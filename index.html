@@ -47,7 +47,7 @@ input,select{width:100%;padding:12px;border:1px solid #cbd5ce;border-radius:9px;
 
 <header>
 <h1>📦 BODEGA SEASCAPE</h1>
-<p>Control de inventario · Versión de prueba</p>
+<p>Control de inventario · Firebase</p>
 </header>
 
 <main class="wrap">
@@ -216,160 +216,345 @@ Exportar historial CSV
 
 
 <div class="warn">
-Esta prueba guarda datos en este navegador y dispositivo.
-Ahora estamos probando la conexión con Firebase.
+Los datos se guardan en Firebase y pueden sincronizarse entre dispositivos.
 </div>
 
 </main>
 
 
-<script>
+<!-- FIREBASE -->
 
-const get=()=>JSON.parse(
-localStorage.getItem('bs_stock')||'[]'
+<script type="module">
+
+import { db } from "./firebase.js";
+
+import {
+collection,
+getDocs,
+addDoc,
+doc,
+updateDoc,
+query,
+orderBy
+}
+from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+let stock=[];
+let moves=[];
+
+
+async function cargarDatos(){
+
+try{
+
+const materialesSnapshot=
+await getDocs(
+collection(db,"materiales")
 );
 
-const getM=()=>JSON.parse(
-localStorage.getItem('bs_moves')||'[]'
-);
 
+stock=
+materialesSnapshot.docs.map(d=>{
 
-const save=(s,m)=>{
+const data=d.data();
 
-localStorage.setItem(
-'bs_stock',
-JSON.stringify(s)
-);
+return{
 
-localStorage.setItem(
-'bs_moves',
-JSON.stringify(m)
-);
+id:d.id,
 
-render();
+name:data.nombre||data.name||"Sin nombre",
+
+unit:data.unidad||data.unit||"",
+
+qty:Number(
+data.cantidad ??
+data.qty ??
+0
+)
 
 };
 
+});
 
-function show(id,b){
 
-document
-.querySelectorAll('main section')
-.forEach(x=>x.classList.add('hidden'));
+const movimientosSnapshot=
+await getDocs(
+query(
+collection(db,"movimientos"),
+orderBy("fecha","desc")
+)
+);
 
-document
-.getElementById(id)
-.classList.remove('hidden');
 
-document
-.querySelectorAll('.tabs button')
-.forEach(x=>x.classList.remove('active'));
+moves=
+movimientosSnapshot.docs.map(d=>{
 
-b.classList.add('active');
+const data=d.data();
+
+return{
+
+id:d.id,
+
+date:data.fecha
+?.toDate()
+?.toISOString()
+||
+data.date
+||
+new Date().toISOString(),
+
+name:data.nombre||"",
+
+unit:data.unidad||"",
+
+kind:data.tipo||"",
+
+qty:Number(data.cantidad||0),
+
+note:data.nota||""
+
+};
+
+});
+
 
 render();
+
+}catch(error){
+
+console.error("ERROR CARGANDO FIREBASE:",error);
+
+alert(
+"Error cargando los datos de Firebase. Revisa la consola."
+);
+
+}
 
 }
 
 
-document.getElementById('addForm').onsubmit=e=>{
+document
+.getElementById("addForm")
+.onsubmit=
+async e=>{
 
 e.preventDefault();
 
-let s=get();
 
-let name=document
-.getElementById('material')
-.value
-.trim();
-
-let unit=document
-.getElementById('unit')
-.value
-.trim();
-
-let amount=+
+let name=
 document
-.getElementById('amount')
-.value;
+.getElementById("material")
+.value
+.trim();
+
+
+let unit=
+document
+.getElementById("unit")
+.value
+.trim();
+
+
+let amount=
+Number(
+document
+.getElementById("amount")
+.value
+);
+
 
 if(
-s.some(
-x=>x.name.toLowerCase()===name.toLowerCase()
+stock.some(
+x=>
+x.name.toLowerCase()
+===
+name.toLowerCase()
 )
 ){
 
 return alert(
-'Ese material ya existe. Registra una entrada para aumentar su cantidad.'
+"Ese material ya existe. Registra una entrada para aumentar su cantidad."
 );
 
 }
 
-s.push({
-id:Date.now().toString(),
-name,
-unit,
+
+try{
+
+const nuevo=
+await addDoc(
+collection(db,"materiales"),
+{
+
+nombre:name,
+
+cantidad:amount,
+
+unidad:unit
+
+}
+);
+
+
+stock.push({
+
+id:nuevo.id,
+
+name:name,
+
+unit:unit,
+
 qty:amount
+
 });
 
-save(s,getM());
+
+render();
 
 e.target.reset();
+
+
+alert(
+"Material guardado correctamente en Firebase."
+);
+
+
+}catch(error){
+
+console.error(
+"ERROR GUARDANDO MATERIAL:",
+error
+);
+
+alert(
+"Error guardando el material."
+);
+
+}
 
 };
 
 
-document.getElementById('moveForm').onsubmit=e=>{
+document
+.getElementById("moveForm")
+.onsubmit=
+async e=>{
 
 e.preventDefault();
 
-let s=get();
 
-let m=getM();
-
-let id=document
-.getElementById('pick')
-.value;
-
-let x=s.find(x=>x.id===id);
-
-let kind=document
-.getElementById('kind')
-.value;
-
-let q=+
+let id=
 document
-.getElementById('qty')
+.getElementById("pick")
 .value;
+
+
+let x=
+stock.find(
+x=>x.id===id
+);
+
+
+let kind=
+document
+.getElementById("kind")
+.value;
+
+
+let q=
+Number(
+document
+.getElementById("qty")
+.value
+);
+
 
 if(!x){
 
 return alert(
-'Agrega primero un material.'
+"Agrega primero un material."
 );
 
 }
 
+
 if(
-kind==='Salida'&&
+kind==="Salida"&&
 q>x.qty
 ){
 
 return alert(
-'No hay suficiente existencia. Disponible: '+
+"No hay suficiente existencia. Disponible: "+
 x.qty+
-' '+
+" "+
 x.unit
 );
 
 }
 
-x.qty+=
-kind==='Entrada'
-?q
-:-q;
 
-m.unshift({
+let nuevaCantidad=
+kind==="Entrada"
+?
+x.qty+q
+:
+x.qty-q;
+
+
+try{
+
+
+await updateDoc(
+doc(
+db,
+"materiales",
+x.id
+),
+{
+
+cantidad:nuevaCantidad,
+
+nombre:x.name,
+
+unidad:x.unit
+
+}
+);
+
+
+const movimiento={
+
+nombre:x.name,
+
+unidad:x.unit,
+
+tipo:kind,
+
+cantidad:q,
+
+nota:
+document
+.getElementById("note")
+.value,
+
+fecha:
+new Date()
+
+};
+
+
+await addDoc(
+collection(db,"movimientos"),
+movimiento
+);
+
+
+x.qty=nuevaCantidad;
+
+
+moves.unshift({
 
 date:new Date().toISOString(),
 
@@ -377,27 +562,43 @@ name:x.name,
 
 unit:x.unit,
 
-kind,
+kind:kind,
 
 qty:q,
 
-note:document
-.getElementById('note')
-.value
+note:movimiento.nota
 
 });
 
-save(s,m);
+
+render();
 
 e.target.reset();
 
-alert('Movimiento guardado');
+
+alert(
+"Movimiento guardado correctamente."
+);
+
+
+}catch(error){
+
+console.error(
+"ERROR GUARDANDO MOVIMIENTO:",
+error
+);
+
+alert(
+"Error guardando el movimiento."
+);
+
+}
 
 };
 
 
 document
-.getElementById('filterDate')
+.getElementById("filterDate")
 .value=
 new Date()
 .toISOString()
@@ -405,15 +606,12 @@ new Date()
 
 
 document
-.getElementById('filterDate')
-.onchange=render;
+.getElementById("filterDate")
+.onchange=
+render;
 
 
 function render(){
-
-let s=get();
-
-let m=getM();
 
 let today=
 new Date()
@@ -422,27 +620,31 @@ new Date()
 
 
 document
-.getElementById('count')
-.textContent=s.length;
+.getElementById("count")
+.textContent=
+stock.length;
 
 
 document
-.getElementById('today')
+.getElementById("today")
 .textContent=
-m.filter(
-x=>x.date.slice(0,10)===today
+moves.filter(
+x=>
+x.date.slice(0,10)
+===
+today
 ).length;
 
 
 document
-.getElementById('stockList')
+.getElementById("stockList")
 .innerHTML=
 
-s.length
+stock.length
 
 ?
 
-s.map(
+stock.map(
 x=>
 `<div class="item">
 <b>${esc(x.name)}</b>
@@ -450,7 +652,7 @@ x=>
 ${x.qty} ${esc(x.unit)}
 </div>
 </div>`
-).join('')
+).join("")
 
 :
 
@@ -458,31 +660,34 @@ ${x.qty} ${esc(x.unit)}
 
 
 document
-.getElementById('pick')
+.getElementById("pick")
 .innerHTML=
 
-s.map(
+stock.map(
 x=>
 `<option value="${x.id}">
 ${esc(x.name)} — ${x.qty} ${esc(x.unit)}
 </option>`
-).join('');
+).join("");
 
 
 let d=
 document
-.getElementById('filterDate')
+.getElementById("filterDate")
 .value;
 
 
 let filtered=
-m.filter(
-x=>x.date.slice(0,10)===d
+moves.filter(
+x=>
+x.date.slice(0,10)
+===
+d
 );
 
 
 document
-.getElementById('historyList')
+.getElementById("historyList")
 .innerHTML=
 
 filtered.length
@@ -494,9 +699,9 @@ x=>
 `<div class="item">
 
 <b>
-${x.kind==='Entrada'
-?'🟢 Entrada'
-:'🔴 Salida'
+${x.kind==="Entrada"
+?"🟢 Entrada"
+:"🔴 Salida"
 }:
 ${esc(x.name)}
 </b>
@@ -507,20 +712,20 @@ ${esc(x.unit)}
 ·
 ${new Date(x.date)
 .toLocaleTimeString(
-'es-EC',
+"es-EC",
 {
-hour:'2-digit',
-minute:'2-digit'
+hour:"2-digit",
+minute:"2-digit"
 }
 )}
 </div>
 
 <div class="muted">
-${esc(x.note||'Sin nota')}
+${esc(x.note||"Sin nota")}
 </div>
 
 </div>`
-).join('')
+).join("")
 
 :
 
@@ -529,16 +734,45 @@ ${esc(x.note||'Sin nota')}
 }
 
 
+function show(id,b){
+
+document
+.querySelectorAll("main section")
+.forEach(
+x=>x.classList.add("hidden")
+);
+
+
+document
+.getElementById(id)
+.classList.remove("hidden");
+
+
+document
+.querySelectorAll(".tabs button")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+
+b.classList.add("active");
+
+render();
+
+}
+
+
 function esc(v){
 
 return String(v).replace(
 /[&<>"']/g,
-c=>({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#39;'
+c=>
+({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
 }[c])
 );
 
@@ -547,30 +781,37 @@ c=>({
 
 function exportCSV(){
 
-let m=getM();
-
 let rows=[
 
 [
-'Fecha',
-'Hora',
-'Movimiento',
-'Material',
-'Cantidad',
-'Unidad',
-'Nota'
+"Fecha",
+"Hora",
+"Movimiento",
+"Material",
+"Cantidad",
+"Unidad",
+"Nota"
 ],
 
-...m.map(
+...moves.map(
 x=>[
 x.date.slice(0,10),
+
 new Date(x.date)
-.toLocaleTimeString('es-EC'),
+.toLocaleTimeString(
+"es-EC"
+),
+
 x.kind,
+
 x.name,
+
 x.qty,
+
 x.unit,
+
 x.note
+
 ]
 )
 
@@ -583,28 +824,32 @@ r=>
 r.map(
 v=>
 '"'+
-String(v??'')
+String(v??"")
 .replace(/"/g,'""')+
 '"'
-).join(';')
-).join('\r\n');
+).join(";")
+).join("\r\n");
 
 
 let a=
-document.createElement('a');
+document.createElement("a");
+
 
 a.href=
 URL.createObjectURL(
 new Blob(
-['\ufeff'+csv],
+["\ufeff"+csv],
 {
-type:'text/csv;charset=utf-8;'
+type:
+"text/csv;charset=utf-8;"
 }
 )
 );
 
+
 a.download=
-'BODEGA_SEASCAPE_historial.csv';
+"BODEGA_SEASCAPE_historial.csv";
+
 
 a.click();
 
@@ -613,7 +858,9 @@ URL.revokeObjectURL(a.href);
 }
 
 
-render();
+/* INICIAR */
+
+cargarDatos();
 
 </script>
 
@@ -641,61 +888,6 @@ navigator.serviceWorker
 }
 
 </script>
-
-
-<!-- FIREBASE -->
-
-<script type="module">
-
-import { db } from "./firebase.js";
-
-import {
-collection,
-addDoc
-}
-from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-
-console.log(
-"PRUEBA FIREBASE: iniciando..."
-);
-
-
-try{
-
-const resultado=
-await addDoc(
-collection(db,"pruebas"),
-{
-mensaje:
-"Firebase conectado correctamente"
-}
-);
-
-
-console.log(
-"PRUEBA FIREBASE: GUARDADO"
-);
-
-console.log(
-"ID:",
-resultado.id
-);
-
-
-}catch(error){
-
-console.error(
-"PRUEBA FIREBASE: ERROR"
-);
-
-console.error(error);
-
-}
-
-</script>
-
 
 </body>
 </html>
