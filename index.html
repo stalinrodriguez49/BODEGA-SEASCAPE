@@ -1,151 +1,371 @@
+```html
 <!doctype html>
 <html lang="es">
 <head>
+
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#166534">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<meta
+  name="theme-color"
+  content="#166534"
+>
+
 <title>BODEGA SEASCAPE</title>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font:16px system-ui;background:#f1f5f2;color:#17251b}
-header{background:#166534;color:white;padding:22px 18px}
-h1{margin:0;font-size:23px}
-header p{margin:5px 0 0;opacity:.85}
-.wrap{max-width:760px;margin:auto;padding:14px}
-.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
-.tabs button,.btn{border:0;border-radius:10px;padding:12px 14px;font-weight:700;background:#166534;color:white}
-.tabs button{background:#dce9df;color:#164d2b}
-.tabs button.active{background:#166534;color:white}
-.panel{background:white;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 2px 10px #102b1510}
-.hidden{display:none}
-label{display:block;font-size:14px;font-weight:700;margin:10px 0 5px}
-input,select{width:100%;padding:12px;border:1px solid #cbd5ce;border-radius:9px;font-size:16px;background:white}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.item{border-bottom:1px solid #e4e9e5;padding:12px 0}
-.item:last-child{border:0}
-.muted{color:#637168;font-size:13px}
-.qty{font-size:20px;font-weight:800;color:#166534}
-.btn.secondary{background:#e5eee7;color:#164d2b}
-.btn.danger{background:#b42318}
-.full{width:100%;margin-top:12px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{background:#e5f1e8;padding:14px;border-radius:12px}
-.stat strong{display:block;font-size:24px;color:#166534}
-.empty{color:#68766c;text-align:center;padding:20px}
-.warn{font-size:13px;background:#fff7df;padding:12px;border-radius:10px;color:#735514}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font:16px system-ui;
+  background:#f1f5f2;
+  color:#17251b;
+}
+
+header{
+  background:#166534;
+  color:white;
+  padding:22px 18px;
+}
+
+h1{
+  margin:0;
+  font-size:23px;
+}
+
+header p{
+  margin:5px 0 0;
+  opacity:.85;
+}
+
+.wrap{
+  max-width:760px;
+  margin:auto;
+  padding:14px;
+}
+
+.tabs{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.tabs button,
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:12px 14px;
+  font-weight:700;
+  background:#166534;
+  color:white;
+  cursor:pointer;
+}
+
+.tabs button{
+  background:#dce9df;
+  color:#164d2b;
+}
+
+.tabs button.active{
+  background:#166534;
+  color:white;
+}
+
+.panel{
+  background:white;
+  border-radius:14px;
+  padding:16px;
+  margin:12px 0;
+  box-shadow:0 2px 10px #102b1510;
+}
+
+.hidden{
+  display:none;
+}
+
+label{
+  display:block;
+  font-size:14px;
+  font-weight:700;
+  margin:10px 0 5px;
+}
+
+input,
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid #cbd5ce;
+  border-radius:9px;
+  font-size:16px;
+  background:white;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.item{
+  border-bottom:1px solid #e4e9e5;
+  padding:12px 0;
+}
+
+.item:last-child{
+  border:0;
+}
+
+.muted{
+  color:#637168;
+  font-size:13px;
+}
+
+.qty{
+  font-size:20px;
+  font-weight:800;
+  color:#166534;
+}
+
+.btn.secondary{
+  background:#e5eee7;
+  color:#164d2b;
+}
+
+.btn.danger{
+  background:#b42318;
+}
+
+.full{
+  width:100%;
+  margin-top:12px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.stat{
+  background:#e5f1e8;
+  padding:14px;
+  border-radius:12px;
+}
+
+.stat strong{
+  display:block;
+  font-size:24px;
+  color:#166534;
+}
+
+.empty{
+  color:#68766c;
+  text-align:center;
+  padding:20px;
+}
+
+.warn{
+  font-size:13px;
+  background:#fff7df;
+  padding:12px;
+  border-radius:10px;
+  color:#735514;
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
 
-<meta name="theme-color" content="#14532d">
-<meta name="mobile-web-app-capable" content="yes">
+<meta
+  name="theme-color"
+  content="#14532d"
+>
+
+<meta
+  name="mobile-web-app-capable"
+  content="yes"
+>
 
 </head>
 
 <body>
 
 <header>
+
 <h1>📦 BODEGA SEASCAPE</h1>
-<p>Control de inventario · Firebase</p>
+
+<p>
+Control de inventario · Firebase
+</p>
+
 </header>
 
+
 <main class="wrap">
+
 
 <div class="stats">
 
 <div class="stat">
-<span>Tipos de materiales</span>
-<strong id="count">0</strong>
+
+<span>
+Tipos de materiales
+</span>
+
+<strong id="count">
+0
+</strong>
+
 </div>
+
 
 <div class="stat">
-<span>Movimientos hoy</span>
-<strong id="today">0</strong>
-</div>
+
+<span>
+Movimientos hoy
+</span>
+
+<strong id="today">
+0
+</strong>
 
 </div>
 
-<nav class="tabs" style="margin-top:14px">
+</div>
 
-<button class="active" onclick="show('stock',this)">
+
+<nav
+  class="tabs"
+  style="margin-top:14px"
+>
+
+<button
+  id="tabStock"
+  class="active"
+  type="button"
+>
 Inventario
 </button>
 
-<button onclick="show('move',this)">
+
+<button
+  id="tabMove"
+  type="button"
+>
 Entrada / salida
 </button>
 
-<button onclick="show('history',this)">
+
+<button
+  id="tabHistory"
+  type="button"
+>
 Historial
 </button>
 
 </nav>
 
 
-<section id="stock" class="panel">
+<section
+  id="stock"
+  class="panel"
+>
 
-<h2>Inventario actual</h2>
+<h2>
+Inventario actual
+</h2>
+
 
 <form id="addForm">
 
-<label>Nombre del material</label>
+<label>
+Nombre del material
+</label>
 
 <input
-id="material"
-placeholder="Ej. Cemento"
-required
+  id="material"
+  placeholder="Ej. Cemento"
+  required
 >
+
 
 <div class="row">
 
+
 <div>
 
-<label>Cantidad inicial</label>
+<label>
+Cantidad inicial
+</label>
 
 <input
-id="amount"
-type="number"
-min="0"
-step="any"
-placeholder="0"
-required
+  id="amount"
+  type="number"
+  min="0"
+  step="any"
+  placeholder="0"
+  required
 >
 
 </div>
 
+
 <div>
 
-<label>Unidad</label>
+<label>
+Unidad
+</label>
 
 <input
-id="unit"
-placeholder="sacos, unidades, kg..."
-required
+  id="unit"
+  placeholder="sacos, unidades, kg..."
+  required
 >
 
 </div>
 
 </div>
 
-<button class="btn full">
+
+<button
+  class="btn full"
+  type="submit"
+>
 Agregar material
 </button>
 
 </form>
+
 
 <div id="stockList"></div>
 
 </section>
 
 
-<section id="move" class="panel hidden">
+<section
+  id="move"
+  class="panel hidden"
+>
 
-<h2>Registrar movimiento</h2>
+<h2>
+Registrar movimiento
+</h2>
+
 
 <form id="moveForm">
 
-<label>Tipo de movimiento</label>
+<label>
+Tipo de movimiento
+</label>
 
 <select id="kind">
 
@@ -159,34 +379,51 @@ Entrada
 
 </select>
 
-<label>Material</label>
 
-<select id="pick" required>
+<label>
+Material
+</label>
+
+<select
+  id="pick"
+  required
+>
 </select>
 
-<label>Cantidad</label>
+
+<label>
+Cantidad
+</label>
 
 <input
-id="qty"
-type="number"
-min=".001"
-step="any"
-required
-placeholder="Cantidad"
+  id="qty"
+  type="number"
+  min=".001"
+  step="any"
+  required
+  placeholder="Cantidad"
 >
 
-<label>Nota (opcional)</label>
+
+<label>
+Nota (opcional)
+</label>
 
 <input
-id="note"
-placeholder="Ej. Entrega para trabajo"
+  id="note"
+  placeholder="Ej. Entrega para trabajo"
 >
 
-<button class="btn full">
+
+<button
+  class="btn full"
+  type="submit"
+>
 Guardar movimiento
 </button>
 
 </form>
+
 
 <p class="muted">
 La existencia se actualiza al guardar.
@@ -195,19 +432,33 @@ La existencia se actualiza al guardar.
 </section>
 
 
-<section id="history" class="panel hidden">
+<section
+  id="history"
+  class="panel hidden"
+>
 
-<h2>Historial de movimientos</h2>
+<h2>
+Historial de movimientos
+</h2>
 
-<label>Filtrar por fecha</label>
 
-<input type="date" id="filterDate">
+<label>
+Filtrar por fecha
+</label>
+
+<input
+  type="date"
+  id="filterDate"
+>
+
 
 <div id="historyList"></div>
 
+
 <button
-class="btn secondary full"
-onclick="exportCSV()"
+  id="exportBtn"
+  class="btn secondary full"
+  type="button"
 >
 Exportar historial CSV
 </button>
@@ -216,8 +467,11 @@ Exportar historial CSV
 
 
 <div class="warn">
+
 Los datos se guardan en Firebase y pueden sincronizarse entre dispositivos.
+
 </div>
+
 
 </main>
 
@@ -228,631 +482,993 @@ Los datos se guardan en Firebase y pueden sincronizarse entre dispositivos.
 
 import { db } from "./firebase.js";
 
+
 import {
-collection,
-getDocs,
-addDoc,
-doc,
-updateDoc,
-query,
-orderBy
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  updateDoc,
+  query,
+  orderBy
 }
 from
 "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-let stock=[];
-let moves=[];
+let stock = [];
 
+let moves = [];
 
-async function cargarDatos(){
 
-try{
+/* =========================
+   UTILIDADES
+========================= */
 
-const materialesSnapshot=
-await getDocs(
-collection(db,"materiales")
-);
+function fechaISO(valor){
 
+  try{
 
-stock = materialesSnapshot.docs.map(d => {
+    if(
+      valor &&
+      typeof valor.toDate === "function"
+    ){
 
-  const data = d.data();
+      return valor
+        .toDate()
+        .toISOString();
 
-  console.log("MATERIAL FIREBASE:", d.id, data);
+    }
 
-  return {
-    id: d.id,
-    name: data.nombre || "Sin nombre",
-    unit: data.unidad || "",
-    qty: Number(data.cantidad || 0)
-  };
 
-});
+    if(valor){
 
-console.log("TOTAL MATERIALES:", stock.length);
+      const fecha = new Date(valor);
 
+      if(!isNaN(fecha.getTime())){
 
-const movimientosSnapshot=
-await getDocs(
-query(
-collection(db,"movimientos"),
-orderBy("fecha","desc")
-)
-);
+        return fecha.toISOString();
 
+      }
 
-moves=
-movimientosSnapshot.docs.map(d=>{
+    }
 
-const data=d.data();
+  }catch(error){
 
-return{
+    console.error(
+      "ERROR CON FECHA:",
+      error
+    );
 
-id:d.id,
+  }
 
-date:data.fecha
-?.toDate()
-?.toISOString()
-||
-data.date
-||
-new Date().toISOString(),
 
-name:data.nombre||"",
-
-unit:data.unidad||"",
-
-kind:data.tipo||"",
-
-qty:Number(data.cantidad||0),
-
-note:data.nota||""
-
-};
-
-});
-
-
-render();
-
-}catch(error){
-
-console.error("ERROR CARGANDO FIREBASE:",error);
-
-alert(
-"Error cargando los datos de Firebase. Revisa la consola."
-);
-
-}
-
-}
-
-
-document
-.getElementById("addForm")
-.onsubmit=
-async e=>{
-
-e.preventDefault();
-
-
-let name=
-document
-.getElementById("material")
-.value
-.trim();
-
-
-let unit=
-document
-.getElementById("unit")
-.value
-.trim();
-
-
-let amount=
-Number(
-document
-.getElementById("amount")
-.value
-);
-
-
-if(
-stock.some(
-x=>
-x.name.toLowerCase()
-===
-name.toLowerCase()
-)
-){
-
-return alert(
-"Ese material ya existe. Registra una entrada para aumentar su cantidad."
-);
-
-}
-
-
-try{
-
-const nuevo=
-await addDoc(
-collection(db,"materiales"),
-{
-
-nombre:name,
-
-cantidad:amount,
-
-unidad:unit
-
-}
-);
-
-
-stock.push({
-
-id:nuevo.id,
-
-name:name,
-
-unit:unit,
-
-qty:amount
-
-});
-
-
-render();
-
-e.target.reset();
-
-
-alert(
-"Material guardado correctamente en Firebase."
-);
-
-
-}catch(error){
-
-console.error(
-"ERROR GUARDANDO MATERIAL:",
-error
-);
-
-alert(
-"Error guardando el material."
-);
-
-}
-
-};
-
-
-document
-.getElementById("moveForm")
-.onsubmit=
-async e=>{
-
-e.preventDefault();
-
-
-let id=
-document
-.getElementById("pick")
-.value;
-
-
-let x=
-stock.find(
-x=>x.id===id
-);
-
-
-let kind=
-document
-.getElementById("kind")
-.value;
-
-
-let q=
-Number(
-document
-.getElementById("qty")
-.value
-);
-
-
-if(!x){
-
-return alert(
-"Agrega primero un material."
-);
-
-}
-
-
-if(
-kind==="Salida"&&
-q>x.qty
-){
-
-return alert(
-"No hay suficiente existencia. Disponible: "+
-x.qty+
-" "+
-x.unit
-);
-
-}
-
-
-let nuevaCantidad=
-kind==="Entrada"
-?
-x.qty+q
-:
-x.qty-q;
-
-
-try{
-
-
-await updateDoc(
-doc(
-db,
-"materiales",
-x.id
-),
-{
-
-cantidad:nuevaCantidad,
-
-nombre:x.name,
-
-unidad:x.unit
-
-}
-);
-
-
-const movimiento={
-
-nombre:x.name,
-
-unidad:x.unit,
-
-tipo:kind,
-
-cantidad:q,
-
-nota:
-document
-.getElementById("note")
-.value,
-
-fecha:
-new Date()
-
-};
-
-
-await addDoc(
-collection(db,"movimientos"),
-movimiento
-);
-
-
-x.qty=nuevaCantidad;
-
-
-moves.unshift({
-
-date:new Date().toISOString(),
-
-name:x.name,
-
-unit:x.unit,
-
-kind:kind,
-
-qty:q,
-
-note:movimiento.nota
-
-});
-
-
-render();
-
-e.target.reset();
-
-
-alert(
-"Movimiento guardado correctamente."
-);
-
-
-}catch(error){
-
-console.error(
-"ERROR GUARDANDO MOVIMIENTO:",
-error
-);
-
-alert(
-"Error guardando el movimiento."
-);
-
-}
-
-};
-
-
-document
-.getElementById("filterDate")
-.value=
-new Date()
-.toISOString()
-.slice(0,10);
-
-
-document
-.getElementById("filterDate")
-.onchange=
-render;
-
-
-function render(){
-
-let today=
-new Date()
-.toISOString()
-.slice(0,10);
-
-
-document
-.getElementById("count")
-.textContent=
-stock.length;
-
-
-document
-.getElementById("today")
-.textContent=
-moves.filter(
-x=>
-x.date.slice(0,10)
-===
-today
-).length;
-
-
-document
-.getElementById("stockList")
-.innerHTML=
-
-stock.length
-
-?
-
-stock.map(
-x=>
-`<div class="item">
-<b>${esc(x.name)}</b>
-<div class="qty">
-${x.qty} ${esc(x.unit)}
-</div>
-</div>`
-).join("")
-
-:
-
-'<div class="empty">Aún no hay materiales. Agrega el inventario inicial arriba.</div>';
-
-
-document
-.getElementById("pick")
-.innerHTML=
-
-stock.map(
-x=>
-`<option value="${x.id}">
-${esc(x.name)} — ${x.qty} ${esc(x.unit)}
-</option>`
-).join("");
-
-
-let d=
-document
-.getElementById("filterDate")
-.value;
-
-
-let filtered=
-moves.filter(
-x=>
-x.date.slice(0,10)
-===
-d
-);
-
-
-document
-.getElementById("historyList")
-.innerHTML=
-
-filtered.length
-
-?
-
-filtered.map(
-x=>
-`<div class="item">
-
-<b>
-${x.kind==="Entrada"
-?"🟢 Entrada"
-:"🔴 Salida"
-}:
-${esc(x.name)}
-</b>
-
-<div>
-${x.qty}
-${esc(x.unit)}
-·
-${new Date(x.date)
-.toLocaleTimeString(
-"es-EC",
-{
-hour:"2-digit",
-minute:"2-digit"
-}
-)}
-</div>
-
-<div class="muted">
-${esc(x.note||"Sin nota")}
-</div>
-
-</div>`
-).join("")
-
-:
-
-'<div class="empty">No hay movimientos para esa fecha.</div>';
-
-}
-
-
-window.show = function(id,b){
-
-document
-.querySelectorAll("main section")
-.forEach(
-x=>x.classList.add("hidden")
-);
-
-
-document
-.getElementById(id)
-.classList.remove("hidden");
-
-
-document
-.querySelectorAll(".tabs button")
-.forEach(
-x=>x.classList.remove("active")
-);
-
-
-b.classList.add("active");
-
-render();
+  return new Date().toISOString();
 
 }
 
 
 function esc(v){
 
-return String(v).replace(
-/[&<>"']/g,
-c=>
-({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#39;"
-}[c])
-);
+  return String(v ?? "").replace(
+    /[&<>"']/g,
+    c =>
+    ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[c])
+  );
 
 }
 
+
+/* =========================
+   CARGAR FIREBASE
+========================= */
+
+async function cargarDatos(){
+
+  try{
+
+    const materialesSnapshot =
+      await getDocs(
+        collection(
+          db,
+          "materiales"
+        )
+      );
+
+
+    stock =
+      materialesSnapshot.docs.map(
+        d => {
+
+          const data = d.data();
+
+
+          console.log(
+            "MATERIAL FIREBASE:",
+            d.id,
+            data
+          );
+
+
+          return {
+
+            id:d.id,
+
+            name:
+              data.nombre ||
+              data.name ||
+              "Sin nombre",
+
+            unit:
+              data.unidad ||
+              data.unit ||
+              "",
+
+            qty:
+              Number(
+                data.cantidad ??
+                data.qty ??
+                0
+              )
+
+          };
+
+        }
+      );
+
+
+    console.log(
+      "TOTAL MATERIALES:",
+      stock.length
+    );
+
+
+    let movimientosSnapshot;
+
+
+    try{
+
+      movimientosSnapshot =
+        await getDocs(
+          query(
+            collection(
+              db,
+              "movimientos"
+            ),
+            orderBy(
+              "fecha",
+              "desc"
+            )
+          )
+        );
+
+    }catch(error){
+
+      console.error(
+        "ERROR LEYENDO MOVIMIENTOS:",
+        error
+      );
+
+      movimientosSnapshot = {
+        docs:[]
+      };
+
+    }
+
+
+    moves =
+      movimientosSnapshot.docs.map(
+        d => {
+
+          const data = d.data();
+
+
+          return {
+
+            id:d.id,
+
+            date:
+              fechaISO(
+                data.fecha ||
+                data.date
+              ),
+
+            name:
+              data.nombre ||
+              data.name ||
+              "",
+
+            unit:
+              data.unidad ||
+              data.unit ||
+              "",
+
+            kind:
+              data.tipo ||
+              data.kind ||
+              "",
+
+            qty:
+              Number(
+                data.cantidad ??
+                data.qty ??
+                0
+              ),
+
+            note:
+              data.nota ||
+              data.note ||
+              ""
+
+          };
+
+        }
+      );
+
+
+    render();
+
+
+  }catch(error){
+
+    console.error(
+      "ERROR CARGANDO FIREBASE:",
+      error
+    );
+
+
+    alert(
+      "Error cargando los datos de Firebase. Revisa la consola."
+    );
+
+  }
+
+}
+
+
+/* =========================
+   AGREGAR MATERIAL
+========================= */
+
+document
+  .getElementById("addForm")
+  .addEventListener(
+    "submit",
+    async e => {
+
+      e.preventDefault();
+
+
+      const name =
+        document
+          .getElementById("material")
+          .value
+          .trim();
+
+
+      const unit =
+        document
+          .getElementById("unit")
+          .value
+          .trim();
+
+
+      const amount =
+        Number(
+          document
+            .getElementById("amount")
+            .value
+        );
+
+
+      if(
+        stock.some(
+          x =>
+          x.name
+            .toLowerCase()
+            ===
+          name.toLowerCase()
+        )
+      ){
+
+        alert(
+          "Ese material ya existe. Registra una entrada para aumentar su cantidad."
+        );
+
+        return;
+
+      }
+
+
+      try{
+
+        const nuevo =
+          await addDoc(
+            collection(
+              db,
+              "materiales"
+            ),
+            {
+
+              nombre:name,
+
+              cantidad:amount,
+
+              unidad:unit
+
+            }
+          );
+
+
+        stock.push({
+
+          id:nuevo.id,
+
+          name:name,
+
+          unit:unit,
+
+          qty:amount
+
+        });
+
+
+        render();
+
+
+        e.target.reset();
+
+
+        alert(
+          "Material guardado correctamente en Firebase."
+        );
+
+
+      }catch(error){
+
+        console.error(
+          "ERROR GUARDANDO MATERIAL:",
+          error
+        );
+
+
+        alert(
+          "Error guardando el material."
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   MOVIMIENTOS
+========================= */
+
+document
+  .getElementById("moveForm")
+  .addEventListener(
+    "submit",
+    async e => {
+
+      e.preventDefault();
+
+
+      const id =
+        document
+          .getElementById("pick")
+          .value;
+
+
+      const x =
+        stock.find(
+          item =>
+          item.id === id
+        );
+
+
+      const kind =
+        document
+          .getElementById("kind")
+          .value;
+
+
+      const q =
+        Number(
+          document
+            .getElementById("qty")
+            .value
+        );
+
+
+      if(!x){
+
+        alert(
+          "Agrega primero un material."
+        );
+
+        return;
+
+      }
+
+
+      if(
+        !q ||
+        q <= 0
+      ){
+
+        alert(
+          "Ingresa una cantidad válida."
+        );
+
+        return;
+
+      }
+
+
+      if(
+        kind === "Salida" &&
+        q > x.qty
+      ){
+
+        alert(
+          "No hay suficiente existencia. Disponible: " +
+          x.qty +
+          " " +
+          x.unit
+        );
+
+        return;
+
+      }
+
+
+      const nuevaCantidad =
+        kind === "Entrada"
+        ?
+        x.qty + q
+        :
+        x.qty - q;
+
+
+      try{
+
+        await updateDoc(
+          doc(
+            db,
+            "materiales",
+            x.id
+          ),
+          {
+
+            cantidad:nuevaCantidad,
+
+            nombre:x.name,
+
+            unidad:x.unit
+
+          }
+        );
+
+
+        const movimiento = {
+
+          nombre:x.name,
+
+          unidad:x.unit,
+
+          tipo:kind,
+
+          cantidad:q,
+
+          nota:
+            document
+              .getElementById("note")
+              .value
+              .trim(),
+
+          fecha:
+            new Date()
+
+        };
+
+
+        const movimientoNuevo =
+          await addDoc(
+            collection(
+              db,
+              "movimientos"
+            ),
+            movimiento
+          );
+
+
+        x.qty =
+          nuevaCantidad;
+
+
+        moves.unshift({
+
+          id:
+            movimientoNuevo.id,
+
+          date:
+            new Date().toISOString(),
+
+          name:x.name,
+
+          unit:x.unit,
+
+          kind:kind,
+
+          qty:q,
+
+          note:
+            movimiento.nota
+
+        });
+
+
+        render();
+
+
+        e.target.reset();
+
+
+        alert(
+          "Movimiento guardado correctamente."
+        );
+
+
+      }catch(error){
+
+        console.error(
+          "ERROR GUARDANDO MOVIMIENTO:",
+          error
+        );
+
+
+        alert(
+          "Error guardando el movimiento."
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   FECHA DEL HISTORIAL
+========================= */
+
+document
+  .getElementById("filterDate")
+  .value =
+  new Date()
+    .toISOString()
+    .slice(0,10);
+
+
+document
+  .getElementById("filterDate")
+  .addEventListener(
+    "change",
+    render
+  );
+
+
+/* =========================
+   MOSTRAR PESTAÑAS
+========================= */
+
+function mostrarSeccion(
+  id,
+  boton
+){
+
+  document
+    .querySelectorAll(
+      "main section"
+    )
+    .forEach(
+      section =>
+      section.classList.add(
+        "hidden"
+      )
+    );
+
+
+  const seccion =
+    document.getElementById(id);
+
+
+  if(!seccion){
+
+    console.error(
+      "No existe la sección:",
+      id
+    );
+
+    return;
+
+  }
+
+
+  seccion.classList.remove(
+    "hidden"
+  );
+
+
+  document
+    .querySelectorAll(
+      ".tabs button"
+    )
+    .forEach(
+      button =>
+      button.classList.remove(
+        "active"
+      )
+    );
+
+
+  boton.classList.add(
+    "active"
+  );
+
+
+  render();
+
+}
+
+
+/* =========================
+   BOTONES DE PESTAÑAS
+========================= */
+
+document
+  .getElementById("tabStock")
+  .addEventListener(
+    "click",
+    function(){
+
+      mostrarSeccion(
+        "stock",
+        this
+      );
+
+    }
+  );
+
+
+document
+  .getElementById("tabMove")
+  .addEventListener(
+    "click",
+    function(){
+
+      mostrarSeccion(
+        "move",
+        this
+      );
+
+    }
+  );
+
+
+document
+  .getElementById("tabHistory")
+  .addEventListener(
+    "click",
+    function(){
+
+      mostrarSeccion(
+        "history",
+        this
+      );
+
+    }
+  );
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+  const today =
+    new Date()
+      .toISOString()
+      .slice(0,10);
+
+
+  document
+    .getElementById("count")
+    .textContent =
+    stock.length;
+
+
+  document
+    .getElementById("today")
+    .textContent =
+    moves.filter(
+      x =>
+      fechaISO(x.date)
+        .slice(0,10)
+        ===
+      today
+    ).length;
+
+
+  document
+    .getElementById("stockList")
+    .innerHTML =
+
+    stock.length
+
+    ?
+
+    stock.map(
+      x =>
+      `
+      <div class="item">
+
+        <b>
+          ${esc(x.name)}
+        </b>
+
+        <div class="qty">
+          ${x.qty}
+          ${esc(x.unit)}
+        </div>
+
+      </div>
+      `
+    ).join("")
+
+    :
+
+    `
+    <div class="empty">
+      Aún no hay materiales.
+      Agrega el inventario inicial arriba.
+    </div>
+    `;
+
+
+  document
+    .getElementById("pick")
+    .innerHTML =
+
+    stock.map(
+      x =>
+      `
+      <option value="${esc(x.id)}">
+        ${esc(x.name)}
+        —
+        ${x.qty}
+        ${esc(x.unit)}
+      </option>
+      `
+    ).join("");
+
+
+  const d =
+    document
+      .getElementById("filterDate")
+      .value;
+
+
+  const filtered =
+    moves.filter(
+      x =>
+      fechaISO(x.date)
+        .slice(0,10)
+        ===
+      d
+    );
+
+
+  document
+    .getElementById("historyList")
+    .innerHTML =
+
+    filtered.length
+
+    ?
+
+    filtered.map(
+      x =>
+      `
+      <div class="item">
+
+        <b>
+
+          ${
+            x.kind === "Entrada"
+            ?
+            "🟢 Entrada"
+            :
+            "🔴 Salida"
+          }:
+
+          ${esc(x.name)}
+
+        </b>
+
+
+        <div>
+
+          ${x.qty}
+
+          ${esc(x.unit)}
+
+          ·
+
+          ${
+            new Date(
+              fechaISO(x.date)
+            ).toLocaleTimeString(
+              "es-EC",
+              {
+                hour:"2-digit",
+                minute:"2-digit"
+              }
+            )
+          }
+
+        </div>
+
+
+        <div class="muted">
+
+          ${esc(
+            x.note ||
+            "Sin nota"
+          )}
+
+        </div>
+
+      </div>
+      `
+    ).join("")
+
+    :
+
+    `
+    <div class="empty">
+      No hay movimientos para esa fecha.
+    </div>
+    `;
+
+}
+
+
+/* =========================
+   EXPORTAR CSV
+========================= */
 
 function exportCSV(){
 
-let rows=[
+  const rows = [
 
-[
-"Fecha",
-"Hora",
-"Movimiento",
-"Material",
-"Cantidad",
-"Unidad",
-"Nota"
-],
+    [
+      "Fecha",
+      "Hora",
+      "Movimiento",
+      "Material",
+      "Cantidad",
+      "Unidad",
+      "Nota"
+    ],
 
-...moves.map(
-x=>[
-x.date.slice(0,10),
+    ...moves.map(
+      x => [
 
-new Date(x.date)
-.toLocaleTimeString(
-"es-EC"
-),
+        fechaISO(x.date)
+          .slice(0,10),
 
-x.kind,
+        new Date(
+          fechaISO(x.date)
+        ).toLocaleTimeString(
+          "es-EC"
+        ),
 
-x.name,
+        x.kind,
 
-x.qty,
+        x.name,
 
-x.unit,
+        x.qty,
 
-x.note
+        x.unit,
 
-]
-)
+        x.note
 
-];
+      ]
+    )
 
-
-let csv=
-rows.map(
-r=>
-r.map(
-v=>
-'"'+
-String(v??"")
-.replace(/"/g,'""')+
-'"'
-).join(";")
-).join("\r\n");
+  ];
 
 
-let a=
-document.createElement("a");
+  const csv =
+    rows
+      .map(
+        row =>
+        row
+          .map(
+            value =>
+            '"' +
+            String(
+              value ?? ""
+            ).replace(
+              /"/g,
+              '""'
+            ) +
+            '"'
+          )
+          .join(";")
+      )
+      .join("\r\n");
 
 
-a.href=
-URL.createObjectURL(
-new Blob(
-["\ufeff"+csv],
-{
-type:
-"text/csv;charset=utf-8;"
+  const a =
+    document.createElement(
+      "a"
+    );
+
+
+  a.href =
+    URL.createObjectURL(
+      new Blob(
+        [
+          "\ufeff" +
+          csv
+        ],
+        {
+          type:
+            "text/csv;charset=utf-8;"
+        }
+      )
+    );
+
+
+  a.download =
+    "BODEGA_SEASCAPE_historial.csv";
+
+
+  a.click();
+
+
+  URL.revokeObjectURL(
+    a.href
+  );
+
 }
-)
-);
 
 
-a.download=
-"BODEGA_SEASCAPE_historial.csv";
+/* =========================
+   BOTÓN EXPORTAR
+========================= */
+
+document
+  .getElementById("exportBtn")
+  .addEventListener(
+    "click",
+    exportCSV
+  );
 
 
-a.click();
-
-URL.revokeObjectURL(a.href);
-
-}
-
-
-/* INICIAR */
+/* =========================
+   INICIAR
+========================= */
 
 cargarDatos();
 
@@ -864,20 +1480,20 @@ cargarDatos();
 <script>
 
 if(
-"serviceWorker" in navigator &&
-location.protocol.startsWith("http")
+  "serviceWorker" in navigator &&
+  location.protocol.startsWith("http")
 ){
 
-window.addEventListener(
-"load",
-()=>{
+  window.addEventListener(
+    "load",
+    () => {
 
-navigator.serviceWorker
-.register("./sw.js")
-.catch(console.error);
+      navigator.serviceWorker
+        .register("./sw.js")
+        .catch(console.error);
 
-}
-);
+    }
+  );
 
 }
 
@@ -885,3 +1501,4 @@ navigator.serviceWorker
 
 </body>
 </html>
+```
