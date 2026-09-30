@@ -255,28 +255,22 @@ collection(db,"materiales")
 );
 
 
-stock=
-materialesSnapshot.docs.map(d=>{
+stock = materialesSnapshot.docs.map(d => {
 
-const data=d.data();
+  const data = d.data();
 
-return{
+  console.log("MATERIAL FIREBASE:", d.id, data);
 
-id:d.id,
-
-name:data.nombre||data.name||"Sin nombre",
-
-unit:data.unidad||data.unit||"",
-
-qty:Number(
-data.cantidad ??
-data.qty ??
-0
-)
-
-};
+  return {
+    id: d.id,
+    name: data.nombre || "Sin nombre",
+    unit: data.unidad || "",
+    qty: Number(data.cantidad || 0)
+  };
 
 });
+
+console.log("TOTAL MATERIALES:", stock.length);
 
 
 const movimientosSnapshot=
