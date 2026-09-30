@@ -31,6 +31,28 @@ render();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
   window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(console.error));
 }
+<script type="module">
+  import { db } from "./firebase.js";
+  import {
+    collection,
+    addDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+  async function probarFirebase() {
+    try {
+      const prueba = await addDoc(collection(db, "pruebas"), {
+        mensaje: "Firebase conectado correctamente",
+        fecha: serverTimestamp()
+      });
+
+      console.log("Firebase conectado. ID:", prueba.id);
+    } catch (error) {
+      console.error("Error conectando Firebase:", error);
+    }
+  }
+
+  probarFirebase();
 </script>
 <script type="module" src="firebase.js"></script>
 </body></html>
