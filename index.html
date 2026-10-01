@@ -57,13 +57,19 @@ label{
   margin:12px 0 5px;
 }
 
-input,select{
+input,select,textarea{
   width:100%;
   padding:12px;
   border:1px solid #cbd5ce;
   border-radius:9px;
   font-size:16px;
   background:white;
+  font-family:inherit;
+}
+
+textarea{
+  min-height:80px;
+  resize:vertical;
 }
 
 .btn{
@@ -99,9 +105,7 @@ input,select{
   margin-bottom:12px;
 }
 
-.userbar strong{
-  display:block;
-}
+.userbar strong{display:block}
 
 .email{
   font-size:13px;
@@ -157,9 +161,7 @@ input,select{
   color:white;
 }
 
-.panel{
-  margin:12px 0;
-}
+.panel{margin:12px 0}
 
 .row{
   display:grid;
@@ -202,6 +204,97 @@ input,select{
   background:#e5eee7;
   color:#164d2b;
 }
+
+
+/* CARGAMENTOS */
+
+.carga-box{
+  background:#f7faf8;
+  border:1px solid #dce8df;
+  border-radius:12px;
+  padding:14px;
+  margin-top:12px;
+}
+
+.carga-material{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:11px;
+  margin:8px 0;
+  background:white;
+  border:1px solid #e0e8e2;
+  border-radius:10px;
+}
+
+.carga-material strong{
+  display:block;
+}
+
+.remove{
+  border:0;
+  border-radius:8px;
+  padding:8px 10px;
+  background:#fee4e2;
+  color:#b42318;
+  font-weight:800;
+}
+
+.fecha-grupo{
+  margin-top:22px;
+}
+
+.fecha-titulo{
+  background:#e5f1e8;
+  padding:11px 13px;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:800;
+  color:#164d2b;
+}
+
+.cargamento{
+  border:1px solid #dce5de;
+  border-radius:12px;
+  margin-top:10px;
+  overflow:hidden;
+  background:white;
+}
+
+.cargamento-cabecera{
+  padding:13px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.cargamento-cabecera strong{
+  color:#166534;
+}
+
+.cargamento-detalle{
+  border-top:1px solid #e4e9e5;
+  padding:14px;
+  background:#fafcfb;
+}
+
+.cargamento-linea{
+  padding:8px 0;
+  border-bottom:1px solid #e8ede9;
+}
+
+.cargamento-linea:last-child{
+  border-bottom:0;
+}
+
+.info-carga{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid #dde5df;
+}
 </style>
 </head>
 
@@ -228,28 +321,12 @@ input,select{
     <form id="loginForm">
 
       <label>Usuario o correo</label>
-
-      <input
-        id="loginUser"
-        type="text"
-        autocomplete="username"
-        required
-      >
+      <input id="loginUser" type="text" autocomplete="username" required>
 
       <label>Contraseña</label>
+      <input id="loginPassword" type="password" autocomplete="current-password" required>
 
-      <input
-        id="loginPassword"
-        type="password"
-        autocomplete="current-password"
-        required
-      >
-
-      <button
-        id="loginBtn"
-        class="btn full"
-        type="submit"
-      >
+      <button id="loginBtn" class="btn full" type="submit">
         Ingresar
       </button>
 
@@ -271,20 +348,11 @@ input,select{
   <div class="userbar">
 
     <div>
-
-      <strong id="userName">
-        👤 Usuario
-      </strong>
-
+      <strong id="userName">👤 Usuario</strong>
       <div id="userEmail" class="email"></div>
-
     </div>
 
-    <button
-      id="logoutBtn"
-      class="logout"
-      type="button"
-    >
+    <button id="logoutBtn" class="logout" type="button">
       Cerrar sesión
     </button>
 
@@ -308,25 +376,19 @@ input,select{
 
   <div class="tabs">
 
-    <button
-      id="tabStock"
-      class="active"
-      type="button"
-    >
+    <button id="tabStock" class="active" type="button">
       Inventario
     </button>
 
-    <button
-      id="tabMove"
-      type="button"
-    >
+    <button id="tabMove" type="button">
       Entrada / salida
     </button>
 
-    <button
-      id="tabHistory"
-      type="button"
-    >
+    <button id="tabLoads" type="button">
+      📥 Cargamentos
+    </button>
+
+    <button id="tabHistory" type="button">
       Historial
     </button>
 
@@ -342,38 +404,18 @@ input,select{
     <form id="addForm">
 
       <label>Nombre del material</label>
-
-      <input
-        id="material"
-        required
-      >
+      <input id="material" required>
 
       <div class="row">
 
         <div>
-
           <label>Cantidad inicial</label>
-
-          <input
-            id="amount"
-            type="number"
-            min="0"
-            step="any"
-            required
-          >
-
+          <input id="amount" type="number" min="0" step="any" required>
         </div>
 
         <div>
-
           <label>Unidad</label>
-
-          <input
-            id="unit"
-            placeholder="sacos, kg, unidades..."
-            required
-          >
-
+          <input id="unit" placeholder="sacos, kg, unidades..." required>
         </div>
 
       </div>
@@ -389,12 +431,9 @@ input,select{
   </section>
 
 
-  <!-- MOVIMIENTOS -->
+  <!-- ENTRADA / SALIDA -->
 
-  <section
-    id="movePanel"
-    class="panel hidden"
-  >
+  <section id="movePanel" class="panel hidden">
 
     <h2>Registrar movimiento</h2>
 
@@ -403,37 +442,18 @@ input,select{
       <label>Tipo</label>
 
       <select id="kind">
-
-        <option value="Salida">
-          Salida
-        </option>
-
-        <option value="Entrada">
-          Entrada
-        </option>
-
+        <option value="Salida">Salida</option>
+        <option value="Entrada">Entrada</option>
       </select>
 
       <label>Material</label>
-
       <select id="pick"></select>
 
       <label>Cantidad</label>
-
-      <input
-        id="qty"
-        type="number"
-        min=".001"
-        step="any"
-        required
-      >
+      <input id="qty" type="number" min=".001" step="any" required>
 
       <label>Nota</label>
-
-      <input
-        id="note"
-        placeholder="Opcional"
-      >
+      <input id="note" placeholder="Opcional">
 
       <button class="btn full">
         Guardar movimiento
@@ -448,21 +468,104 @@ input,select{
   </section>
 
 
+  <!-- CARGAMENTOS -->
+
+  <section id="loadsPanel" class="panel hidden">
+
+    <h2>📥 Cargamentos</h2>
+
+    <p class="muted">
+      Registra varios materiales recibidos como un solo cargamento.
+    </p>
+
+    <div class="carga-box">
+
+      <h3>Registrar nuevo cargamento</h3>
+
+      <label>Material</label>
+      <select id="loadMaterial"></select>
+
+      <label>Cantidad recibida</label>
+      <input
+        id="loadQty"
+        type="number"
+        min=".001"
+        step="any"
+        placeholder="Ej. 50"
+      >
+
+      <button
+        id="addLoadMaterial"
+        class="btn full"
+        type="button"
+      >
+        ➕ Agregar a la lista
+      </button>
+
+
+      <h3>Materiales del cargamento</h3>
+
+      <div id="loadDraftList">
+        <div class="empty">
+          Todavía no has agregado materiales.
+        </div>
+      </div>
+
+
+      <label>Nota del cargamento</label>
+
+      <textarea
+        id="loadNote"
+        placeholder="Opcional: proveedor, número de guía, observaciones..."
+      ></textarea>
+
+
+      <div class="carga-box">
+
+        <div>
+          👤 Responsable:
+          <strong id="loadResponsible">Usuario</strong>
+        </div>
+
+        <div class="muted">
+          La fecha y hora se registrarán automáticamente.
+        </div>
+
+      </div>
+
+
+      <button
+        id="saveLoad"
+        class="btn full"
+        type="button"
+      >
+        📥 Registrar cargamento
+      </button>
+
+    </div>
+
+
+    <h2 style="margin-top:28px">
+      Historial de cargamentos
+    </h2>
+
+    <div id="loadsHistory">
+      <div class="empty">
+        No hay cargamentos registrados.
+      </div>
+    </div>
+
+  </section>
+
+
   <!-- HISTORIAL -->
 
-  <section
-    id="historyPanel"
-    class="panel hidden"
-  >
+  <section id="historyPanel" class="panel hidden">
 
     <h2>Historial</h2>
 
     <label>Fecha</label>
-
-    <input
-      id="filterDate"
-      type="date"
-    >
+    <input id="filterDate" type="date">
 
     <div id="historyList"></div>
 
@@ -480,12 +583,6 @@ input,select{
 
 
 <script type="module">
-
-/*
-========================================
-FIREBASE
-========================================
-*/
 
 import {
   initializeApp
@@ -507,7 +604,8 @@ import {
   addDoc,
   doc,
   updateDoc,
-  onSnapshot
+  onSnapshot,
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -534,14 +632,9 @@ const firebaseConfig = {
 };
 
 
-const app =
-  initializeApp(firebaseConfig);
-
-const auth =
-  getAuth(app);
-
-const db =
-  getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 
 /*
@@ -551,12 +644,13 @@ VARIABLES
 */
 
 let stock = [];
-
 let moves = [];
+let cargamentos = [];
+let borradorCarga = [];
 
 let detenerMateriales = null;
-
 let detenerMovimientos = null;
+let detenerCargamentos = null;
 
 let usuarioActual = {
   uid:"",
@@ -593,51 +687,10 @@ const userEmail =
   document.getElementById("userEmail");
 
 
-status.style.color =
-  "#166534";
+status.style.color = "#166534";
 
 status.textContent =
   "🟢 Firebase cargado. Puedes iniciar sesión.";
-
-
-/*
-========================================
-CONVERTIR USUARIO A CORREO
-========================================
-*/
-
-function obtenerCorreo(valor){
-
-  const usuario =
-    valor
-      .trim()
-      .toLowerCase();
-
-
-  /*
-  Si escribió un correo completo,
-  lo dejamos exactamente como está.
-  Esto permite que Stalin use Gmail.
-  */
-
-  if(usuario.includes("@")){
-
-    return usuario;
-
-  }
-
-
-  /*
-  Si escribió solamente el usuario,
-  agregamos el correo interno.
-  */
-
-  return (
-    usuario +
-    "@bodegaseascape.com"
-  );
-
-}
 
 
 /*
@@ -646,12 +699,25 @@ LOGIN
 ========================================
 */
 
+function obtenerCorreo(valor){
+
+  const usuario =
+    valor.trim().toLowerCase();
+
+  if(usuario.includes("@")){
+    return usuario;
+  }
+
+  return usuario + "@bodegaseascape.com";
+
+}
+
+
 loginForm.addEventListener(
   "submit",
   async event => {
 
     event.preventDefault();
-
 
     const usuario =
       document
@@ -659,52 +725,36 @@ loginForm.addEventListener(
         .value
         .trim();
 
-
     const password =
       document
         .getElementById("loginPassword")
         .value;
 
-
     const email =
       obtenerCorreo(usuario);
 
-
     loginBtn.disabled = true;
+    loginBtn.textContent = "Ingresando...";
 
-    loginBtn.textContent =
-      "Ingresando...";
-
-
-    status.style.color =
-      "#166534";
-
-    status.textContent =
-      "Verificando cuenta...";
-
+    status.style.color = "#166534";
+    status.textContent = "Verificando cuenta...";
 
     try{
 
-      const resultado =
-        await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
       status.textContent =
         "Acceso correcto.";
-
 
     }catch(error){
 
       console.error(error);
 
-
-      status.style.color =
-        "#b42318";
-
+      status.style.color = "#b42318";
 
       status.textContent =
         "❌ Usuario o contraseña incorrectos.";
@@ -712,9 +762,7 @@ loginForm.addEventListener(
     }finally{
 
       loginBtn.disabled = false;
-
-      loginBtn.textContent =
-        "Ingresar";
+      loginBtn.textContent = "Ingresar";
 
     }
 
@@ -736,23 +784,14 @@ onAuthStateChanged(
 
       detenerTiempoReal();
 
-
-      appScreen
-        .classList
-        .add("hidden");
-
-
-      loginScreen
-        .classList
-        .remove("hidden");
-
+      appScreen.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
 
       usuarioActual = {
         uid:"",
         nombre:"",
         email:""
       };
-
 
       return;
 
@@ -761,8 +800,7 @@ onAuthStateChanged(
 
     usuarioActual = {
 
-      uid:
-        user.uid,
+      uid:user.uid,
 
       nombre:
         user.email ||
@@ -776,27 +814,15 @@ onAuthStateChanged(
 
 
     userName.textContent =
-      "👤 " +
-      usuarioActual.nombre;
-
+      "👤 " + usuarioActual.nombre;
 
     userEmail.textContent =
       usuarioActual.email;
 
 
-    loginScreen
-      .classList
-      .add("hidden");
+    loginScreen.classList.add("hidden");
+    appScreen.classList.remove("hidden");
 
-
-    appScreen
-      .classList
-      .remove("hidden");
-
-
-    /*
-    BUSCAR PERFIL DEL USUARIO
-    */
 
     try{
 
@@ -816,17 +842,11 @@ onAuthStateChanged(
           perfil.data();
 
 
-        /*
-        COMPROBAR SI LA CUENTA
-        ESTÁ ACTIVA
-        */
-
         if(datos.activo === false){
 
           alert(
             "Esta cuenta está desactivada."
           );
-
 
           await signOut(auth);
 
@@ -846,7 +866,6 @@ onAuthStateChanged(
 
       }
 
-
     }catch(error){
 
       console.error(
@@ -857,9 +876,11 @@ onAuthStateChanged(
     }
 
 
-    /*
-    ACTIVAR TIEMPO REAL
-    */
+    document
+      .getElementById("loadResponsible")
+      .textContent =
+        usuarioActual.nombre;
+
 
     iniciarTiempoReal();
 
@@ -869,7 +890,7 @@ onAuthStateChanged(
 
 /*
 ========================================
-CERRAR SESIÓN
+LOGOUT
 ========================================
 */
 
@@ -926,25 +947,14 @@ function fechaISO(valor){
 
   }
 
-
   const fecha =
     new Date(valor);
 
-
-  if(
-    !isNaN(
-      fecha.getTime()
-    )
-  ){
-
-    return fecha
-      .toISOString();
-
+  if(!isNaN(fecha.getTime())){
+    return fecha.toISOString();
   }
 
-
-  return new Date()
-    .toISOString();
+  return new Date().toISOString();
 
 }
 
@@ -954,26 +964,46 @@ function fechaLocal(fecha = new Date()){
   const a =
     fecha.getFullYear();
 
-
   const m =
     String(
-      fecha.getMonth() + 1
-    ).padStart(
-      2,
-      "0"
-    );
-
+      fecha.getMonth()+1
+    ).padStart(2,"0");
 
   const d =
     String(
       fecha.getDate()
-    ).padStart(
-      2,
-      "0"
-    );
-
+    ).padStart(2,"0");
 
   return `${a}-${m}-${d}`;
+
+}
+
+
+function fechaMostrar(fecha){
+
+  return new Date(fecha)
+    .toLocaleDateString(
+      "es-EC",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+      }
+    );
+
+}
+
+
+function horaMostrar(fecha){
+
+  return new Date(fecha)
+    .toLocaleTimeString(
+      "es-EC",
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
 
 }
 
@@ -1009,11 +1039,9 @@ function iniciarTiempoReal(){
               const x =
                 documento.data();
 
-
               return {
 
-                id:
-                  documento.id,
+                id:documento.id,
 
                 name:
                   x.nombre ||
@@ -1037,7 +1065,6 @@ function iniciarTiempoReal(){
             }
           );
 
-
         render();
 
       },
@@ -1045,7 +1072,7 @@ function iniciarTiempoReal(){
       error => {
 
         console.error(
-          "Error sincronizando materiales:",
+          "Error materiales:",
           error
         );
 
@@ -1073,11 +1100,9 @@ function iniciarTiempoReal(){
               const x =
                 documento.data();
 
-
               return {
 
-                id:
-                  documento.id,
+                id:documento.id,
 
                 date:
                   fechaISO(
@@ -1118,6 +1143,10 @@ function iniciarTiempoReal(){
 
                 responsableUid:
                   x.responsableUid ||
+                  "",
+
+                cargamentoId:
+                  x.cargamentoId ||
                   ""
 
               };
@@ -1140,7 +1169,86 @@ function iniciarTiempoReal(){
       error => {
 
         console.error(
-          "Error sincronizando movimientos:",
+          "Error movimientos:",
+          error
+        );
+
+      }
+    );
+
+
+  /*
+  CARGAMENTOS
+  */
+
+  detenerCargamentos =
+    onSnapshot(
+      collection(
+        db,
+        "cargamentos"
+      ),
+
+      snapshot => {
+
+        cargamentos =
+          snapshot.docs.map(
+            documento => {
+
+              const x =
+                documento.data();
+
+              return {
+
+                id:
+                  documento.id,
+
+                date:
+                  fechaISO(
+                    x.fecha
+                  ),
+
+                responsableNombre:
+                  x.responsableNombre ||
+                  "",
+
+                responsableUid:
+                  x.responsableUid ||
+                  "",
+
+                nota:
+                  x.nota ||
+                  "",
+
+                materiales:
+                  Array.isArray(
+                    x.materiales
+                  )
+                  ?
+                  x.materiales
+                  :
+                  []
+
+              };
+
+            }
+          );
+
+
+        cargamentos.sort(
+          (a,b) =>
+            new Date(b.date) -
+            new Date(a.date)
+        );
+
+
+        renderCargamentos();
+
+      },
+
+      error => {
+
+        console.error(
+          "Error cargamentos:",
           error
         );
 
@@ -1153,20 +1261,18 @@ function iniciarTiempoReal(){
 function detenerTiempoReal(){
 
   if(detenerMateriales){
-
     detenerMateriales();
-
     detenerMateriales = null;
-
   }
 
-
   if(detenerMovimientos){
-
     detenerMovimientos();
-
     detenerMovimientos = null;
+  }
 
+  if(detenerCargamentos){
+    detenerCargamentos();
+    detenerCargamentos = null;
   }
 
 }
@@ -1237,9 +1343,7 @@ document
           {
 
             nombre:name,
-
             cantidad:amount,
-
             unidad:unit
 
           }
@@ -1247,7 +1351,6 @@ document
 
 
         event.target.reset();
-
 
         alert(
           "Material guardado."
@@ -1257,7 +1360,6 @@ document
       }catch(error){
 
         console.error(error);
-
 
         alert(
           "No se pudo guardar el material."
@@ -1271,7 +1373,7 @@ document
 
 /*
 ========================================
-MOVIMIENTOS
+MOVIMIENTO NORMAL
 ========================================
 */
 
@@ -1292,8 +1394,7 @@ document
 
       const material =
         stock.find(
-          x =>
-            x.id === id
+          x => x.id === id
         );
 
 
@@ -1329,9 +1430,7 @@ document
           .trim();
 
 
-      if(
-        cantidad <= 0
-      ){
+      if(cantidad <= 0){
 
         alert(
           "Cantidad inválida."
@@ -1344,8 +1443,7 @@ document
 
       if(
         tipo === "Salida" &&
-        cantidad >
-        material.qty
+        cantidad > material.qty
       ){
 
         alert(
@@ -1360,11 +1458,9 @@ document
       const nuevaCantidad =
         tipo === "Entrada"
         ?
-        material.qty +
-        cantidad
+        material.qty + cantidad
         :
-        material.qty -
-        cantidad;
+        material.qty - cantidad;
 
 
       try{
@@ -1376,10 +1472,7 @@ document
             material.id
           ),
           {
-
-            cantidad:
-              nuevaCantidad
-
+            cantidad:nuevaCantidad
           }
         );
 
@@ -1432,7 +1525,6 @@ document
 
         console.error(error);
 
-
         alert(
           "No se pudo guardar el movimiento."
         );
@@ -1441,6 +1533,716 @@ document
 
     }
   );
+
+
+/*
+========================================
+BORRADOR DEL CARGAMENTO
+========================================
+*/
+
+document
+  .getElementById("addLoadMaterial")
+  .addEventListener(
+    "click",
+    () => {
+
+      const id =
+        document
+          .getElementById("loadMaterial")
+          .value;
+
+
+      const cantidad =
+        Number(
+          document
+            .getElementById("loadQty")
+            .value
+        );
+
+
+      const material =
+        stock.find(
+          x => x.id === id
+        );
+
+
+      if(!material){
+
+        alert(
+          "Selecciona un material."
+        );
+
+        return;
+
+      }
+
+
+      if(cantidad <= 0){
+
+        alert(
+          "Ingresa una cantidad válida."
+        );
+
+        return;
+
+      }
+
+
+      const existente =
+        borradorCarga.find(
+          x => x.id === id
+        );
+
+
+      if(existente){
+
+        existente.qty +=
+          cantidad;
+
+      }else{
+
+        borradorCarga.push({
+
+          id:
+            material.id,
+
+          name:
+            material.name,
+
+          unit:
+            material.unit,
+
+          qty:
+            cantidad
+
+        });
+
+      }
+
+
+      document
+        .getElementById("loadQty")
+        .value = "";
+
+
+      renderBorradorCarga();
+
+    }
+  );
+
+
+function quitarCarga(index){
+
+  borradorCarga.splice(
+    index,
+    1
+  );
+
+  renderBorradorCarga();
+
+}
+
+
+window.quitarCarga =
+  quitarCarga;
+
+
+function renderBorradorCarga(){
+
+  const contenedor =
+    document
+      .getElementById(
+        "loadDraftList"
+      );
+
+
+  if(
+    borradorCarga.length === 0
+  ){
+
+    contenedor.innerHTML =
+      `
+      <div class="empty">
+        Todavía no has agregado materiales.
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  contenedor.innerHTML =
+    borradorCarga.map(
+      (x,index) => `
+
+        <div class="carga-material">
+
+          <div>
+
+            <strong>
+              ${esc(x.name)}
+            </strong>
+
+            ${x.qty}
+            ${esc(x.unit)}
+
+          </div>
+
+          <button
+            class="remove"
+            type="button"
+            onclick="quitarCarga(${index})"
+          >
+            🗑️
+          </button>
+
+        </div>
+
+      `
+    ).join("");
+
+}
+
+
+/*
+========================================
+REGISTRAR CARGAMENTO
+========================================
+*/
+
+document
+  .getElementById("saveLoad")
+  .addEventListener(
+    "click",
+    async () => {
+
+      if(
+        borradorCarga.length === 0
+      ){
+
+        alert(
+          "Agrega al menos un material al cargamento."
+        );
+
+        return;
+
+      }
+
+
+      const boton =
+        document
+          .getElementById(
+            "saveLoad"
+          );
+
+
+      const nota =
+        document
+          .getElementById(
+            "loadNote"
+          )
+          .value
+          .trim();
+
+
+      boton.disabled = true;
+
+      boton.textContent =
+        "Registrando...";
+
+
+      try{
+
+        /*
+        Primero actualizamos todas las
+        cantidades mediante transacción.
+        */
+
+        await runTransaction(
+          db,
+          async transaction => {
+
+            const lecturas = [];
+
+
+            for(
+              const item
+              of borradorCarga
+            ){
+
+              const referencia =
+                doc(
+                  db,
+                  "materiales",
+                  item.id
+                );
+
+
+              const snapshot =
+                await transaction.get(
+                  referencia
+                );
+
+
+              if(
+                !snapshot.exists()
+              ){
+
+                throw new Error(
+                  "Material no encontrado: " +
+                  item.name
+                );
+
+              }
+
+
+              lecturas.push({
+
+                item:item,
+
+                referencia:referencia,
+
+                datos:snapshot.data()
+
+              });
+
+            }
+
+
+            for(
+              const lectura
+              of lecturas
+            ){
+
+              const actual =
+                Number(
+                  lectura.datos.cantidad ??
+                  lectura.datos.qty ??
+                  0
+                );
+
+
+              transaction.update(
+                lectura.referencia,
+                {
+
+                  cantidad:
+                    actual +
+                    lectura.item.qty
+
+                }
+              );
+
+            }
+
+          }
+        );
+
+
+        /*
+        Creamos el cargamento.
+        */
+
+        const fecha =
+          new Date();
+
+
+        const materialesCarga =
+          borradorCarga.map(
+            x => ({
+
+              materialId:
+                x.id,
+
+              nombre:
+                x.name,
+
+              unidad:
+                x.unit,
+
+              cantidad:
+                x.qty
+
+            })
+          );
+
+
+        const cargaRef =
+          await addDoc(
+            collection(
+              db,
+              "cargamentos"
+            ),
+            {
+
+              fecha:
+                fecha,
+
+              responsableNombre:
+                usuarioActual.nombre,
+
+              responsableUid:
+                usuarioActual.uid,
+
+              nota:
+                nota,
+
+              materiales:
+                materialesCarga
+
+            }
+          );
+
+
+        /*
+        También registramos cada material
+        como entrada en el historial general.
+        */
+
+        for(
+          const item
+          of borradorCarga
+        ){
+
+          await addDoc(
+            collection(
+              db,
+              "movimientos"
+            ),
+            {
+
+              nombre:
+                item.name,
+
+              unidad:
+                item.unit,
+
+              tipo:
+                "Entrada",
+
+              cantidad:
+                item.qty,
+
+              nota:
+                nota ||
+                "Ingreso por cargamento",
+
+              fecha:
+                fecha,
+
+              responsableNombre:
+                usuarioActual.nombre,
+
+              responsableUid:
+                usuarioActual.uid,
+
+              cargamentoId:
+                cargaRef.id
+
+            }
+          );
+
+        }
+
+
+        borradorCarga = [];
+
+        document
+          .getElementById(
+            "loadNote"
+          )
+          .value = "";
+
+
+        renderBorradorCarga();
+
+
+        alert(
+          "Cargamento registrado correctamente."
+        );
+
+
+      }catch(error){
+
+        console.error(error);
+
+
+        alert(
+          "No se pudo registrar el cargamento."
+        );
+
+
+      }finally{
+
+        boton.disabled = false;
+
+        boton.textContent =
+          "📥 Registrar cargamento";
+
+      }
+
+    }
+  );
+
+
+/*
+========================================
+RENDER CARGAMENTOS
+========================================
+*/
+
+function renderCargamentos(){
+
+  const contenedor =
+    document
+      .getElementById(
+        "loadsHistory"
+      );
+
+
+  if(
+    cargamentos.length === 0
+  ){
+
+    contenedor.innerHTML =
+      `
+      <div class="empty">
+        No hay cargamentos registrados.
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  const grupos = {};
+
+
+  cargamentos.forEach(
+    carga => {
+
+      const clave =
+        fechaLocal(
+          new Date(
+            carga.date
+          )
+        );
+
+
+      if(!grupos[clave]){
+
+        grupos[clave] = [];
+
+      }
+
+
+      grupos[clave].push(
+        carga
+      );
+
+    }
+  );
+
+
+  const fechas =
+    Object.keys(
+      grupos
+    ).sort(
+      (a,b) =>
+        b.localeCompare(a)
+    );
+
+
+  let html = "";
+
+
+  fechas.forEach(
+    fecha => {
+
+      const lista =
+        grupos[fecha];
+
+
+      html += `
+
+        <div class="fecha-grupo">
+
+          <div class="fecha-titulo">
+            📅 ${
+              fechaMostrar(
+                fecha + "T12:00:00"
+              )
+            }
+          </div>
+
+      `;
+
+
+      lista.forEach(
+        (carga,index) => {
+
+          const numero =
+            lista.length -
+            index;
+
+
+          html += `
+
+            <div class="cargamento">
+
+              <div
+                class="cargamento-cabecera"
+                onclick="
+                  document
+                    .getElementById(
+                      'detalle-${esc(carga.id)}'
+                    )
+                    .classList
+                    .toggle('hidden')
+                "
+              >
+
+                <div>
+
+                  <strong>
+                    📦 Cargamento #${numero}
+                  </strong>
+
+                  <div class="muted">
+                    🕐 ${horaMostrar(carga.date)}
+                  </div>
+
+                  <div class="responsable">
+                    👤 Responsable:
+                    ${
+                      esc(
+                        carga.responsableNombre ||
+                        "No registrado"
+                      )
+                    }
+                  </div>
+
+                </div>
+
+                <strong>
+                  ▼
+                </strong>
+
+              </div>
+
+
+              <div
+                id="detalle-${esc(carga.id)}"
+                class="cargamento-detalle hidden"
+              >
+
+                <strong>
+                  Materiales recibidos
+                </strong>
+
+
+                ${
+                  carga.materiales
+                    .map(
+                      material => `
+
+                        <div class="cargamento-linea">
+
+                          <strong>
+                            ${
+                              esc(
+                                material.nombre
+                              )
+                            }
+                          </strong>
+
+                          <div>
+                            ${
+                              Number(
+                                material.cantidad ??
+                                0
+                              )
+                            }
+                            ${
+                              esc(
+                                material.unidad ||
+                                ""
+                              )
+                            }
+                          </div>
+
+                        </div>
+
+                      `
+                    )
+                    .join("")
+                }
+
+
+                <div class="info-carga">
+
+                  <div>
+                    📅 ${
+                      fechaMostrar(
+                        carga.date
+                      )
+                    }
+                  </div>
+
+                  <div>
+                    🕐 ${
+                      horaMostrar(
+                        carga.date
+                      )
+                    }
+                  </div>
+
+                  <div>
+                    👤 Responsable:
+                    ${
+                      esc(
+                        carga.responsableNombre ||
+                        "No registrado"
+                      )
+                    }
+                  </div>
+
+                  <div>
+                    📝 ${
+                      esc(
+                        carga.nota ||
+                        "Sin nota"
+                      )
+                    }
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      );
+
+
+      html += `
+        </div>
+      `;
+
+    }
+  );
+
+
+  contenedor.innerHTML =
+    html;
+
+}
 
 
 /*
@@ -1459,6 +2261,11 @@ const panels = {
   move:
     document.getElementById(
       "movePanel"
+    ),
+
+  loads:
+    document.getElementById(
+      "loadsPanel"
     ),
 
   history:
@@ -1542,6 +2349,21 @@ document
 
 
 document
+  .getElementById("tabLoads")
+  .addEventListener(
+    "click",
+    function(){
+
+      abrirPanel(
+        "loads",
+        this
+      );
+
+    }
+  );
+
+
+document
   .getElementById("tabHistory")
   .addEventListener(
     "click",
@@ -1558,7 +2380,7 @@ document
 
 /*
 ========================================
-FECHA
+FECHA HISTORIAL
 ========================================
 */
 
@@ -1578,7 +2400,7 @@ document
 
 /*
 ========================================
-RENDER
+RENDER GENERAL
 ========================================
 */
 
@@ -1605,6 +2427,10 @@ function render(){
       ).length;
 
 
+  /*
+  INVENTARIO
+  */
+
   document
     .getElementById("stockList")
     .innerHTML =
@@ -1622,10 +2448,8 @@ function render(){
             </b>
 
             <div class="qty">
-
               ${x.qty}
               ${esc(x.unit)}
-
             </div>
 
           </div>
@@ -1636,11 +2460,15 @@ function render(){
       :
 
       `
-        <div class="empty">
-          No hay materiales.
-        </div>
+      <div class="empty">
+        No hay materiales.
+      </div>
       `;
 
+
+  /*
+  SELECT MOVIMIENTO
+  */
 
   document
     .getElementById("pick")
@@ -1661,6 +2489,47 @@ function render(){
         `
       ).join("");
 
+
+  /*
+  SELECT CARGAMENTO
+  */
+
+  document
+    .getElementById("loadMaterial")
+    .innerHTML =
+
+      stock.map(
+        x => `
+
+          <option value="${esc(x.id)}">
+
+            ${esc(x.name)}
+            —
+            ${x.qty}
+            ${esc(x.unit)}
+
+          </option>
+
+        `
+      ).join("");
+
+
+  /*
+  RESPONSABLE CARGAMENTO
+  */
+
+  document
+    .getElementById(
+      "loadResponsible"
+    )
+    .textContent =
+      usuarioActual.nombre ||
+      "Usuario";
+
+
+  /*
+  HISTORIAL
+  */
 
   const filtro =
     document
@@ -1724,23 +2593,15 @@ function render(){
                 ·
 
                 ${
-                  new Date(
+                  horaMostrar(
                     x.date
-                  ).toLocaleTimeString(
-                    "es-EC",
-                    {
-                      hour:"2-digit",
-                      minute:"2-digit"
-                    }
                   )
                 }
 
               </div>
 
               <div class="responsable">
-
                 ${responsable}
-
               </div>
 
               <div class="muted">
@@ -1764,17 +2625,21 @@ function render(){
       :
 
       `
-        <div class="empty">
-          No hay movimientos para esta fecha.
-        </div>
+      <div class="empty">
+        No hay movimientos para esta fecha.
+      </div>
       `;
+
+
+  renderBorradorCarga();
+  renderCargamentos();
 
 }
 
 
 /*
 ========================================
-EXPORTAR CSV
+CSV
 ========================================
 */
 
@@ -1815,11 +2680,8 @@ document
               ),
 
               x.kind,
-
               x.name,
-
               x.qty,
-
               x.unit,
 
               x.responsableNombre ||
