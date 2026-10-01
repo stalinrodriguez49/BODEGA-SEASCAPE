@@ -1,26 +1,14 @@
 <!doctype html>
 <html lang="es">
 <head>
-
 <meta charset="utf-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
-
-<meta
-  name="theme-color"
-  content="#166534"
->
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#166534">
 
 <title>BODEGA SEASCAPE</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -51,9 +39,7 @@ header p{
   padding:14px;
 }
 
-.hidden{
-  display:none !important;
-}
+.hidden{display:none!important}
 
 /* LOGIN */
 
@@ -96,9 +82,13 @@ header p{
   margin-bottom:12px;
 }
 
+.user-info strong{
+  display:block;
+}
+
 .user-email{
   font-size:13px;
-  color:#164d2b;
+  color:#52705b;
   word-break:break-all;
 }
 
@@ -179,13 +169,18 @@ select{
   padding:12px 0;
 }
 
-.item:last-child{
-  border:0;
-}
+.item:last-child{border:0}
 
 .muted{
   color:#637168;
   font-size:13px;
+}
+
+.responsable{
+  margin-top:5px;
+  font-size:14px;
+  font-weight:700;
+  color:#166534;
 }
 
 .qty{
@@ -235,320 +230,261 @@ select{
   border-radius:10px;
   color:#735514;
 }
-
 </style>
 
 <link rel="manifest" href="manifest.json">
-
-<meta
-  name="mobile-web-app-capable"
-  content="yes"
->
+<meta name="mobile-web-app-capable" content="yes">
 
 </head>
 
 <body>
 
 <header>
-
 <h1>📦 BODEGA SEASCAPE</h1>
-
 <p>Control de inventario · Firebase</p>
-
 </header>
 
 
 <!-- LOGIN -->
 
-<div
-  id="loginScreen"
-  class="login-wrap hidden"
->
+<div id="loginScreen" class="login-wrap hidden">
 
-<div class="login-card">
+  <div class="login-card">
 
-<h2>🔐 Iniciar sesión</h2>
+    <h2>🔐 Iniciar sesión</h2>
 
-<p class="muted">
-Ingresa con tu cuenta de BODEGA SEASCAPE.
-</p>
+    <p class="muted">
+      Ingresa con tu cuenta de BODEGA SEASCAPE.
+    </p>
 
-<form id="loginForm">
+    <form id="loginForm">
 
-<label>Correo electrónico</label>
+      <label>Correo electrónico</label>
 
-<input
-  id="loginEmail"
-  type="email"
-  autocomplete="username"
-  placeholder="correo@ejemplo.com"
-  required
->
+      <input
+        id="loginEmail"
+        type="email"
+        autocomplete="username"
+        required
+      >
 
-<label>Contraseña</label>
+      <label>Contraseña</label>
 
-<input
-  id="loginPassword"
-  type="password"
-  autocomplete="current-password"
-  placeholder="Contraseña"
-  required
->
+      <input
+        id="loginPassword"
+        type="password"
+        autocomplete="current-password"
+        required
+      >
 
-<button
-  id="loginBtn"
-  class="btn full"
-  type="submit"
->
-Ingresar
-</button>
+      <button
+        id="loginBtn"
+        class="btn full"
+        type="submit"
+      >
+        Ingresar
+      </button>
 
-</form>
+    </form>
 
-<div
-  id="loginError"
-  class="login-error"
-></div>
+    <div id="loginError" class="login-error"></div>
 
-</div>
+  </div>
 
 </div>
 
 
 <!-- APLICACIÓN -->
 
-<main
-  id="appScreen"
-  class="wrap hidden"
->
+<main id="appScreen" class="wrap hidden">
 
-<div class="userbar">
+  <div class="userbar">
 
-<div>
+    <div class="user-info">
 
-<strong>👤 Sesión iniciada</strong>
+      <strong id="userName">
+        👤 Usuario
+      </strong>
 
-<div
-  id="userEmail"
-  class="user-email"
-></div>
+      <div id="userEmail" class="user-email"></div>
 
-</div>
+    </div>
 
-<button
-  id="logoutBtn"
-  class="logout"
-  type="button"
->
-Cerrar sesión
-</button>
+    <button
+      id="logoutBtn"
+      class="logout"
+      type="button"
+    >
+      Cerrar sesión
+    </button>
 
-</div>
+  </div>
 
 
-<div class="stats">
+  <div class="stats">
 
-<div class="stat">
+    <div class="stat">
+      <span>Tipos de materiales</span>
+      <strong id="count">0</strong>
+    </div>
 
-<span>Tipos de materiales</span>
+    <div class="stat">
+      <span>Movimientos hoy</span>
+      <strong id="today">0</strong>
+    </div>
 
-<strong id="count">0</strong>
+  </div>
 
-</div>
 
-<div class="stat">
+  <nav class="tabs" style="margin-top:14px">
 
-<span>Movimientos hoy</span>
+    <button id="tabStock" class="active" type="button">
+      Inventario
+    </button>
 
-<strong id="today">0</strong>
+    <button id="tabMove" type="button">
+      Entrada / salida
+    </button>
 
-</div>
+    <button id="tabHistory" type="button">
+      Historial
+    </button>
 
-</div>
+  </nav>
 
 
-<nav
-  class="tabs"
-  style="margin-top:14px"
->
+  <!-- INVENTARIO -->
 
-<button
-  id="tabStock"
-  class="active"
-  type="button"
->
-Inventario
-</button>
+  <section id="stock" class="panel">
 
-<button
-  id="tabMove"
-  type="button"
->
-Entrada / salida
-</button>
+    <h2>Inventario actual</h2>
 
-<button
-  id="tabHistory"
-  type="button"
->
-Historial
-</button>
+    <form id="addForm">
 
-</nav>
+      <label>Nombre del material</label>
 
+      <input
+        id="material"
+        placeholder="Ej. Cemento"
+        required
+      >
 
-<section
-  id="stock"
-  class="panel"
->
+      <div class="row">
 
-<h2>Inventario actual</h2>
+        <div>
 
-<form id="addForm">
+          <label>Cantidad inicial</label>
 
-<label>Nombre del material</label>
+          <input
+            id="amount"
+            type="number"
+            min="0"
+            step="any"
+            required
+          >
 
-<input
-  id="material"
-  placeholder="Ej. Cemento"
-  required
->
+        </div>
 
-<div class="row">
+        <div>
 
-<div>
+          <label>Unidad</label>
 
-<label>Cantidad inicial</label>
+          <input
+            id="unit"
+            placeholder="sacos, unidades, kg..."
+            required
+          >
 
-<input
-  id="amount"
-  type="number"
-  min="0"
-  step="any"
-  placeholder="0"
-  required
->
+        </div>
 
-</div>
+      </div>
 
-<div>
+      <button class="btn full" type="submit">
+        Agregar material
+      </button>
 
-<label>Unidad</label>
+    </form>
 
-<input
-  id="unit"
-  placeholder="sacos, unidades, kg..."
-  required
->
+    <div id="stockList"></div>
 
-</div>
+  </section>
 
-</div>
 
-<button
-  class="btn full"
-  type="submit"
->
-Agregar material
-</button>
+  <!-- MOVIMIENTOS -->
 
-</form>
+  <section id="move" class="panel hidden">
 
-<div id="stockList"></div>
+    <h2>Registrar movimiento</h2>
 
-</section>
+    <form id="moveForm">
 
+      <label>Tipo de movimiento</label>
 
-<section
-  id="move"
-  class="panel hidden"
->
+      <select id="kind">
+        <option value="Salida">Salida</option>
+        <option value="Entrada">Entrada</option>
+      </select>
 
-<h2>Registrar movimiento</h2>
+      <label>Material</label>
 
-<form id="moveForm">
+      <select id="pick" required></select>
 
-<label>Tipo de movimiento</label>
+      <label>Cantidad</label>
 
-<select id="kind">
+      <input
+        id="qty"
+        type="number"
+        min=".001"
+        step="any"
+        required
+      >
 
-<option value="Salida">Salida</option>
+      <label>Nota (opcional)</label>
 
-<option value="Entrada">Entrada</option>
+      <input
+        id="note"
+        placeholder="Ej. Entrega para trabajo"
+      >
 
-</select>
+      <button class="btn full" type="submit">
+        Guardar movimiento
+      </button>
 
-<label>Material</label>
+    </form>
 
-<select
-  id="pick"
-  required
-></select>
+    <p class="muted">
+      El responsable se registra automáticamente con la cuenta iniciada.
+    </p>
 
-<label>Cantidad</label>
+  </section>
 
-<input
-  id="qty"
-  type="number"
-  min=".001"
-  step="any"
-  required
-  placeholder="Cantidad"
->
 
-<label>Nota (opcional)</label>
+  <!-- HISTORIAL -->
 
-<input
-  id="note"
-  placeholder="Ej. Entrega para trabajo"
->
+  <section id="history" class="panel hidden">
 
-<button
-  class="btn full"
-  type="submit"
->
-Guardar movimiento
-</button>
+    <h2>Historial de movimientos</h2>
 
-</form>
+    <label>Filtrar por fecha</label>
 
-<p class="muted">
-La existencia se actualiza al guardar.
-</p>
+    <input type="date" id="filterDate">
 
-</section>
+    <div id="historyList"></div>
 
+    <button
+      id="exportBtn"
+      class="btn secondary full"
+      type="button"
+    >
+      Exportar historial CSV
+    </button>
 
-<section
-  id="history"
-  class="panel hidden"
->
+  </section>
 
-<h2>Historial de movimientos</h2>
 
-<label>Filtrar por fecha</label>
-
-<input
-  type="date"
-  id="filterDate"
->
-
-<div id="historyList"></div>
-
-<button
-  id="exportBtn"
-  class="btn secondary full"
-  type="button"
->
-Exportar historial CSV
-</button>
-
-</section>
-
-
-<div class="warn">
-Los datos se guardan en Firebase y pueden sincronizarse entre dispositivos.
-</div>
+  <div class="warn">
+    Los datos se guardan en Firebase y pueden sincronizarse entre dispositivos.
+  </div>
 
 </main>
 
@@ -563,6 +499,7 @@ import {
 import {
   collection,
   getDocs,
+  getDoc,
   addDoc,
   doc,
   updateDoc,
@@ -585,6 +522,16 @@ let stock = [];
 let moves = [];
 let datosCargados = false;
 
+/*
+  Aquí guardaremos los datos del usuario
+  actualmente conectado.
+*/
+let usuarioActual = {
+  uid:"",
+  nombre:"",
+  email:""
+};
+
 
 /* LOGIN */
 
@@ -603,6 +550,9 @@ const loginError =
 const loginBtn =
   document.getElementById("loginBtn");
 
+const userName =
+  document.getElementById("userName");
+
 const userEmail =
   document.getElementById("userEmail");
 
@@ -616,9 +566,7 @@ loginForm.addEventListener(
     loginError.textContent = "";
 
     loginBtn.disabled = true;
-
-    loginBtn.textContent =
-      "Ingresando...";
+    loginBtn.textContent = "Ingresando...";
 
     const email =
       document
@@ -648,12 +596,6 @@ loginForm.addEventListener(
         error
       );
 
-      /*
-        IMPORTANTE:
-        mostramos el código REAL
-        devuelto por Firebase.
-      */
-
       loginError.textContent =
         "Error Firebase: " +
         (error.code || error.message);
@@ -661,14 +603,60 @@ loginForm.addEventListener(
     }finally{
 
       loginBtn.disabled = false;
-
-      loginBtn.textContent =
-        "Ingresar";
+      loginBtn.textContent = "Ingresar";
 
     }
 
   }
 );
+
+
+/* CARGAR PERFIL DEL USUARIO */
+
+async function cargarUsuario(user){
+
+  const perfilRef =
+    doc(
+      db,
+      "usuarios",
+      user.uid
+    );
+
+  const perfilSnap =
+    await getDoc(perfilRef);
+
+  if(!perfilSnap.exists()){
+
+    throw new Error(
+      "No existe el perfil del usuario en Firestore."
+    );
+
+  }
+
+  const perfil =
+    perfilSnap.data();
+
+  if(perfil.activo === false){
+
+    throw new Error(
+      "Esta cuenta está desactivada."
+    );
+
+  }
+
+  usuarioActual = {
+    uid:user.uid,
+    nombre:perfil.nombre || user.email,
+    email:user.email || perfil.email || ""
+  };
+
+  userName.textContent =
+    "👤 " + usuarioActual.nombre;
+
+  userEmail.textContent =
+    usuarioActual.email;
+
+}
 
 
 /* DETECTAR SESIÓN */
@@ -679,41 +667,57 @@ onAuthStateChanged(
 
     if(user){
 
-      loginScreen.classList.add(
-        "hidden"
-      );
+      try{
 
-      appScreen.classList.remove(
-        "hidden"
-      );
+        /*
+          Primero buscamos quién es el usuario
+          dentro de la colección usuarios.
+        */
+        await cargarUsuario(user);
 
-      userEmail.textContent =
-        user.email || "Usuario";
+        loginScreen.classList.add("hidden");
+        appScreen.classList.remove("hidden");
 
-      if(!datosCargados){
+        if(!datosCargados){
 
-        await cargarDatos();
+          await cargarDatos();
+          datosCargados = true;
 
-        datosCargados = true;
+        }
+
+      }catch(error){
+
+        console.error(
+          "ERROR CARGANDO USUARIO:",
+          error
+        );
+
+        await signOut(auth);
+
+        loginError.textContent =
+          error.message ||
+          "No se pudo cargar el usuario.";
 
       }
 
     }else{
 
-      appScreen.classList.add(
-        "hidden"
-      );
+      appScreen.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
 
-      loginScreen.classList.remove(
-        "hidden"
-      );
+      userName.textContent =
+        "👤 Usuario";
 
       userEmail.textContent = "";
 
+      usuarioActual = {
+        uid:"",
+        nombre:"",
+        email:""
+      };
+
       stock = [];
-
       moves = [];
-
       datosCargados = false;
 
     }
@@ -736,10 +740,7 @@ document
 
       }catch(error){
 
-        console.error(
-          "ERROR CERRANDO SESIÓN:",
-          error
-        );
+        console.error(error);
 
         alert(
           "No se pudo cerrar la sesión."
@@ -783,15 +784,11 @@ function fechaISO(valor){
 
   }catch(error){
 
-    console.error(
-      "ERROR CON FECHA:",
-      error
-    );
+    console.error(error);
 
   }
 
-  return new Date()
-    .toISOString();
+  return new Date().toISOString();
 
 }
 
@@ -859,6 +856,7 @@ async function cargarDatos(){
         }
       );
 
+
     let movimientosSnapshot;
 
     try{
@@ -889,6 +887,7 @@ async function cargarDatos(){
       };
 
     }
+
 
     moves =
       movimientosSnapshot.docs.map(
@@ -931,6 +930,14 @@ async function cargarDatos(){
             note:
               data.nota ||
               data.note ||
+              "",
+
+            responsableNombre:
+              data.responsableNombre ||
+              "",
+
+            responsableUid:
+              data.responsableUid ||
               ""
 
           };
@@ -966,7 +973,10 @@ document
 
       e.preventDefault();
 
-      if(!auth.currentUser){
+      if(
+        !auth.currentUser ||
+        !usuarioActual.uid
+      ){
 
         alert(
           "Debes iniciar sesión."
@@ -1044,10 +1054,7 @@ document
 
       }catch(error){
 
-        console.error(
-          "ERROR GUARDANDO MATERIAL:",
-          error
-        );
+        console.error(error);
 
         alert(
           "Error guardando el material."
@@ -1069,7 +1076,10 @@ document
 
       e.preventDefault();
 
-      if(!auth.currentUser){
+      if(
+        !auth.currentUser ||
+        !usuarioActual.uid
+      ){
 
         alert(
           "Debes iniciar sesión."
@@ -1138,12 +1148,14 @@ document
 
       }
 
+
       const nuevaCantidad =
         kind === "Entrada"
         ?
         x.qty + q
         :
         x.qty - q;
+
 
       try{
 
@@ -1159,6 +1171,12 @@ document
             unidad:x.unit
           }
         );
+
+
+        /*
+          AQUÍ SE GUARDA AUTOMÁTICAMENTE
+          QUIÉN REALIZÓ EL MOVIMIENTO.
+        */
 
         const movimiento = {
 
@@ -1176,9 +1194,16 @@ document
               .value
               .trim(),
 
-          fecha:new Date()
+          fecha:new Date(),
+
+          responsableNombre:
+            usuarioActual.nombre,
+
+          responsableUid:
+            usuarioActual.uid
 
         };
+
 
         const movimientoNuevo =
           await addDoc(
@@ -1189,7 +1214,10 @@ document
             movimiento
           );
 
-        x.qty = nuevaCantidad;
+
+        x.qty =
+          nuevaCantidad;
+
 
         moves.unshift({
 
@@ -1208,16 +1236,25 @@ document
           qty:q,
 
           note:
-            movimiento.nota
+            movimiento.nota,
+
+          responsableNombre:
+            usuarioActual.nombre,
+
+          responsableUid:
+            usuarioActual.uid
 
         });
+
 
         render();
 
         e.target.reset();
 
         alert(
-          "Movimiento guardado correctamente."
+          "Movimiento guardado correctamente por " +
+          usuarioActual.nombre +
+          "."
         );
 
       }catch(error){
@@ -1245,6 +1282,7 @@ document
   new Date()
     .toISOString()
     .slice(0,10);
+
 
 document
   .getElementById("filterDate")
@@ -1317,6 +1355,7 @@ document
     }
   );
 
+
 document
   .getElementById("tabMove")
   .addEventListener(
@@ -1330,6 +1369,7 @@ document
 
     }
   );
+
 
 document
   .getElementById("tabHistory")
@@ -1355,266 +1395,14 @@ function render(){
       .toISOString()
       .slice(0,10);
 
+
   document
     .getElementById("count")
     .textContent =
     stock.length;
 
+
   document
     .getElementById("today")
     .textContent =
-    moves.filter(
-      x =>
-      fechaISO(x.date)
-        .slice(0,10)
-        ===
-      today
-    ).length;
-
-  document
-    .getElementById("stockList")
-    .innerHTML =
-
-    stock.length
-
-    ?
-
-    stock.map(
-      x =>
-      `
-      <div class="item">
-        <b>${esc(x.name)}</b>
-
-        <div class="qty">
-          ${x.qty}
-          ${esc(x.unit)}
-        </div>
-      </div>
-      `
-    ).join("")
-
-    :
-
-    `
-    <div class="empty">
-      Aún no hay materiales.
-      Agrega el inventario inicial arriba.
-    </div>
-    `;
-
-  document
-    .getElementById("pick")
-    .innerHTML =
-
-    stock.map(
-      x =>
-      `
-      <option value="${esc(x.id)}">
-        ${esc(x.name)}
-        —
-        ${x.qty}
-        ${esc(x.unit)}
-      </option>
-      `
-    ).join("");
-
-  const d =
-    document
-      .getElementById("filterDate")
-      .value;
-
-  const filtered =
-    moves.filter(
-      x =>
-      fechaISO(x.date)
-        .slice(0,10)
-        ===
-      d
-    );
-
-  document
-    .getElementById("historyList")
-    .innerHTML =
-
-    filtered.length
-
-    ?
-
-    filtered.map(
-      x =>
-      `
-      <div class="item">
-
-        <b>
-          ${
-            x.kind === "Entrada"
-            ?
-            "🟢 Entrada"
-            :
-            "🔴 Salida"
-          }:
-          ${esc(x.name)}
-        </b>
-
-        <div>
-          ${x.qty}
-          ${esc(x.unit)}
-          ·
-          ${
-            new Date(
-              fechaISO(x.date)
-            ).toLocaleTimeString(
-              "es-EC",
-              {
-                hour:"2-digit",
-                minute:"2-digit"
-              }
-            )
-          }
-        </div>
-
-        <div class="muted">
-          ${esc(
-            x.note ||
-            "Sin nota"
-          )}
-        </div>
-
-      </div>
-      `
-    ).join("")
-
-    :
-
-    `
-    <div class="empty">
-      No hay movimientos para esa fecha.
-    </div>
-    `;
-
-}
-
-
-/* EXPORTAR CSV */
-
-function exportCSV(){
-
-  const rows = [
-
-    [
-      "Fecha",
-      "Hora",
-      "Movimiento",
-      "Material",
-      "Cantidad",
-      "Unidad",
-      "Nota"
-    ],
-
-    ...moves.map(
-      x => [
-
-        fechaISO(x.date)
-          .slice(0,10),
-
-        new Date(
-          fechaISO(x.date)
-        ).toLocaleTimeString(
-          "es-EC"
-        ),
-
-        x.kind,
-        x.name,
-        x.qty,
-        x.unit,
-        x.note
-
-      ]
-    )
-
-  ];
-
-  const csv =
-    rows
-      .map(
-        row =>
-        row
-          .map(
-            value =>
-            '"' +
-            String(
-              value ?? ""
-            ).replace(
-              /"/g,
-              '""'
-            ) +
-            '"'
-          )
-          .join(";")
-      )
-      .join("\r\n");
-
-  const a =
-    document.createElement("a");
-
-  const url =
-    URL.createObjectURL(
-      new Blob(
-        [
-          "\ufeff" +
-          csv
-        ],
-        {
-          type:
-            "text/csv;charset=utf-8;"
-        }
-      )
-    );
-
-  a.href = url;
-
-  a.download =
-    "BODEGA_SEASCAPE_historial.csv";
-
-  a.click();
-
-  URL.revokeObjectURL(url);
-
-}
-
-
-document
-  .getElementById("exportBtn")
-  .addEventListener(
-    "click",
-    exportCSV
-  );
-
-</script>
-
-
-<script>
-
-if(
-  "serviceWorker" in navigator &&
-  location.protocol.startsWith("http")
-){
-
-  window.addEventListener(
-    "load",
-    () => {
-
-      navigator
-        .serviceWorker
-        .register("./sw.js")
-        .catch(console.error);
-
-    }
-  );
-
-}
-
-</script>
-
-</body>
-</html>
+    mov
