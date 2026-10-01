@@ -222,16 +222,17 @@ input,select{
     <h2>🔐 Iniciar sesión</h2>
 
     <p class="muted">
-      Ingresa con tu cuenta de BODEGA SEASCAPE.
+      Ingresa con tu usuario o correo.
     </p>
 
     <form id="loginForm">
 
-      <label>Correo electrónico</label>
+      <label>Usuario o correo</label>
 
       <input
-        id="loginEmail"
-        type="email"
+        id="loginUser"
+        type="text"
+        autocomplete="username"
         required
       >
 
@@ -240,6 +241,7 @@ input,select{
       <input
         id="loginPassword"
         type="password"
+        autocomplete="current-password"
         required
       >
 
@@ -341,7 +343,10 @@ input,select{
 
       <label>Nombre del material</label>
 
-      <input id="material" required>
+      <input
+        id="material"
+        required
+      >
 
       <div class="row">
 
@@ -384,9 +389,12 @@ input,select{
   </section>
 
 
-  <!-- MOVIMIENTO -->
+  <!-- MOVIMIENTOS -->
 
-  <section id="movePanel" class="panel hidden">
+  <section
+    id="movePanel"
+    class="panel hidden"
+  >
 
     <h2>Registrar movimiento</h2>
 
@@ -395,8 +403,15 @@ input,select{
       <label>Tipo</label>
 
       <select id="kind">
-        <option value="Salida">Salida</option>
-        <option value="Entrada">Entrada</option>
+
+        <option value="Salida">
+          Salida
+        </option>
+
+        <option value="Entrada">
+          Entrada
+        </option>
+
       </select>
 
       <label>Material</label>
@@ -435,7 +450,10 @@ input,select{
 
   <!-- HISTORIAL -->
 
-  <section id="historyPanel" class="panel hidden">
+  <section
+    id="historyPanel"
+    class="panel hidden"
+  >
 
     <h2>Historial</h2>
 
@@ -537,6 +555,7 @@ let stock = [];
 let moves = [];
 
 let detenerMateriales = null;
+
 let detenerMovimientos = null;
 
 let usuarioActual = {
@@ -583,6 +602,46 @@ status.textContent =
 
 /*
 ========================================
+CONVERTIR USUARIO A CORREO
+========================================
+*/
+
+function obtenerCorreo(valor){
+
+  const usuario =
+    valor
+      .trim()
+      .toLowerCase();
+
+
+  /*
+  Si escribió un correo completo,
+  lo dejamos exactamente como está.
+  Esto permite que Stalin use Gmail.
+  */
+
+  if(usuario.includes("@")){
+
+    return usuario;
+
+  }
+
+
+  /*
+  Si escribió solamente el usuario,
+  agregamos el correo interno.
+  */
+
+  return (
+    usuario +
+    "@bodegaseascape.com"
+  );
+
+}
+
+
+/*
+========================================
 LOGIN
 ========================================
 */
@@ -593,24 +652,36 @@ loginForm.addEventListener(
 
     event.preventDefault();
 
-    const email =
+
+    const usuario =
       document
-        .getElementById("loginEmail")
+        .getElementById("loginUser")
         .value
         .trim();
+
 
     const password =
       document
         .getElementById("loginPassword")
         .value;
 
-    loginBtn.disabled = true;
-    loginBtn.textContent = "Ingresando...";
 
-    status.style.color = "#166534";
+    const email =
+      obtenerCorreo(usuario);
+
+
+    loginBtn.disabled = true;
+
+    loginBtn.textContent =
+      "Ingresando...";
+
+
+    status.style.color =
+      "#166534";
 
     status.textContent =
-      "1️⃣ Enviando correo y contraseña a Firebase...";
+      "Verificando cuenta...";
+
 
     try{
 
@@ -621,27 +692,29 @@ loginForm.addEventListener(
           password
         );
 
+
       status.textContent =
-        "2️⃣ Acceso aceptado: " +
-        resultado.user.email;
+        "Acceso correcto.";
+
 
     }catch(error){
 
       console.error(error);
 
-      status.style.color = "#b42318";
+
+      status.style.color =
+        "#b42318";
+
 
       status.textContent =
-        "❌ " +
-        (
-          error.code ||
-          error.message
-        );
+        "❌ Usuario o contraseña incorrectos.";
 
     }finally{
 
       loginBtn.disabled = false;
-      loginBtn.textContent = "Ingresar";
+
+      loginBtn.textContent =
+        "Ingresar";
 
     }
 
@@ -663,19 +736,23 @@ onAuthStateChanged(
 
       detenerTiempoReal();
 
+
       appScreen
         .classList
         .add("hidden");
 
+
       loginScreen
         .classList
         .remove("hidden");
+
 
       usuarioActual = {
         uid:"",
         nombre:"",
         email:""
       };
+
 
       return;
 
@@ -684,7 +761,8 @@ onAuthStateChanged(
 
     usuarioActual = {
 
-      uid:user.uid,
+      uid:
+        user.uid,
 
       nombre:
         user.email ||
@@ -701,6 +779,7 @@ onAuthStateChanged(
       "👤 " +
       usuarioActual.nombre;
 
+
     userEmail.textContent =
       usuarioActual.email;
 
@@ -709,13 +788,14 @@ onAuthStateChanged(
       .classList
       .add("hidden");
 
+
     appScreen
       .classList
       .remove("hidden");
 
 
     /*
-    BUSCAR NOMBRE DEL USUARIO
+    BUSCAR PERFIL DEL USUARIO
     */
 
     try{
@@ -729,20 +809,43 @@ onAuthStateChanged(
           )
         );
 
+
       if(perfil.exists()){
 
         const datos =
           perfil.data();
 
+
+        /*
+        COMPROBAR SI LA CUENTA
+        ESTÁ ACTIVA
+        */
+
+        if(datos.activo === false){
+
+          alert(
+            "Esta cuenta está desactivada."
+          );
+
+
+          await signOut(auth);
+
+          return;
+
+        }
+
+
         usuarioActual.nombre =
           datos.nombre ||
           usuarioActual.nombre;
+
 
         userName.textContent =
           "👤 " +
           usuarioActual.nombre;
 
       }
+
 
     }catch(error){
 
@@ -755,7 +858,7 @@ onAuthStateChanged(
 
 
     /*
-    ACTIVAR SINCRONIZACIÓN
+    ACTIVAR TIEMPO REAL
     */
 
     iniciarTiempoReal();
@@ -766,7 +869,7 @@ onAuthStateChanged(
 
 /*
 ========================================
-LOGOUT
+CERRAR SESIÓN
 ========================================
 */
 
@@ -823,8 +926,10 @@ function fechaISO(valor){
 
   }
 
+
   const fecha =
     new Date(valor);
+
 
   if(
     !isNaN(
@@ -837,6 +942,7 @@ function fechaISO(valor){
 
   }
 
+
   return new Date()
     .toISOString();
 
@@ -848,6 +954,7 @@ function fechaLocal(fecha = new Date()){
   const a =
     fecha.getFullYear();
 
+
   const m =
     String(
       fecha.getMonth() + 1
@@ -855,6 +962,7 @@ function fechaLocal(fecha = new Date()){
       2,
       "0"
     );
+
 
   const d =
     String(
@@ -864,6 +972,7 @@ function fechaLocal(fecha = new Date()){
       "0"
     );
 
+
   return `${a}-${m}-${d}`;
 
 }
@@ -871,7 +980,7 @@ function fechaLocal(fecha = new Date()){
 
 /*
 ========================================
-SINCRONIZACIÓN EN TIEMPO REAL
+TIEMPO REAL
 ========================================
 */
 
@@ -900,6 +1009,7 @@ function iniciarTiempoReal(){
               const x =
                 documento.data();
 
+
               return {
 
                 id:
@@ -926,6 +1036,7 @@ function iniciarTiempoReal(){
 
             }
           );
+
 
         render();
 
@@ -961,6 +1072,7 @@ function iniciarTiempoReal(){
 
               const x =
                 documento.data();
+
 
               return {
 
@@ -1074,11 +1186,13 @@ document
 
       event.preventDefault();
 
+
       const name =
         document
           .getElementById("material")
           .value
           .trim();
+
 
       const amount =
         Number(
@@ -1086,6 +1200,7 @@ document
             .getElementById("amount")
             .value
         );
+
 
       const unit =
         document
@@ -1120,28 +1235,29 @@ document
             "materiales"
           ),
           {
+
             nombre:name,
+
             cantidad:amount,
+
             unidad:unit
+
           }
         );
 
 
-        /*
-        NO HACEMOS stock.push().
-        onSnapshot recibirá automáticamente
-        el material desde Firebase.
-        */
-
         event.target.reset();
+
 
         alert(
           "Material guardado."
         );
 
+
       }catch(error){
 
         console.error(error);
+
 
         alert(
           "No se pudo guardar el material."
@@ -1244,9 +1360,11 @@ document
       const nuevaCantidad =
         tipo === "Entrada"
         ?
-        material.qty + cantidad
+        material.qty +
+        cantidad
         :
-        material.qty - cantidad;
+        material.qty -
+        cantidad;
 
 
       try{
@@ -1258,8 +1376,10 @@ document
             material.id
           ),
           {
+
             cantidad:
               nuevaCantidad
+
           }
         );
 
@@ -1299,15 +1419,6 @@ document
         );
 
 
-        /*
-        NO CAMBIAMOS material.qty
-        NI HACEMOS moves.unshift().
-
-        onSnapshot recibirá ambos
-        cambios automáticamente.
-        */
-
-
         event.target.reset();
 
 
@@ -1320,6 +1431,7 @@ document
       }catch(error){
 
         console.error(error);
+
 
         alert(
           "No se pudo guardar el movimiento."
@@ -1510,8 +1622,10 @@ function render(){
             </b>
 
             <div class="qty">
+
               ${x.qty}
               ${esc(x.unit)}
+
             </div>
 
           </div>
@@ -1573,32 +1687,15 @@ function render(){
       filtrados.map(
         x => {
 
-          let responsable;
-
-
-          if(
+          const responsable =
             x.responsableNombre
-          ){
-
-            responsable =
-              x.kind === "Entrada"
-              ?
-              "👤 Entregado por: " +
-              esc(
-                x.responsableNombre
-              )
-              :
-              "👤 Retirado por: " +
-              esc(
-                x.responsableNombre
-              );
-
-          }else{
-
-            responsable =
-              "👤 Responsable: No registrado";
-
-          }
+            ?
+            "👤 Responsable: " +
+            esc(
+              x.responsableNombre
+            )
+            :
+            "👤 Responsable: No registrado";
 
 
           return `
@@ -1641,16 +1738,20 @@ function render(){
               </div>
 
               <div class="responsable">
+
                 ${responsable}
+
               </div>
 
               <div class="muted">
+
                 ${
                   esc(
                     x.note ||
                     "Sin nota"
                   )
                 }
+
               </div>
 
             </div>
@@ -1673,7 +1774,7 @@ function render(){
 
 /*
 ========================================
-CSV
+EXPORTAR CSV
 ========================================
 */
 
@@ -1702,6 +1803,7 @@ document
             const fecha =
               new Date(x.date);
 
+
             return [
 
               fecha.toLocaleDateString(
@@ -1713,8 +1815,11 @@ document
               ),
 
               x.kind,
+
               x.name,
+
               x.qty,
+
               x.unit,
 
               x.responsableNombre ||
