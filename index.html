@@ -341,10 +341,7 @@ input,select{
 
       <label>Nombre del material</label>
 
-      <input
-        id="material"
-        required
-      >
+      <input id="material" required>
 
       <div class="row">
 
@@ -389,10 +386,7 @@ input,select{
 
   <!-- MOVIMIENTO -->
 
-  <section
-    id="movePanel"
-    class="panel hidden"
-  >
+  <section id="movePanel" class="panel hidden">
 
     <h2>Registrar movimiento</h2>
 
@@ -401,22 +395,13 @@ input,select{
       <label>Tipo</label>
 
       <select id="kind">
-
-        <option value="Salida">
-          Salida
-        </option>
-
-        <option value="Entrada">
-          Entrada
-        </option>
-
+        <option value="Salida">Salida</option>
+        <option value="Entrada">Entrada</option>
       </select>
-
 
       <label>Material</label>
 
       <select id="pick"></select>
-
 
       <label>Cantidad</label>
 
@@ -428,14 +413,12 @@ input,select{
         required
       >
 
-
       <label>Nota</label>
 
       <input
         id="note"
         placeholder="Opcional"
       >
-
 
       <button class="btn full">
         Guardar movimiento
@@ -452,10 +435,7 @@ input,select{
 
   <!-- HISTORIAL -->
 
-  <section
-    id="historyPanel"
-    class="panel hidden"
-  >
+  <section id="historyPanel" class="panel hidden">
 
     <h2>Historial</h2>
 
@@ -485,7 +465,7 @@ input,select{
 
 /*
 ========================================
-IMPORTAR FIREBASE DIRECTAMENTE
+FIREBASE
 ========================================
 */
 
@@ -505,19 +485,13 @@ import {
 import {
   getFirestore,
   collection,
-  getDocs,
   getDoc,
   addDoc,
   doc,
-  updateDoc
+  updateDoc,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-
-/*
-========================================
-CONFIGURACIÓN FIREBASE
-========================================
-*/
 
 const firebaseConfig = {
 
@@ -562,6 +536,9 @@ let stock = [];
 
 let moves = [];
 
+let detenerMateriales = null;
+let detenerMovimientos = null;
+
 let usuarioActual = {
   uid:"",
   nombre:"",
@@ -597,12 +574,6 @@ const userEmail =
   document.getElementById("userEmail");
 
 
-/*
-========================================
-CONFIRMACIÓN DE JAVASCRIPT
-========================================
-*/
-
 status.style.color =
   "#166534";
 
@@ -622,32 +593,24 @@ loginForm.addEventListener(
 
     event.preventDefault();
 
-
     const email =
       document
         .getElementById("loginEmail")
         .value
         .trim();
 
-
     const password =
       document
         .getElementById("loginPassword")
         .value;
 
-
     loginBtn.disabled = true;
+    loginBtn.textContent = "Ingresando...";
 
-    loginBtn.textContent =
-      "Ingresando...";
-
-
-    status.style.color =
-      "#166534";
+    status.style.color = "#166534";
 
     status.textContent =
       "1️⃣ Enviando correo y contraseña a Firebase...";
-
 
     try{
 
@@ -658,20 +621,15 @@ loginForm.addEventListener(
           password
         );
 
-
       status.textContent =
         "2️⃣ Acceso aceptado: " +
         resultado.user.email;
-
 
     }catch(error){
 
       console.error(error);
 
-
-      status.style.color =
-        "#b42318";
-
+      status.style.color = "#b42318";
 
       status.textContent =
         "❌ " +
@@ -683,9 +641,7 @@ loginForm.addEventListener(
     }finally{
 
       loginBtn.disabled = false;
-
-      loginBtn.textContent =
-        "Ingresar";
+      loginBtn.textContent = "Ingresar";
 
     }
 
@@ -695,7 +651,7 @@ loginForm.addEventListener(
 
 /*
 ========================================
-CAMBIO DE SESIÓN
+SESIÓN
 ========================================
 */
 
@@ -705,29 +661,30 @@ onAuthStateChanged(
 
     if(!user){
 
+      detenerTiempoReal();
+
       appScreen
         .classList
         .add("hidden");
-
 
       loginScreen
         .classList
         .remove("hidden");
 
+      usuarioActual = {
+        uid:"",
+        nombre:"",
+        email:""
+      };
 
       return;
 
     }
 
 
-    /*
-    MOSTRAR APP INMEDIATAMENTE
-    */
-
     usuarioActual = {
 
-      uid:
-        user.uid,
+      uid:user.uid,
 
       nombre:
         user.email ||
@@ -744,7 +701,6 @@ onAuthStateChanged(
       "👤 " +
       usuarioActual.nombre;
 
-
     userEmail.textContent =
       usuarioActual.email;
 
@@ -753,33 +709,13 @@ onAuthStateChanged(
       .classList
       .add("hidden");
 
-
     appScreen
       .classList
       .remove("hidden");
 
 
     /*
-    CARGAR DATOS
-    */
-
-    try{
-
-      await cargarDatos();
-
-    }catch(error){
-
-      console.error(error);
-
-      alert(
-        "La sesión inició, pero hubo un error cargando el inventario."
-      );
-
-    }
-
-
-    /*
-    BUSCAR NOMBRE EN usuarios/UID
+    BUSCAR NOMBRE DEL USUARIO
     */
 
     try{
@@ -793,17 +729,14 @@ onAuthStateChanged(
           )
         );
 
-
       if(perfil.exists()){
 
         const datos =
           perfil.data();
 
-
         usuarioActual.nombre =
           datos.nombre ||
           usuarioActual.nombre;
-
 
         userName.textContent =
           "👤 " +
@@ -820,6 +753,13 @@ onAuthStateChanged(
 
     }
 
+
+    /*
+    ACTIVAR SINCRONIZACIÓN
+    */
+
+    iniciarTiempoReal();
+
   }
 );
 
@@ -835,6 +775,8 @@ document
   .addEventListener(
     "click",
     async () => {
+
+      detenerTiempoReal();
 
       await signOut(auth);
 
@@ -881,10 +823,8 @@ function fechaISO(valor){
 
   }
 
-
   const fecha =
     new Date(valor);
-
 
   if(
     !isNaN(
@@ -897,7 +837,6 @@ function fechaISO(valor){
 
   }
 
-
   return new Date()
     .toISOString();
 
@@ -909,7 +848,6 @@ function fechaLocal(fecha = new Date()){
   const a =
     fecha.getFullYear();
 
-
   const m =
     String(
       fecha.getMonth() + 1
@@ -917,7 +855,6 @@ function fechaLocal(fecha = new Date()){
       2,
       "0"
     );
-
 
   const d =
     String(
@@ -927,7 +864,6 @@ function fechaLocal(fecha = new Date()){
       "0"
     );
 
-
   return `${a}-${m}-${d}`;
 
 }
@@ -935,134 +871,191 @@ function fechaLocal(fecha = new Date()){
 
 /*
 ========================================
-CARGAR DATOS
+SINCRONIZACIÓN EN TIEMPO REAL
 ========================================
 */
 
-async function cargarDatos(){
+function iniciarTiempoReal(){
 
-  const materiales =
-    await getDocs(
+  detenerTiempoReal();
+
+
+  /*
+  MATERIALES
+  */
+
+  detenerMateriales =
+    onSnapshot(
       collection(
         db,
         "materiales"
-      )
-    );
+      ),
 
+      snapshot => {
 
-  stock =
-    materiales.docs.map(
-      documento => {
+        stock =
+          snapshot.docs.map(
+            documento => {
 
-        const x =
-          documento.data();
+              const x =
+                documento.data();
 
+              return {
 
-        return {
+                id:
+                  documento.id,
 
-          id:
-            documento.id,
+                name:
+                  x.nombre ||
+                  x.name ||
+                  "Sin nombre",
 
-          name:
-            x.nombre ||
-            x.name ||
-            "Sin nombre",
+                unit:
+                  x.unidad ||
+                  x.unit ||
+                  "",
 
-          unit:
-            x.unidad ||
-            x.unit ||
-            "",
+                qty:
+                  Number(
+                    x.cantidad ??
+                    x.qty ??
+                    0
+                  )
 
-          qty:
-            Number(
-              x.cantidad ??
-              x.qty ??
-              0
-            )
+              };
 
-        };
+            }
+          );
+
+        render();
+
+      },
+
+      error => {
+
+        console.error(
+          "Error sincronizando materiales:",
+          error
+        );
 
       }
     );
 
 
-  const movimientos =
-    await getDocs(
+  /*
+  MOVIMIENTOS
+  */
+
+  detenerMovimientos =
+    onSnapshot(
       collection(
         db,
         "movimientos"
-      )
-    );
+      ),
+
+      snapshot => {
+
+        moves =
+          snapshot.docs.map(
+            documento => {
+
+              const x =
+                documento.data();
+
+              return {
+
+                id:
+                  documento.id,
+
+                date:
+                  fechaISO(
+                    x.fecha ||
+                    x.date
+                  ),
+
+                name:
+                  x.nombre ||
+                  x.name ||
+                  "",
+
+                unit:
+                  x.unidad ||
+                  x.unit ||
+                  "",
+
+                kind:
+                  x.tipo ||
+                  x.kind ||
+                  "",
+
+                qty:
+                  Number(
+                    x.cantidad ??
+                    x.qty ??
+                    0
+                  ),
+
+                note:
+                  x.nota ||
+                  x.note ||
+                  "",
+
+                responsableNombre:
+                  x.responsableNombre ||
+                  "",
+
+                responsableUid:
+                  x.responsableUid ||
+                  ""
+
+              };
+
+            }
+          );
 
 
-  moves =
-    movimientos.docs.map(
-      documento => {
+        moves.sort(
+          (a,b) =>
+            new Date(b.date) -
+            new Date(a.date)
+        );
 
-        const x =
-          documento.data();
 
+        render();
 
-        return {
+      },
 
-          id:
-            documento.id,
+      error => {
 
-          date:
-            fechaISO(
-              x.fecha ||
-              x.date
-            ),
-
-          name:
-            x.nombre ||
-            x.name ||
-            "",
-
-          unit:
-            x.unidad ||
-            x.unit ||
-            "",
-
-          kind:
-            x.tipo ||
-            x.kind ||
-            "",
-
-          qty:
-            Number(
-              x.cantidad ??
-              x.qty ??
-              0
-            ),
-
-          note:
-            x.nota ||
-            x.note ||
-            "",
-
-          responsableNombre:
-            x.responsableNombre ||
-            "",
-
-          responsableUid:
-            x.responsableUid ||
-            ""
-
-        };
+        console.error(
+          "Error sincronizando movimientos:",
+          error
+        );
 
       }
     );
 
-
-  moves.sort(
-    (a,b) =>
-      new Date(b.date) -
-      new Date(a.date)
-  );
+}
 
 
-  render();
+function detenerTiempoReal(){
+
+  if(detenerMateriales){
+
+    detenerMateriales();
+
+    detenerMateriales = null;
+
+  }
+
+
+  if(detenerMovimientos){
+
+    detenerMovimientos();
+
+    detenerMovimientos = null;
+
+  }
 
 }
 
@@ -1081,13 +1074,11 @@ document
 
       event.preventDefault();
 
-
       const name =
         document
           .getElementById("material")
           .value
           .trim();
-
 
       const amount =
         Number(
@@ -1095,7 +1086,6 @@ document
             .getElementById("amount")
             .value
         );
-
 
       const unit =
         document
@@ -1124,48 +1114,30 @@ document
 
       try{
 
-        const nuevo =
-          await addDoc(
-            collection(
-              db,
-              "materiales"
-            ),
-            {
-
-              nombre:name,
-
-              cantidad:amount,
-
-              unidad:unit
-
-            }
-          );
+        await addDoc(
+          collection(
+            db,
+            "materiales"
+          ),
+          {
+            nombre:name,
+            cantidad:amount,
+            unidad:unit
+          }
+        );
 
 
-        stock.push({
-
-          id:
-            nuevo.id,
-
-          name:name,
-
-          qty:amount,
-
-          unit:unit
-
-        });
-
+        /*
+        NO HACEMOS stock.push().
+        onSnapshot recibirá automáticamente
+        el material desde Firebase.
+        */
 
         event.target.reset();
-
-
-        render();
-
 
         alert(
           "Material guardado."
         );
-
 
       }catch(error){
 
@@ -1272,11 +1244,9 @@ document
       const nuevaCantidad =
         tipo === "Entrada"
         ?
-        material.qty +
-        cantidad
+        material.qty + cantidad
         :
-        material.qty -
-        cantidad;
+        material.qty - cantidad;
 
 
       try{
@@ -1294,86 +1264,51 @@ document
         );
 
 
-        const datosMovimiento = {
+        await addDoc(
+          collection(
+            db,
+            "movimientos"
+          ),
+          {
 
-          nombre:
-            material.name,
+            nombre:
+              material.name,
 
-          unidad:
-            material.unit,
+            unidad:
+              material.unit,
 
-          tipo:
-            tipo,
+            tipo:
+              tipo,
 
-          cantidad:
-            cantidad,
+            cantidad:
+              cantidad,
 
-          nota:
-            nota,
+            nota:
+              nota,
 
-          fecha:
-            new Date(),
+            fecha:
+              new Date(),
 
-          responsableNombre:
-            usuarioActual.nombre,
+            responsableNombre:
+              usuarioActual.nombre,
 
-          responsableUid:
-            usuarioActual.uid
+            responsableUid:
+              usuarioActual.uid
 
-        };
-
-
-        const nuevo =
-          await addDoc(
-            collection(
-              db,
-              "movimientos"
-            ),
-            datosMovimiento
-          );
+          }
+        );
 
 
-        material.qty =
-          nuevaCantidad;
+        /*
+        NO CAMBIAMOS material.qty
+        NI HACEMOS moves.unshift().
 
-
-        moves.unshift({
-
-          id:
-            nuevo.id,
-
-          date:
-            new Date()
-              .toISOString(),
-
-          name:
-            material.name,
-
-          unit:
-            material.unit,
-
-          kind:
-            tipo,
-
-          qty:
-            cantidad,
-
-          note:
-            nota,
-
-          responsableNombre:
-            usuarioActual.nombre,
-
-          responsableUid:
-            usuarioActual.uid
-
-        });
+        onSnapshot recibirá ambos
+        cambios automáticamente.
+        */
 
 
         event.target.reset();
-
-
-        render();
 
 
         alert(
@@ -1385,7 +1320,6 @@ document
       }catch(error){
 
         console.error(error);
-
 
         alert(
           "No se pudo guardar el movimiento."
@@ -1768,7 +1702,6 @@ document
             const fecha =
               new Date(x.date);
 
-
             return [
 
               fecha.toLocaleDateString(
@@ -1780,11 +1713,8 @@ document
               ),
 
               x.kind,
-
               x.name,
-
               x.qty,
-
               x.unit,
 
               x.responsableNombre ||
