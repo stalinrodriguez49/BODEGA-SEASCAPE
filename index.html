@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -8,7 +9,10 @@
 <title>BODEGA SEASCAPE</title>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
@@ -23,8 +27,15 @@ header{
   padding:22px 18px;
 }
 
-h1{margin:0;font-size:23px}
-header p{margin:5px 0 0;opacity:.85}
+h1{
+  margin:0;
+  font-size:23px;
+}
+
+header p{
+  margin:5px 0 0;
+  opacity:.85;
+}
 
 .wrap{
   max-width:760px;
@@ -32,7 +43,9 @@ header p{margin:5px 0 0;opacity:.85}
   padding:14px;
 }
 
-.hidden{display:none!important}
+.hidden{
+  display:none!important;
+}
 
 .login-wrap{
   max-width:420px;
@@ -133,7 +146,8 @@ label{
   margin:10px 0 5px;
 }
 
-input,select{
+input,
+select{
   width:100%;
   padding:12px;
   border:1px solid #cbd5ce;
@@ -153,7 +167,9 @@ input,select{
   padding:12px 0;
 }
 
-.item:last-child{border:0}
+.item:last-child{
+  border:0;
+}
 
 .muted{
   color:#637168;
@@ -214,23 +230,38 @@ input,select{
   border-radius:10px;
   color:#735514;
 }
+
 </style>
 
 <link rel="manifest" href="manifest.json">
+
 </head>
 
 <body>
 
 <header>
+
 <h1>📦 BODEGA SEASCAPE</h1>
-<p>Control de inventario · Firebase</p>
+
+<p>
+Control de inventario · Firebase
+</p>
+
 </header>
 
-<div id="loginScreen" class="login-wrap">
+
+<!-- LOGIN -->
+
+<div
+  id="loginScreen"
+  class="login-wrap"
+>
 
 <div class="login-card">
 
-<h2>🔐 Iniciar sesión</h2>
+<h2>
+🔐 Iniciar sesión
+</h2>
 
 <p class="muted">
 Ingresa con tu cuenta de BODEGA SEASCAPE.
@@ -238,7 +269,10 @@ Ingresa con tu cuenta de BODEGA SEASCAPE.
 
 <form id="loginForm">
 
-<label>Correo electrónico</label>
+<label>
+Correo electrónico
+</label>
+
 <input
   id="loginEmail"
   type="email"
@@ -246,7 +280,10 @@ Ingresa con tu cuenta de BODEGA SEASCAPE.
   required
 >
 
-<label>Contraseña</label>
+<label>
+Contraseña
+</label>
+
 <input
   id="loginPassword"
   type="password"
@@ -264,19 +301,37 @@ Ingresar
 
 </form>
 
-<div id="loginError" class="login-error"></div>
+<div
+  id="loginError"
+  class="login-error"
+></div>
 
 </div>
+
 </div>
 
 
-<main id="appScreen" class="wrap hidden">
+<!-- APLICACIÓN -->
+
+<main
+  id="appScreen"
+  class="wrap hidden"
+>
+
 
 <div class="userbar">
 
 <div class="user-info">
-<strong id="userName">👤 Usuario</strong>
-<div id="userEmail" class="user-email"></div>
+
+<strong id="userName">
+👤 Usuario
+</strong>
+
+<div
+  id="userEmail"
+  class="user-email"
+></div>
+
 </div>
 
 <button
@@ -293,48 +348,94 @@ Cerrar sesión
 <div class="stats">
 
 <div class="stat">
-<span>Tipos de materiales</span>
-<strong id="count">0</strong>
+
+<span>
+Tipos de materiales
+</span>
+
+<strong id="count">
+0
+</strong>
+
 </div>
+
 
 <div class="stat">
-<span>Movimientos hoy</span>
-<strong id="today">0</strong>
-</div>
+
+<span>
+Movimientos hoy
+</span>
+
+<strong id="today">
+0
+</strong>
 
 </div>
 
+</div>
 
-<nav class="tabs" style="margin-top:14px">
 
-<button id="tabStock" class="active" type="button">
+<nav
+  class="tabs"
+  style="margin-top:14px"
+>
+
+<button
+  id="tabStock"
+  class="active"
+  type="button"
+>
 Inventario
 </button>
 
-<button id="tabMove" type="button">
+<button
+  id="tabMove"
+  type="button"
+>
 Entrada / salida
 </button>
 
-<button id="tabHistory" type="button">
+<button
+  id="tabHistory"
+  type="button"
+>
 Historial
 </button>
 
 </nav>
 
 
-<section id="stock" class="panel">
+<!-- INVENTARIO -->
 
-<h2>Inventario actual</h2>
+<section
+  id="stock"
+  class="panel"
+>
+
+<h2>
+Inventario actual
+</h2>
 
 <form id="addForm">
 
-<label>Nombre del material</label>
-<input id="material" required>
+<label>
+Nombre del material
+</label>
+
+<input
+  id="material"
+  placeholder="Ej. Cemento"
+  required
+>
 
 <div class="row">
 
 <div>
-<label>Cantidad inicial</label>
+
+<label>
+Cantidad inicial
+</label>
+
 <input
   id="amount"
   type="number"
@@ -342,20 +443,30 @@ Historial
   step="any"
   required
 >
+
 </div>
 
+
 <div>
-<label>Unidad</label>
+
+<label>
+Unidad
+</label>
+
 <input
   id="unit"
   placeholder="sacos, unidades, kg..."
   required
 >
-</div>
 
 </div>
 
-<button class="btn full" type="submit">
+</div>
+
+<button
+  class="btn full"
+  type="submit"
+>
 Agregar material
 </button>
 
@@ -366,23 +477,50 @@ Agregar material
 </section>
 
 
-<section id="move" class="panel hidden">
+<!-- MOVIMIENTO -->
 
-<h2>Registrar movimiento</h2>
+<section
+  id="move"
+  class="panel hidden"
+>
+
+<h2>
+Registrar movimiento
+</h2>
 
 <form id="moveForm">
 
-<label>Tipo de movimiento</label>
+<label>
+Tipo de movimiento
+</label>
 
 <select id="kind">
-<option value="Salida">Salida</option>
-<option value="Entrada">Entrada</option>
+
+<option value="Salida">
+Salida
+</option>
+
+<option value="Entrada">
+Entrada
+</option>
+
 </select>
 
-<label>Material</label>
-<select id="pick" required></select>
 
-<label>Cantidad</label>
+<label>
+Material
+</label>
+
+<select
+  id="pick"
+  required
+></select>
+
+
+<label>
+Cantidad
+</label>
+
 <input
   id="qty"
   type="number"
@@ -391,10 +529,21 @@ Agregar material
   required
 >
 
-<label>Nota (opcional)</label>
-<input id="note">
 
-<button class="btn full" type="submit">
+<label>
+Nota (opcional)
+</label>
+
+<input
+  id="note"
+  placeholder="Ej. Entrega para trabajo"
+>
+
+
+<button
+  class="btn full"
+  type="submit"
+>
 Guardar movimiento
 </button>
 
@@ -407,12 +556,25 @@ El responsable se registra automáticamente.
 </section>
 
 
-<section id="history" class="panel hidden">
+<!-- HISTORIAL -->
 
-<h2>Historial de movimientos</h2>
+<section
+  id="history"
+  class="panel hidden"
+>
 
-<label>Filtrar por fecha</label>
-<input type="date" id="filterDate">
+<h2>
+Historial de movimientos
+</h2>
+
+<label>
+Filtrar por fecha
+</label>
+
+<input
+  type="date"
+  id="filterDate"
+>
 
 <div id="historyList"></div>
 
@@ -436,7 +598,11 @@ Los datos se guardan en Firebase y pueden sincronizarse entre dispositivos.
 
 <script type="module">
 
-import { db, auth } from "./firebase.js";
+import {
+  db,
+  auth
+} from "./firebase.js";
+
 
 import {
   collection,
@@ -447,6 +613,7 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
+
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
@@ -455,6 +622,7 @@ import {
 
 
 let stock = [];
+
 let moves = [];
 
 let usuarioActual = {
@@ -465,202 +633,312 @@ let usuarioActual = {
 
 
 const loginScreen =
-  document.getElementById("loginScreen");
+  document.getElementById(
+    "loginScreen"
+  );
 
 const appScreen =
-  document.getElementById("appScreen");
+  document.getElementById(
+    "appScreen"
+  );
 
 const loginForm =
-  document.getElementById("loginForm");
+  document.getElementById(
+    "loginForm"
+  );
 
 const loginError =
-  document.getElementById("loginError");
+  document.getElementById(
+    "loginError"
+  );
 
 const loginBtn =
-  document.getElementById("loginBtn");
+  document.getElementById(
+    "loginBtn"
+  );
 
 const userName =
-  document.getElementById("userName");
+  document.getElementById(
+    "userName"
+  );
 
 const userEmail =
-  document.getElementById("userEmail");
+  document.getElementById(
+    "userEmail"
+  );
 
 
-/* LOGIN */
+/* =========================
+   LOGIN CON DIAGNÓSTICO
+========================= */
 
-loginForm.addEventListener("submit", async e => {
+loginForm.addEventListener(
+  "submit",
+  async e => {
 
-  e.preventDefault();
+    e.preventDefault();
 
-  loginError.textContent = "";
+    loginError.style.color =
+      "#166534";
 
-  loginBtn.disabled = true;
-  loginBtn.textContent = "Ingresando...";
+    loginError.textContent = "";
 
-  const email =
-    document
-      .getElementById("loginEmail")
-      .value
-      .trim();
+    loginBtn.disabled = true;
 
-  const password =
-    document
-      .getElementById("loginPassword")
-      .value;
-
-  try{
-
-    await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    loginError.textContent =
-      "Error Firebase: " +
-      (error.code || error.message);
-
-  }finally{
-
-    loginBtn.disabled = false;
-    loginBtn.textContent = "Ingresar";
-
-  }
-
-});
+    loginBtn.textContent =
+      "Ingresando...";
 
 
-/* SESIÓN */
-
-onAuthStateChanged(auth, async user => {
-
-  if(!user){
-
-    appScreen.classList.add("hidden");
-    loginScreen.classList.remove("hidden");
-
-    usuarioActual = {
-      uid:"",
-      nombre:"",
-      email:""
-    };
-
-    return;
-
-  }
+    const email =
+      document
+        .getElementById(
+          "loginEmail"
+        )
+        .value
+        .trim();
 
 
-  /*
-    IMPORTANTE:
-    MOSTRAMOS LA APP INMEDIATAMENTE.
-  */
+    const password =
+      document
+        .getElementById(
+          "loginPassword"
+        )
+        .value;
 
-  usuarioActual = {
-    uid:user.uid,
-    nombre:user.email || "Usuario",
-    email:user.email || ""
-  };
-
-
-  userName.textContent =
-    "👤 " + usuarioActual.nombre;
-
-  userEmail.textContent =
-    usuarioActual.email;
-
-
-  loginScreen.classList.add("hidden");
-  appScreen.classList.remove("hidden");
-
-
-  /*
-    PRIMERO CARGAMOS INVENTARIO.
-  */
-
-  try{
-
-    await cargarDatos();
-
-  }catch(error){
-
-    console.error(
-      "Error cargando inventario:",
-      error
-    );
-
-  }
-
-
-  /*
-    DESPUÉS BUSCAMOS EL NOMBRE.
-    SI FALLA, LA APP SIGUE ABIERTA.
-  */
-
-  try{
-
-    const perfilRef =
-      doc(
-        db,
-        "usuarios",
-        user.uid
-      );
-
-
-    const perfilSnap =
-      await getDoc(perfilRef);
-
-
-    if(perfilSnap.exists()){
-
-      const perfil =
-        perfilSnap.data();
-
-
-      usuarioActual.nombre =
-        perfil.nombre ||
-        usuarioActual.nombre;
-
-
-      userName.textContent =
-        "👤 " +
-        usuarioActual.nombre;
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "No se pudo leer usuarios:",
-      error
-    );
-
-  }
-
-});
-
-
-/* LOGOUT */
-
-document
-  .getElementById("logoutBtn")
-  .addEventListener("click", async () => {
 
     try{
 
-      await signOut(auth);
+      loginError.textContent =
+        "1️⃣ Enviando datos a Firebase...";
+
+
+      const resultado =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+      loginError.style.color =
+        "#166534";
+
+
+      loginError.textContent =
+        "2️⃣ Firebase aceptó la sesión: " +
+        resultado.user.email;
+
 
     }catch(error){
 
       console.error(error);
 
+
+      loginError.style.color =
+        "#b42318";
+
+
+      loginError.textContent =
+        "❌ Error Firebase: " +
+        (
+          error.code ||
+          error.message
+        );
+
+    }finally{
+
+      loginBtn.disabled = false;
+
+      loginBtn.textContent =
+        "Ingresar";
+
     }
 
-  });
+  }
+);
 
+
+/* =========================
+   SESIÓN
+========================= */
+
+onAuthStateChanged(
+  auth,
+  async user => {
+
+    if(!user){
+
+      appScreen
+        .classList
+        .add("hidden");
+
+
+      loginScreen
+        .classList
+        .remove("hidden");
+
+
+      usuarioActual = {
+        uid:"",
+        nombre:"",
+        email:""
+      };
+
+
+      return;
+
+    }
+
+
+    usuarioActual = {
+
+      uid:
+        user.uid,
+
+      nombre:
+        user.email ||
+        "Usuario",
+
+      email:
+        user.email ||
+        ""
+
+    };
+
+
+    userName.textContent =
+      "👤 " +
+      usuarioActual.nombre;
+
+
+    userEmail.textContent =
+      usuarioActual.email;
+
+
+    /*
+      MOSTRAR LA APP
+      ANTES DE LEER FIRESTORE
+    */
+
+    loginScreen
+      .classList
+      .add("hidden");
+
+
+    appScreen
+      .classList
+      .remove("hidden");
+
+
+    /*
+      CARGAR INVENTARIO
+    */
+
+    try{
+
+      await cargarDatos();
+
+    }catch(error){
+
+      console.error(
+        "Error cargando datos:",
+        error
+      );
+
+    }
+
+
+    /*
+      BUSCAR PERFIL
+      usuarios/{UID}
+    */
+
+    try{
+
+      const perfilRef =
+        doc(
+          db,
+          "usuarios",
+          user.uid
+        );
+
+
+      const perfilSnap =
+        await getDoc(
+          perfilRef
+        );
+
+
+      if(
+        perfilSnap.exists()
+      ){
+
+        const perfil =
+          perfilSnap.data();
+
+
+        usuarioActual.nombre =
+          perfil.nombre ||
+          usuarioActual.nombre;
+
+
+        usuarioActual.email =
+          perfil.email ||
+          usuarioActual.email;
+
+
+        userName.textContent =
+          "👤 " +
+          usuarioActual.nombre;
+
+
+        userEmail.textContent =
+          usuarioActual.email;
+
+      }
+
+    }catch(error){
+
+      console.error(
+        "Error leyendo perfil:",
+        error
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================
+   CERRAR SESIÓN
+========================= */
+
+document
+  .getElementById(
+    "logoutBtn"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+      try{
+
+        await signOut(auth);
+
+      }catch(error){
+
+        console.error(error);
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   FECHAS
+========================= */
 
 function fechaISO(valor){
 
@@ -668,7 +946,8 @@ function fechaISO(valor){
 
     if(
       valor &&
-      typeof valor.toDate === "function"
+      typeof valor.toDate ===
+      "function"
     ){
 
       return valor
@@ -677,12 +956,23 @@ function fechaISO(valor){
 
     }
 
-    const fecha =
-      new Date(valor);
 
-    if(!isNaN(fecha.getTime())){
+    if(valor){
 
-      return fecha.toISOString();
+      const fecha =
+        new Date(valor);
+
+
+      if(
+        !isNaN(
+          fecha.getTime()
+        )
+      ){
+
+        return fecha
+          .toISOString();
+
+      }
 
     }
 
@@ -692,28 +982,89 @@ function fechaISO(valor){
 
   }
 
-  return new Date().toISOString();
+
+  return new Date()
+    .toISOString();
 
 }
 
 
+/*
+  FECHA LOCAL DE ECUADOR.
+  Evita que por UTC aparezca
+  el día siguiente.
+*/
+
+function fechaLocal(){
+
+  const ahora =
+    new Date();
+
+
+  const anio =
+    ahora.getFullYear();
+
+
+  const mes =
+    String(
+      ahora.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const dia =
+    String(
+      ahora.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  return (
+    anio +
+    "-" +
+    mes +
+    "-" +
+    dia
+  );
+
+}
+
+
+/* =========================
+   TEXTO SEGURO
+========================= */
+
 function esc(valor){
 
-  return String(valor ?? "").replace(
+  return String(
+    valor ?? ""
+  ).replace(
     /[&<>"']/g,
     c => ({
+
       "&":"&amp;",
+
       "<":"&lt;",
+
       ">":"&gt;",
+
       '"':"&quot;",
+
       "'":"&#39;"
+
     }[c])
   );
 
 }
 
 
-/* CARGAR FIRESTORE */
+/* =========================
+   CARGAR FIRESTORE
+========================= */
 
 async function cargarDatos(){
 
@@ -727,35 +1078,39 @@ async function cargarDatos(){
 
 
   stock =
-    materiales.docs.map(d => {
+    materiales.docs.map(
+      d => {
 
-      const data =
-        d.data();
+        const data =
+          d.data();
 
-      return {
 
-        id:d.id,
+        return {
 
-        name:
-          data.nombre ||
-          data.name ||
-          "Sin nombre",
+          id:
+            d.id,
 
-        unit:
-          data.unidad ||
-          data.unit ||
-          "",
+          name:
+            data.nombre ||
+            data.name ||
+            "Sin nombre",
 
-        qty:
-          Number(
-            data.cantidad ??
-            data.qty ??
-            0
-          )
+          unit:
+            data.unidad ||
+            data.unit ||
+            "",
 
-      };
+          qty:
+            Number(
+              data.cantidad ??
+              data.qty ??
+              0
+            )
 
-    });
+        };
+
+      }
+    );
 
 
   const movimientos =
@@ -768,65 +1123,69 @@ async function cargarDatos(){
 
 
   moves =
-    movimientos.docs.map(d => {
+    movimientos.docs.map(
+      d => {
 
-      const data =
-        d.data();
+        const data =
+          d.data();
 
-      return {
 
-        id:d.id,
+        return {
 
-        date:
-          fechaISO(
-            data.fecha ||
-            data.date
-          ),
+          id:
+            d.id,
 
-        name:
-          data.nombre ||
-          data.name ||
-          "",
+          date:
+            fechaISO(
+              data.fecha ||
+              data.date
+            ),
 
-        unit:
-          data.unidad ||
-          data.unit ||
-          "",
+          name:
+            data.nombre ||
+            data.name ||
+            "",
 
-        kind:
-          data.tipo ||
-          data.kind ||
-          "",
+          unit:
+            data.unidad ||
+            data.unit ||
+            "",
 
-        qty:
-          Number(
-            data.cantidad ??
-            data.qty ??
-            0
-          ),
+          kind:
+            data.tipo ||
+            data.kind ||
+            "",
 
-        note:
-          data.nota ||
-          data.note ||
-          "",
+          qty:
+            Number(
+              data.cantidad ??
+              data.qty ??
+              0
+            ),
 
-        responsableNombre:
-          data.responsableNombre ||
-          "",
+          note:
+            data.nota ||
+            data.note ||
+            "",
 
-        responsableUid:
-          data.responsableUid ||
-          ""
+          responsableNombre:
+            data.responsableNombre ||
+            "",
 
-      };
+          responsableUid:
+            data.responsableUid ||
+            ""
 
-    });
+        };
+
+      }
+    );
 
 
   moves.sort(
     (a,b) =>
-    new Date(b.date) -
-    new Date(a.date)
+      new Date(b.date) -
+      new Date(a.date)
   );
 
 
@@ -835,345 +1194,424 @@ async function cargarDatos(){
 }
 
 
-/* AGREGAR MATERIAL */
+/* =========================
+   AGREGAR MATERIAL
+========================= */
 
 document
-  .getElementById("addForm")
-  .addEventListener("submit", async e => {
+  .getElementById(
+    "addForm"
+  )
+  .addEventListener(
+    "submit",
+    async e => {
 
-    e.preventDefault();
-
-
-    if(!auth.currentUser){
-
-      alert("Debes iniciar sesión.");
-      return;
-
-    }
+      e.preventDefault();
 
 
-    const name =
-      document
-        .getElementById("material")
-        .value
-        .trim();
+      if(
+        !auth.currentUser
+      ){
+
+        alert(
+          "Debes iniciar sesión."
+        );
+
+        return;
+
+      }
 
 
-    const unit =
-      document
-        .getElementById("unit")
-        .value
-        .trim();
-
-
-    const amount =
-      Number(
+      const name =
         document
-          .getElementById("amount")
+          .getElementById(
+            "material"
+          )
           .value
-      );
+          .trim();
 
 
-    if(
-      stock.some(
-        x =>
-        x.name.toLowerCase() ===
-        name.toLowerCase()
-      )
-    ){
+      const unit =
+        document
+          .getElementById(
+            "unit"
+          )
+          .value
+          .trim();
 
-      alert(
-        "Ese material ya existe."
-      );
 
-      return;
+      const amount =
+        Number(
+          document
+            .getElementById(
+              "amount"
+            )
+            .value
+        );
+
+
+      if(
+        stock.some(
+          x =>
+            x.name
+              .toLowerCase()
+            ===
+            name
+              .toLowerCase()
+        )
+      ){
+
+        alert(
+          "Ese material ya existe."
+        );
+
+        return;
+
+      }
+
+
+      try{
+
+        const nuevo =
+          await addDoc(
+            collection(
+              db,
+              "materiales"
+            ),
+            {
+
+              nombre:
+                name,
+
+              cantidad:
+                amount,
+
+              unidad:
+                unit
+
+            }
+          );
+
+
+        stock.push({
+
+          id:
+            nuevo.id,
+
+          name:
+            name,
+
+          unit:
+            unit,
+
+          qty:
+            amount
+
+        });
+
+
+        e.target.reset();
+
+
+        render();
+
+
+        alert(
+          "Material guardado correctamente."
+        );
+
+
+      }catch(error){
+
+        console.error(error);
+
+
+        alert(
+          "Error guardando el material."
+        );
+
+      }
 
     }
+  );
 
 
-    try{
+/* =========================
+   ENTRADA / SALIDA
+========================= */
 
-      const nuevo =
-        await addDoc(
-          collection(
+document
+  .getElementById(
+    "moveForm"
+  )
+  .addEventListener(
+    "submit",
+    async e => {
+
+      e.preventDefault();
+
+
+      if(
+        !auth.currentUser ||
+        !usuarioActual.uid
+      ){
+
+        alert(
+          "Debes iniciar sesión."
+        );
+
+        return;
+
+      }
+
+
+      const id =
+        document
+          .getElementById(
+            "pick"
+          )
+          .value;
+
+
+      const material =
+        stock.find(
+          x =>
+            x.id === id
+        );
+
+
+      if(!material){
+
+        alert(
+          "Selecciona un material."
+        );
+
+        return;
+
+      }
+
+
+      const tipo =
+        document
+          .getElementById(
+            "kind"
+          )
+          .value;
+
+
+      const cantidad =
+        Number(
+          document
+            .getElementById(
+              "qty"
+            )
+            .value
+        );
+
+
+      const nota =
+        document
+          .getElementById(
+            "note"
+          )
+          .value
+          .trim();
+
+
+      if(
+        !cantidad ||
+        cantidad <= 0
+      ){
+
+        alert(
+          "Ingresa una cantidad válida."
+        );
+
+        return;
+
+      }
+
+
+      if(
+        tipo === "Salida" &&
+        cantidad >
+        material.qty
+      ){
+
+        alert(
+          "No hay suficiente existencia. Disponible: " +
+          material.qty +
+          " " +
+          material.unit
+        );
+
+        return;
+
+      }
+
+
+      const nuevaCantidad =
+        tipo === "Entrada"
+        ?
+        material.qty +
+        cantidad
+        :
+        material.qty -
+        cantidad;
+
+
+      try{
+
+        await updateDoc(
+          doc(
             db,
-            "materiales"
+            "materiales",
+            material.id
           ),
           {
-            nombre:name,
-            cantidad:amount,
-            unidad:unit
+
+            cantidad:
+              nuevaCantidad,
+
+            nombre:
+              material.name,
+
+            unidad:
+              material.unit
+
           }
         );
 
 
-      stock.push({
-        id:nuevo.id,
-        name:name,
-        unit:unit,
-        qty:amount
-      });
+        const datosMovimiento = {
+
+          nombre:
+            material.name,
+
+          unidad:
+            material.unit,
+
+          tipo:
+            tipo,
+
+          cantidad:
+            cantidad,
+
+          nota:
+            nota,
+
+          fecha:
+            new Date(),
+
+          responsableNombre:
+            usuarioActual.nombre,
+
+          responsableUid:
+            usuarioActual.uid
+
+        };
 
 
-      e.target.reset();
-
-      render();
-
-
-      alert(
-        "Material guardado correctamente."
-      );
-
-    }catch(error){
-
-      console.error(error);
-
-      alert(
-        "Error guardando el material."
-      );
-
-    }
-
-  });
+        const nuevo =
+          await addDoc(
+            collection(
+              db,
+              "movimientos"
+            ),
+            datosMovimiento
+          );
 
 
-/* MOVIMIENTO */
-
-document
-  .getElementById("moveForm")
-  .addEventListener("submit", async e => {
-
-    e.preventDefault();
+        material.qty =
+          nuevaCantidad;
 
 
-    if(
-      !auth.currentUser ||
-      !usuarioActual.uid
-    ){
+        moves.unshift({
 
-      alert(
-        "Debes iniciar sesión."
-      );
+          id:
+            nuevo.id,
 
-      return;
+          date:
+            new Date()
+              .toISOString(),
 
-    }
+          name:
+            material.name,
 
+          unit:
+            material.unit,
 
-    const id =
-      document
-        .getElementById("pick")
-        .value;
+          kind:
+            tipo,
 
+          qty:
+            cantidad,
 
-    const material =
-      stock.find(
-        x => x.id === id
-      );
+          note:
+            nota,
 
+          responsableNombre:
+            usuarioActual.nombre,
 
-    if(!material){
+          responsableUid:
+            usuarioActual.uid
 
-      alert(
-        "Selecciona un material."
-      );
-
-      return;
-
-    }
+        });
 
 
-    const tipo =
-      document
-        .getElementById("kind")
-        .value;
+        e.target.reset();
 
 
-    const cantidad =
-      Number(
-        document
-          .getElementById("qty")
-          .value
-      );
+        render();
 
 
-    const nota =
-      document
-        .getElementById("note")
-        .value
-        .trim();
-
-
-    if(
-      !cantidad ||
-      cantidad <= 0
-    ){
-
-      alert(
-        "Ingresa una cantidad válida."
-      );
-
-      return;
-
-    }
-
-
-    if(
-      tipo === "Salida" &&
-      cantidad > material.qty
-    ){
-
-      alert(
-        "No hay suficiente existencia."
-      );
-
-      return;
-
-    }
-
-
-    const nuevaCantidad =
-      tipo === "Entrada"
-      ?
-      material.qty + cantidad
-      :
-      material.qty - cantidad;
-
-
-    try{
-
-      await updateDoc(
-        doc(
-          db,
-          "materiales",
-          material.id
-        ),
-        {
-          cantidad:nuevaCantidad,
-          nombre:material.name,
-          unidad:material.unit
-        }
-      );
-
-
-      const datosMovimiento = {
-
-        nombre:
-          material.name,
-
-        unidad:
-          material.unit,
-
-        tipo:
-          tipo,
-
-        cantidad:
-          cantidad,
-
-        nota:
-          nota,
-
-        fecha:
-          new Date(),
-
-        responsableNombre:
-          usuarioActual.nombre,
-
-        responsableUid:
-          usuarioActual.uid
-
-      };
-
-
-      const nuevo =
-        await addDoc(
-          collection(
-            db,
-            "movimientos"
-          ),
-          datosMovimiento
+        alert(
+          "Movimiento guardado por " +
+          usuarioActual.nombre +
+          "."
         );
 
 
-      material.qty =
-        nuevaCantidad;
+      }catch(error){
+
+        console.error(error);
 
 
-      moves.unshift({
+        alert(
+          "Error guardando el movimiento."
+        );
 
-        id:nuevo.id,
-
-        date:
-          new Date()
-            .toISOString(),
-
-        name:
-          material.name,
-
-        unit:
-          material.unit,
-
-        kind:
-          tipo,
-
-        qty:
-          cantidad,
-
-        note:
-          nota,
-
-        responsableNombre:
-          usuarioActual.nombre,
-
-        responsableUid:
-          usuarioActual.uid
-
-      });
-
-
-      e.target.reset();
-
-      render();
-
-
-      alert(
-        "Movimiento guardado por " +
-        usuarioActual.nombre +
-        "."
-      );
-
-    }catch(error){
-
-      console.error(error);
-
-      alert(
-        "Error guardando el movimiento."
-      );
+      }
 
     }
+  );
 
-  });
 
-
-/* FECHA */
+/* =========================
+   FECHA HISTORIAL
+========================= */
 
 document
-  .getElementById("filterDate")
+  .getElementById(
+    "filterDate"
+  )
   .value =
-  new Date()
-    .toISOString()
-    .slice(0,10);
+    fechaLocal();
 
 
 document
-  .getElementById("filterDate")
+  .getElementById(
+    "filterDate"
+  )
   .addEventListener(
     "change",
     render
   );
 
 
-/* PESTAÑAS */
+/* =========================
+   PESTAÑAS
+========================= */
 
 function mostrarSeccion(
   id,
@@ -1185,10 +1623,13 @@ function mostrarSeccion(
       "#appScreen section"
     )
     .forEach(
-      section =>
-      section
-        .classList
-        .add("hidden")
+      section => {
+
+        section
+          .classList
+          .add("hidden");
+
+      }
     );
 
 
@@ -1203,10 +1644,13 @@ function mostrarSeccion(
       ".tabs button"
     )
     .forEach(
-      button =>
-      button
-        .classList
-        .remove("active")
+      button => {
+
+        button
+          .classList
+          .remove("active");
+
+      }
     );
 
 
@@ -1221,281 +1665,28 @@ function mostrarSeccion(
 
 
 document
-  .getElementById("tabStock")
+  .getElementById(
+    "tabStock"
+  )
   .addEventListener(
     "click",
     function(){
+
       mostrarSeccion(
         "stock",
         this
       );
+
     }
   );
 
 
 document
-  .getElementById("tabMove")
-  .addEventListener(
-    "click",
-    function(){
-      mostrarSeccion(
-        "move",
-        this
-      );
-    }
-  );
-
-
-document
-  .getElementById("tabHistory")
-  .addEventListener(
-    "click",
-    function(){
-      mostrarSeccion(
-        "history",
-        this
-      );
-    }
-  );
-
-
-/* RENDER */
-
-function render(){
-
-  const hoy =
-    new Date()
-      .toISOString()
-      .slice(0,10);
-
-
-  document
-    .getElementById("count")
-    .textContent =
-    stock.length;
-
-
-  document
-    .getElementById("today")
-    .textContent =
-    moves.filter(
-      x =>
-      fechaISO(x.date)
-        .slice(0,10)
-      ===
-      hoy
-    ).length;
-
-
-  document
-    .getElementById("stockList")
-    .innerHTML =
-
-    stock.length
-
-    ?
-
-    stock.map(
-      x => `
-      <div class="item">
-
-        <b>${esc(x.name)}</b>
-
-        <div class="qty">
-          ${x.qty}
-          ${esc(x.unit)}
-        </div>
-
-      </div>
-      `
-    ).join("")
-
-    :
-
-    `
-    <div class="empty">
-      Aún no hay materiales.
-    </div>
-    `;
-
-
-  document
-    .getElementById("pick")
-    .innerHTML =
-
-    stock.map(
-      x => `
-      <option value="${esc(x.id)}">
-        ${esc(x.name)}
-        —
-        ${x.qty}
-        ${esc(x.unit)}
-      </option>
-      `
-    ).join("");
-
-
-  const fecha =
-    document
-      .getElementById("filterDate")
-      .value;
-
-
-  const filtrados =
-    moves.filter(
-      x =>
-      fechaISO(x.date)
-        .slice(0,10)
-      ===
-      fecha
-    );
-
-
-  document
-    .getElementById("historyList")
-    .innerHTML =
-
-    filtrados.length
-
-    ?
-
-    filtrados.map(
-      x => {
-
-        let responsable;
-
-
-        if(x.responsableNombre){
-
-          responsable =
-            x.kind === "Entrada"
-            ?
-            "👤 Entregado por: " +
-            esc(x.responsableNombre)
-            :
-            "👤 Retirado por: " +
-            esc(x.responsableNombre);
-
-        }else{
-
-          responsable =
-            "👤 Responsable: No registrado";
-
-        }
-
-
-        return `
-        <div class="item">
-
-          <b>
-            ${
-              x.kind === "Entrada"
-              ?
-              "🟢 Entrada"
-              :
-              "🔴 Salida"
-            }:
-            ${esc(x.name)}
-          </b>
-
-          <div>
-            ${x.qty}
-            ${esc(x.unit)}
-            ·
-            ${
-              new Date(
-                fechaISO(x.date)
-              ).toLocaleTimeString(
-                "es-EC",
-                {
-                  hour:"2-digit",
-                  minute:"2-digit"
-                }
-              )
-            }
-          </div>
-
-          <div class="responsable">
-            ${responsable}
-          </div>
-
-          <div class="muted">
-            ${esc(
-              x.note ||
-              "Sin nota"
-            )}
-          </div>
-
-        </div>
-        `;
-
-      }
-    ).join("")
-
-    :
-
-    `
-    <div class="empty">
-      No hay movimientos para esa fecha.
-    </div>
-    `;
-
-}
-
-
-/* CSV */
-
-document
-  .getElementById("exportBtn")
+  .getElementById(
+    "tabMove"
+  )
   .addEventListener(
     "click",
     function(){
 
-      const filas = [
-
-        [
-          "Fecha",
-          "Hora",
-          "Movimiento",
-          "Material",
-          "Cantidad",
-          "Unidad",
-          "Responsable",
-          "Nota"
-        ],
-
-        ...moves.map(
-          x => [
-
-            fechaISO(x.date)
-              .slice(0,10),
-
-            new Date(
-              fechaISO(x.date)
-            ).toLocaleTimeString(
-              "es-EC"
-            ),
-
-            x.kind,
-            x.name,
-            x.qty,
-            x.unit,
-
-            x.responsableNombre ||
-            "No registrado",
-
-            x.note
-
-          ]
-        )
-
-      ];
-
-
-      const csv =
-        filas
-          .map(
-            fila =>
-            fila
-              .map(
-                valor =>
+      
