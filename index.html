@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="es">
 <head>
@@ -52,6 +51,69 @@ header p{
   padding:14px;
 }
 
+.hidden{
+  display:none !important;
+}
+
+/* LOGIN */
+
+.login-wrap{
+  max-width:420px;
+  margin:35px auto;
+  padding:14px;
+}
+
+.login-card{
+  background:white;
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 2px 12px #102b1515;
+}
+
+.login-card h2{
+  margin-top:0;
+  color:#166534;
+}
+
+.login-error{
+  color:#b42318;
+  font-size:14px;
+  margin-top:12px;
+  font-weight:600;
+}
+
+/* USUARIO */
+
+.userbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  background:#e5f1e8;
+  padding:10px 12px;
+  border-radius:12px;
+  margin-bottom:12px;
+}
+
+.user-email{
+  font-size:13px;
+  color:#164d2b;
+  word-break:break-all;
+}
+
+.logout{
+  border:0;
+  border-radius:9px;
+  padding:9px 11px;
+  background:#b42318;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+/* APP */
+
 .tabs{
   display:flex;
   gap:7px;
@@ -86,10 +148,6 @@ header p{
   padding:16px;
   margin:12px 0;
   box-shadow:0 2px 10px #102b1510;
-}
-
-.hidden{
-  display:none;
 }
 
 label{
@@ -186,11 +244,6 @@ select{
 <link rel="manifest" href="manifest.json">
 
 <meta
-  name="theme-color"
-  content="#14532d"
->
-
-<meta
   name="mobile-web-app-capable"
   content="yes"
 >
@@ -210,7 +263,109 @@ Control de inventario · Firebase
 </header>
 
 
-<main class="wrap">
+<!-- =========================
+     INICIO DE SESIÓN
+========================= -->
+
+<div
+  id="loginScreen"
+  class="login-wrap hidden"
+>
+
+<div class="login-card">
+
+<h2>
+🔐 Iniciar sesión
+</h2>
+
+<p class="muted">
+Ingresa con tu cuenta de BODEGA SEASCAPE.
+</p>
+
+<form id="loginForm">
+
+<label>
+Correo electrónico
+</label>
+
+<input
+  id="loginEmail"
+  type="email"
+  autocomplete="username"
+  placeholder="correo@ejemplo.com"
+  required
+>
+
+
+<label>
+Contraseña
+</label>
+
+<input
+  id="loginPassword"
+  type="password"
+  autocomplete="current-password"
+  placeholder="Contraseña"
+  required
+>
+
+
+<button
+  id="loginBtn"
+  class="btn full"
+  type="submit"
+>
+Ingresar
+</button>
+
+</form>
+
+
+<div
+  id="loginError"
+  class="login-error"
+></div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     APLICACIÓN
+========================= -->
+
+<main
+  id="appScreen"
+  class="wrap hidden"
+>
+
+
+<div class="userbar">
+
+<div>
+
+<strong>
+👤 Sesión iniciada
+</strong>
+
+<div
+  id="userEmail"
+  class="user-email"
+></div>
+
+</div>
+
+
+<button
+  id="logoutBtn"
+  class="logout"
+  type="button"
+>
+Cerrar sesión
+</button>
+
+</div>
 
 
 <div class="stats">
@@ -476,11 +631,16 @@ Los datos se guardan en Firebase y pueden sincronizarse entre dispositivos.
 </main>
 
 
-<!-- FIREBASE -->
+<!-- =========================
+     FIREBASE
+========================= -->
 
 <script type="module">
 
-import { db } from "./firebase.js";
+import {
+  db,
+  auth
+} from "./firebase.js";
 
 
 import {
@@ -496,9 +656,206 @@ from
 "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+}
+from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
 let stock = [];
 
 let moves = [];
+
+let datosCargados = false;
+
+
+/* =========================
+   AUTENTICACIÓN
+========================= */
+
+const loginScreen =
+  document.getElementById(
+    "loginScreen"
+  );
+
+const appScreen =
+  document.getElementById(
+    "appScreen"
+  );
+
+const loginForm =
+  document.getElementById(
+    "loginForm"
+  );
+
+const loginError =
+  document.getElementById(
+    "loginError"
+  );
+
+const loginBtn =
+  document.getElementById(
+    "loginBtn"
+  );
+
+const userEmail =
+  document.getElementById(
+    "userEmail"
+  );
+
+
+loginForm.addEventListener(
+  "submit",
+  async e => {
+
+    e.preventDefault();
+
+    loginError.textContent = "";
+
+    loginBtn.disabled = true;
+
+    loginBtn.textContent =
+      "Ingresando...";
+
+
+    const email =
+      document
+        .getElementById(
+          "loginEmail"
+        )
+        .value
+        .trim();
+
+
+    const password =
+      document
+        .getElementById(
+          "loginPassword"
+        )
+        .value;
+
+
+    try{
+
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      loginForm.reset();
+
+    }catch(error){
+
+      console.error(
+        "ERROR INICIANDO SESIÓN:",
+        error
+      );
+
+      loginError.textContent =
+        "Correo o contraseña incorrectos.";
+
+    }finally{
+
+      loginBtn.disabled = false;
+
+      loginBtn.textContent =
+        "Ingresar";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   DETECTAR SESIÓN
+========================= */
+
+onAuthStateChanged(
+  auth,
+  async user => {
+
+    if(user){
+
+      loginScreen.classList.add(
+        "hidden"
+      );
+
+      appScreen.classList.remove(
+        "hidden"
+      );
+
+      userEmail.textContent =
+        user.email || "Usuario";
+
+
+      if(!datosCargados){
+
+        await cargarDatos();
+
+        datosCargados = true;
+
+      }
+
+    }else{
+
+      appScreen.classList.add(
+        "hidden"
+      );
+
+      loginScreen.classList.remove(
+        "hidden"
+      );
+
+      userEmail.textContent = "";
+
+      stock = [];
+
+      moves = [];
+
+      datosCargados = false;
+
+    }
+
+  }
+);
+
+
+/* =========================
+   CERRAR SESIÓN
+========================= */
+
+document
+  .getElementById(
+    "logoutBtn"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+      try{
+
+        await signOut(auth);
+
+      }catch(error){
+
+        console.error(
+          "ERROR CERRANDO SESIÓN:",
+          error
+        );
+
+        alert(
+          "No se pudo cerrar la sesión."
+        );
+
+      }
+
+    }
+  );
 
 
 /* =========================
@@ -523,9 +880,14 @@ function fechaISO(valor){
 
     if(valor){
 
-      const fecha = new Date(valor);
+      const fecha =
+        new Date(valor);
 
-      if(!isNaN(fecha.getTime())){
+      if(
+        !isNaN(
+          fecha.getTime()
+        )
+      ){
 
         return fecha.toISOString();
 
@@ -543,14 +905,17 @@ function fechaISO(valor){
   }
 
 
-  return new Date().toISOString();
+  return new Date()
+    .toISOString();
 
 }
 
 
 function esc(v){
 
-  return String(v ?? "").replace(
+  return String(
+    v ?? ""
+  ).replace(
     /[&<>"']/g,
     c =>
     ({
@@ -586,7 +951,8 @@ async function cargarDatos(){
       materialesSnapshot.docs.map(
         d => {
 
-          const data = d.data();
+          const data =
+            d.data();
 
 
           console.log(
@@ -666,7 +1032,8 @@ async function cargarDatos(){
       movimientosSnapshot.docs.map(
         d => {
 
-          const data = d.data();
+          const data =
+            d.data();
 
 
           return {
@@ -737,7 +1104,9 @@ async function cargarDatos(){
 ========================= */
 
 document
-  .getElementById("addForm")
+  .getElementById(
+    "addForm"
+  )
   .addEventListener(
     "submit",
     async e => {
@@ -745,16 +1114,31 @@ document
       e.preventDefault();
 
 
+      if(!auth.currentUser){
+
+        alert(
+          "Debes iniciar sesión."
+        );
+
+        return;
+
+      }
+
+
       const name =
         document
-          .getElementById("material")
+          .getElementById(
+            "material"
+          )
           .value
           .trim();
 
 
       const unit =
         document
-          .getElementById("unit")
+          .getElementById(
+            "unit"
+          )
           .value
           .trim();
 
@@ -762,7 +1146,9 @@ document
       const amount =
         Number(
           document
-            .getElementById("amount")
+            .getElementById(
+              "amount"
+            )
             .value
         );
 
@@ -821,7 +1207,6 @@ document
 
         render();
 
-
         e.target.reset();
 
 
@@ -853,7 +1238,9 @@ document
 ========================= */
 
 document
-  .getElementById("moveForm")
+  .getElementById(
+    "moveForm"
+  )
   .addEventListener(
     "submit",
     async e => {
@@ -861,9 +1248,22 @@ document
       e.preventDefault();
 
 
+      if(!auth.currentUser){
+
+        alert(
+          "Debes iniciar sesión."
+        );
+
+        return;
+
+      }
+
+
       const id =
         document
-          .getElementById("pick")
+          .getElementById(
+            "pick"
+          )
           .value;
 
 
@@ -876,14 +1276,18 @@ document
 
       const kind =
         document
-          .getElementById("kind")
+          .getElementById(
+            "kind"
+          )
           .value;
 
 
       const q =
         Number(
           document
-            .getElementById("qty")
+            .getElementById(
+              "qty"
+            )
             .value
         );
 
@@ -948,11 +1352,14 @@ document
           ),
           {
 
-            cantidad:nuevaCantidad,
+            cantidad:
+              nuevaCantidad,
 
-            nombre:x.name,
+            nombre:
+              x.name,
 
-            unidad:x.unit
+            unidad:
+              x.unit
 
           }
         );
@@ -970,7 +1377,9 @@ document
 
           nota:
             document
-              .getElementById("note")
+              .getElementById(
+                "note"
+              )
               .value
               .trim(),
 
@@ -1000,15 +1409,20 @@ document
             movimientoNuevo.id,
 
           date:
-            new Date().toISOString(),
+            new Date()
+              .toISOString(),
 
-          name:x.name,
+          name:
+            x.name,
 
-          unit:x.unit,
+          unit:
+            x.unit,
 
-          kind:kind,
+          kind:
+            kind,
 
-          qty:q,
+          qty:
+            q,
 
           note:
             movimiento.nota
@@ -1017,7 +1431,6 @@ document
 
 
         render();
-
 
         e.target.reset();
 
@@ -1050,7 +1463,9 @@ document
 ========================= */
 
 document
-  .getElementById("filterDate")
+  .getElementById(
+    "filterDate"
+  )
   .value =
   new Date()
     .toISOString()
@@ -1058,7 +1473,9 @@ document
 
 
 document
-  .getElementById("filterDate")
+  .getElementById(
+    "filterDate"
+  )
   .addEventListener(
     "change",
     render
@@ -1076,7 +1493,7 @@ function mostrarSeccion(
 
   document
     .querySelectorAll(
-      "main section"
+      "#appScreen section"
     )
     .forEach(
       section =>
@@ -1087,7 +1504,9 @@ function mostrarSeccion(
 
 
   const seccion =
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
 
 
   if(!seccion){
@@ -1134,7 +1553,9 @@ function mostrarSeccion(
 ========================= */
 
 document
-  .getElementById("tabStock")
+  .getElementById(
+    "tabStock"
+  )
   .addEventListener(
     "click",
     function(){
@@ -1149,7 +1570,9 @@ document
 
 
 document
-  .getElementById("tabMove")
+  .getElementById(
+    "tabMove"
+  )
   .addEventListener(
     "click",
     function(){
@@ -1164,7 +1587,9 @@ document
 
 
 document
-  .getElementById("tabHistory")
+  .getElementById(
+    "tabHistory"
+  )
   .addEventListener(
     "click",
     function(){
@@ -1191,17 +1616,23 @@ function render(){
 
 
   document
-    .getElementById("count")
+    .getElementById(
+      "count"
+    )
     .textContent =
     stock.length;
 
 
   document
-    .getElementById("today")
+    .getElementById(
+      "today"
+    )
     .textContent =
     moves.filter(
       x =>
-      fechaISO(x.date)
+      fechaISO(
+        x.date
+      )
         .slice(0,10)
         ===
       today
@@ -1209,7 +1640,9 @@ function render(){
 
 
   document
-    .getElementById("stockList")
+    .getElementById(
+      "stockList"
+    )
     .innerHTML =
 
     stock.length
@@ -1245,7 +1678,9 @@ function render(){
 
 
   document
-    .getElementById("pick")
+    .getElementById(
+      "pick"
+    )
     .innerHTML =
 
     stock.map(
@@ -1263,14 +1698,18 @@ function render(){
 
   const d =
     document
-      .getElementById("filterDate")
+      .getElementById(
+        "filterDate"
+      )
       .value;
 
 
   const filtered =
     moves.filter(
       x =>
-      fechaISO(x.date)
+      fechaISO(
+        x.date
+      )
         .slice(0,10)
         ===
       d
@@ -1278,7 +1717,9 @@ function render(){
 
 
   document
-    .getElementById("historyList")
+    .getElementById(
+      "historyList"
+    )
     .innerHTML =
 
     filtered.length
@@ -1315,7 +1756,9 @@ function render(){
 
           ${
             new Date(
-              fechaISO(x.date)
+              fechaISO(
+                x.date
+              )
             ).toLocaleTimeString(
               "es-EC",
               {
@@ -1373,11 +1816,17 @@ function exportCSV(){
     ...moves.map(
       x => [
 
-        fechaISO(x.date)
-          .slice(0,10),
+        fechaISO(
+          x.date
+        ).slice(
+          0,
+          10
+        ),
 
         new Date(
-          fechaISO(x.date)
+          fechaISO(
+            x.date
+          )
         ).toLocaleTimeString(
           "es-EC"
         ),
@@ -1425,7 +1874,7 @@ function exportCSV(){
     );
 
 
-  a.href =
+  const url =
     URL.createObjectURL(
       new Blob(
         [
@@ -1440,6 +1889,8 @@ function exportCSV(){
     );
 
 
+  a.href = url;
+
   a.download =
     "BODEGA_SEASCAPE_historial.csv";
 
@@ -1448,7 +1899,7 @@ function exportCSV(){
 
 
   URL.revokeObjectURL(
-    a.href
+    url
   );
 
 }
@@ -1459,38 +1910,42 @@ function exportCSV(){
 ========================= */
 
 document
-  .getElementById("exportBtn")
+  .getElementById(
+    "exportBtn"
+  )
   .addEventListener(
     "click",
     exportCSV
   );
 
-
-/* =========================
-   INICIAR
-========================= */
-
-cargarDatos();
-
 </script>
 
 
-<!-- SERVICE WORKER -->
+<!-- =========================
+     SERVICE WORKER
+========================= -->
 
 <script>
 
 if(
   "serviceWorker" in navigator &&
-  location.protocol.startsWith("http")
+  location.protocol.startsWith(
+    "http"
+  )
 ){
 
   window.addEventListener(
     "load",
     () => {
 
-      navigator.serviceWorker
-        .register("./sw.js")
-        .catch(console.error);
+      navigator
+        .serviceWorker
+        .register(
+          "./sw.js"
+        )
+        .catch(
+          console.error
+        );
 
     }
   );
@@ -1501,4 +1956,3 @@ if(
 
 </body>
 </html>
-```
