@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#166534">
 
 <title>BODEGA SEASCAPE</title>
 
@@ -46,10 +47,11 @@ header p{margin:5px 0 0;opacity:.85}
   box-shadow:0 2px 12px #102b1515;
 }
 
-.card h2{
-  margin-top:0;
+.card h2,.panel h2{
   color:#166534;
 }
+
+.card h2{margin-top:0}
 
 label{
   display:block;
@@ -80,11 +82,26 @@ textarea{
   background:#166534;
   color:white;
   cursor:pointer;
+  font-size:15px;
+}
+
+.btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
 }
 
 .full{
   width:100%;
   margin-top:14px;
+}
+
+.secondary{
+  background:#e5eee7;
+  color:#164d2b;
+}
+
+.danger{
+  background:#b42318;
 }
 
 .status{
@@ -154,6 +171,7 @@ textarea{
   font-weight:700;
   background:#dce9df;
   color:#164d2b;
+  cursor:pointer;
 }
 
 .tabs button.active{
@@ -194,17 +212,34 @@ textarea{
   margin-top:4px;
 }
 
+.editado{
+  color:#9a6700;
+  font-weight:700;
+  font-size:14px;
+  margin-top:4px;
+}
+
 .empty{
   text-align:center;
   padding:20px;
   color:#68766c;
 }
 
-.secondary{
-  background:#e5eee7;
-  color:#164d2b;
+.searchbox{
+  position:relative;
+  margin:14px 0;
 }
 
+.searchbox span{
+  position:absolute;
+  left:12px;
+  top:11px;
+  font-size:19px;
+}
+
+.searchbox input{
+  padding-left:42px;
+}
 
 /* CARGAMENTOS */
 
@@ -239,6 +274,7 @@ textarea{
   background:#fee4e2;
   color:#b42318;
   font-weight:800;
+  cursor:pointer;
 }
 
 .fecha-grupo{
@@ -295,6 +331,35 @@ textarea{
   padding-top:10px;
   border-top:1px solid #dde5df;
 }
+
+.edit-actions{
+  margin-top:14px;
+}
+
+.edit-panel{
+  margin-top:14px;
+  padding:14px;
+  border-radius:12px;
+  background:#fff;
+  border:2px solid #dce8df;
+}
+
+.version{
+  text-align:center;
+  color:#738078;
+  font-size:12px;
+  padding:20px 10px 30px;
+}
+
+@media(max-width:520px){
+  .row{
+    grid-template-columns:1fr;
+  }
+
+  .tabs button{
+    flex:1 1 45%;
+  }
+}
 </style>
 </head>
 
@@ -304,7 +369,6 @@ textarea{
   <h1>📦 BODEGA SEASCAPE</h1>
   <p>Control de inventario · Firebase</p>
 </header>
-
 
 <!-- LOGIN -->
 
@@ -320,14 +384,14 @@ textarea{
 
     <form id="loginForm">
 
-      <label>Usuario o correo</label>
+      <label>👤 Usuario o correo</label>
       <input id="loginUser" type="text" autocomplete="username" required>
 
-      <label>Contraseña</label>
+      <label>🔑 Contraseña</label>
       <input id="loginPassword" type="password" autocomplete="current-password" required>
 
       <button id="loginBtn" class="btn full" type="submit">
-        Ingresar
+        🔓 Ingresar
       </button>
 
     </form>
@@ -338,8 +402,11 @@ textarea{
 
   </div>
 
-</div>
+  <div class="version">
+    BODEGA SEASCAPE · v1.2
+  </div>
 
+</div>
 
 <!-- APP -->
 
@@ -353,35 +420,33 @@ textarea{
     </div>
 
     <button id="logoutBtn" class="logout" type="button">
-      Cerrar sesión
+      🚪 Salir
     </button>
 
   </div>
 
-
   <div class="stats">
 
     <div class="stat">
-      Tipos de materiales
+      📦 Tipos de materiales
       <strong id="count">0</strong>
     </div>
 
     <div class="stat">
-      Movimientos hoy
+      🔄 Movimientos hoy
       <strong id="today">0</strong>
     </div>
 
   </div>
 
-
   <div class="tabs">
 
     <button id="tabStock" class="active" type="button">
-      Inventario
+      📦 Inventario
     </button>
 
     <button id="tabMove" type="button">
-      Entrada / salida
+      🔄 Entrada / salida
     </button>
 
     <button id="tabLoads" type="button">
@@ -389,84 +454,95 @@ textarea{
     </button>
 
     <button id="tabHistory" type="button">
-      Historial
+      📋 Historial
     </button>
 
   </div>
-
 
   <!-- INVENTARIO -->
 
   <section id="stockPanel" class="panel">
 
-    <h2>Inventario actual</h2>
+    <h2>📦 Inventario actual</h2>
+
+    <div class="searchbox">
+      <span>🔍</span>
+      <input
+        id="stockSearch"
+        type="search"
+        placeholder="Buscar material..."
+        autocomplete="off"
+      >
+    </div>
+
+    <div id="stockList"></div>
+
+    <hr style="border:0;border-top:1px solid #e4e9e5;margin:22px 0">
+
+    <h2>➕ Agregar material</h2>
 
     <form id="addForm">
 
-      <label>Nombre del material</label>
+      <label>📦 Nombre del material</label>
       <input id="material" required>
 
       <div class="row">
 
         <div>
-          <label>Cantidad inicial</label>
+          <label>🔢 Cantidad inicial</label>
           <input id="amount" type="number" min="0" step="any" required>
         </div>
 
         <div>
-          <label>Unidad</label>
+          <label>📏 Unidad</label>
           <input id="unit" placeholder="sacos, kg, unidades..." required>
         </div>
 
       </div>
 
       <button class="btn full">
-        Agregar material
+        ➕ Agregar material
       </button>
 
     </form>
 
-    <div id="stockList"></div>
-
   </section>
 
-
-  <!-- ENTRADA / SALIDA -->
+  <!-- MOVIMIENTOS -->
 
   <section id="movePanel" class="panel hidden">
 
-    <h2>Registrar movimiento</h2>
+    <h2>🔄 Registrar movimiento</h2>
 
     <form id="moveForm">
 
-      <label>Tipo</label>
+      <label>↕️ Tipo</label>
 
       <select id="kind">
-        <option value="Salida">Salida</option>
-        <option value="Entrada">Entrada</option>
+        <option value="Salida">🔴 Salida</option>
+        <option value="Entrada">🟢 Entrada</option>
       </select>
 
-      <label>Material</label>
+      <label>📦 Material</label>
       <select id="pick"></select>
 
-      <label>Cantidad</label>
+      <label>🔢 Cantidad</label>
       <input id="qty" type="number" min=".001" step="any" required>
 
-      <label>Nota</label>
+      <label>📝 Nota</label>
       <input id="note" placeholder="Opcional">
 
       <button class="btn full">
-        Guardar movimiento
+        💾 Guardar movimiento
       </button>
 
     </form>
 
     <p class="muted">
-      El responsable se registra automáticamente.
+      👤 El responsable se registra automáticamente.
     </p>
 
   </section>
-
 
   <!-- CARGAMENTOS -->
 
@@ -474,36 +550,21 @@ textarea{
 
     <h2>📥 Cargamentos</h2>
 
-    <p class="muted">
-      Registra varios materiales recibidos como un solo cargamento.
-    </p>
-
     <div class="carga-box">
 
-      <h3>Registrar nuevo cargamento</h3>
+      <h3>➕ Registrar nuevo cargamento</h3>
 
-      <label>Material</label>
+      <label>📦 Material</label>
       <select id="loadMaterial"></select>
 
-      <label>Cantidad recibida</label>
-      <input
-        id="loadQty"
-        type="number"
-        min=".001"
-        step="any"
-        placeholder="Ej. 50"
-      >
+      <label>🔢 Cantidad recibida</label>
+      <input id="loadQty" type="number" min=".001" step="any">
 
-      <button
-        id="addLoadMaterial"
-        class="btn full"
-        type="button"
-      >
+      <button id="addLoadMaterial" class="btn full" type="button">
         ➕ Agregar a la lista
       </button>
 
-
-      <h3>Materiales del cargamento</h3>
+      <h3>📋 Materiales del cargamento</h3>
 
       <div id="loadDraftList">
         <div class="empty">
@@ -511,83 +572,120 @@ textarea{
         </div>
       </div>
 
-
-      <label>Nota del cargamento</label>
+      <label>📝 Nota del cargamento</label>
 
       <textarea
         id="loadNote"
-        placeholder="Opcional: proveedor, número de guía, observaciones..."
+        placeholder="Proveedor, guía u observaciones..."
       ></textarea>
 
-
       <div class="carga-box">
-
-        <div>
-          👤 Responsable:
-          <strong id="loadResponsible">Usuario</strong>
-        </div>
+        👤 Responsable:
+        <strong id="loadResponsible">Usuario</strong>
 
         <div class="muted">
-          La fecha y hora se registrarán automáticamente.
+          🕐 Fecha y hora automáticas.
         </div>
-
       </div>
 
-
-      <button
-        id="saveLoad"
-        class="btn full"
-        type="button"
-      >
+      <button id="saveLoad" class="btn full" type="button">
         📥 Registrar cargamento
       </button>
 
     </div>
 
-
     <h2 style="margin-top:28px">
-      Historial de cargamentos
+      📚 Historial de cargamentos
     </h2>
 
-    <div id="loadsHistory">
-      <div class="empty">
-        No hay cargamentos registrados.
-      </div>
+    <div class="searchbox">
+      <span>🔍</span>
+      <input
+        id="loadSearch"
+        type="search"
+        placeholder="Buscar material en cargamentos..."
+        autocomplete="off"
+      >
     </div>
 
-  </section>
+    <div id="loadsHistory"></div>
 
+  </section>
 
   <!-- HISTORIAL -->
 
   <section id="historyPanel" class="panel hidden">
 
-    <h2>Historial</h2>
+    <h2>📋 Historial</h2>
 
-    <label>Fecha</label>
+    <label>📅 Fecha</label>
     <input id="filterDate" type="date">
 
     <div id="historyList"></div>
 
-    <button
-      id="exportBtn"
-      class="btn secondary full"
-      type="button"
-    >
-      Exportar CSV
+    <button id="exportBtn" class="btn secondary full" type="button">
+      📤 Exportar CSV
     </button>
 
   </section>
 
+  <div class="version">
+    BODEGA SEASCAPE · v1.2
+  </div>
+
 </main>
 
-
 <script type="module">
+
+/* ========================================
+   CONTROL DE VERSIÓN
+======================================== */
+
+const VERSION_APP = "1.2";
+const VERSION_KEY = "bodega_seascape_version";
+
+const versionAnterior =
+  localStorage.getItem(VERSION_KEY);
+
+if(versionAnterior !== VERSION_APP){
+
+  localStorage.setItem(
+    VERSION_KEY,
+    VERSION_APP
+  );
+
+  if("caches" in window){
+    try{
+      const nombres = await caches.keys();
+
+      await Promise.all(
+        nombres.map(
+          nombre => caches.delete(nombre)
+        )
+      );
+    }catch(error){
+      console.warn(
+        "No se pudo limpiar caché:",
+        error
+      );
+    }
+  }
+
+  if(versionAnterior){
+    const url = new URL(location.href);
+    url.searchParams.set("v", VERSION_APP);
+    location.replace(url.toString());
+  }
+}
+
+
+/* ========================================
+   FIREBASE
+======================================== */
 
 import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
 
 import {
   getAuth,
@@ -595,7 +693,6 @@ import {
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
 
 import {
   getFirestore,
@@ -610,38 +707,22 @@ import {
 
 
 const firebaseConfig = {
-
-  apiKey:
-    "AIzaSyBjJ_SbNo9pA8IE7mP_2v3UnIGkY0IzjF0",
-
-  authDomain:
-    "bodega-seascape.firebaseapp.com",
-
-  projectId:
-    "bodega-seascape",
-
-  storageBucket:
-    "bodega-seascape.firebasestorage.app",
-
-  messagingSenderId:
-    "634162820624",
-
-  appId:
-    "1:634162820624:web:6d67c35de7667fe07efc95"
-
+  apiKey:"AIzaSyBjJ_SbNo9pA8IE7mP_2v3UnIGkY0IzjF0",
+  authDomain:"bodega-seascape.firebaseapp.com",
+  projectId:"bodega-seascape",
+  storageBucket:"bodega-seascape.firebasestorage.app",
+  messagingSenderId:"634162820624",
+  appId:"1:634162820624:web:6d67c35de7667fe07efc95"
 };
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-/*
-========================================
-VARIABLES
-========================================
-*/
+/* ========================================
+   VARIABLES
+======================================== */
 
 let stock = [];
 let moves = [];
@@ -658,12 +739,13 @@ let usuarioActual = {
   email:""
 };
 
+let cargaEditando = null;
+let borradorEdicion = [];
 
-/*
-========================================
-ELEMENTOS
-========================================
-*/
+
+/* ========================================
+   ELEMENTOS
+======================================== */
 
 const loginScreen =
   document.getElementById("loginScreen");
@@ -686,18 +768,14 @@ const userName =
 const userEmail =
   document.getElementById("userEmail");
 
-
 status.style.color = "#166534";
-
 status.textContent =
   "🟢 Firebase cargado. Puedes iniciar sesión.";
 
 
-/*
-========================================
-LOGIN
-========================================
-*/
+/* ========================================
+   LOGIN
+======================================== */
 
 function obtenerCorreo(valor){
 
@@ -709,9 +787,7 @@ function obtenerCorreo(valor){
   }
 
   return usuario + "@bodegaseascape.com";
-
 }
-
 
 loginForm.addEventListener(
   "submit",
@@ -734,10 +810,7 @@ loginForm.addEventListener(
       obtenerCorreo(usuario);
 
     loginBtn.disabled = true;
-    loginBtn.textContent = "Ingresando...";
-
-    status.style.color = "#166534";
-    status.textContent = "Verificando cuenta...";
+    loginBtn.textContent = "⏳ Ingresando...";
 
     try{
 
@@ -747,34 +820,30 @@ loginForm.addEventListener(
         password
       );
 
-      status.textContent =
-        "Acceso correcto.";
+      status.style.color = "#166534";
+      status.textContent = "✅ Acceso correcto.";
 
     }catch(error){
 
       console.error(error);
 
       status.style.color = "#b42318";
-
       status.textContent =
         "❌ Usuario o contraseña incorrectos.";
 
     }finally{
 
       loginBtn.disabled = false;
-      loginBtn.textContent = "Ingresar";
+      loginBtn.textContent = "🔓 Ingresar";
 
     }
-
   }
 );
 
 
-/*
-========================================
-SESIÓN
-========================================
-*/
+/* ========================================
+   SESIÓN
+======================================== */
 
 onAuthStateChanged(
   auth,
@@ -794,35 +863,13 @@ onAuthStateChanged(
       };
 
       return;
-
     }
 
-
     usuarioActual = {
-
       uid:user.uid,
-
-      nombre:
-        user.email ||
-        "Usuario",
-
-      email:
-        user.email ||
-        ""
-
+      nombre:user.email || "Usuario",
+      email:user.email || ""
     };
-
-
-    userName.textContent =
-      "👤 " + usuarioActual.nombre;
-
-    userEmail.textContent =
-      usuarioActual.email;
-
-
-    loginScreen.classList.add("hidden");
-    appScreen.classList.remove("hidden");
-
 
     try{
 
@@ -835,35 +882,20 @@ onAuthStateChanged(
           )
         );
 
-
       if(perfil.exists()){
 
-        const datos =
-          perfil.data();
-
+        const datos = perfil.data();
 
         if(datos.activo === false){
 
-          alert(
-            "Esta cuenta está desactivada."
-          );
-
+          alert("Esta cuenta está desactivada.");
           await signOut(auth);
-
           return;
-
         }
-
 
         usuarioActual.nombre =
           datos.nombre ||
           usuarioActual.nombre;
-
-
-        userName.textContent =
-          "👤 " +
-          usuarioActual.nombre;
-
       }
 
     }catch(error){
@@ -872,27 +904,30 @@ onAuthStateChanged(
         "Error perfil:",
         error
       );
-
     }
 
+    userName.textContent =
+      "👤 " + usuarioActual.nombre;
+
+    userEmail.textContent =
+      usuarioActual.email;
 
     document
       .getElementById("loadResponsible")
       .textContent =
         usuarioActual.nombre;
 
+    loginScreen.classList.add("hidden");
+    appScreen.classList.remove("hidden");
 
     iniciarTiempoReal();
-
   }
 );
 
 
-/*
-========================================
-LOGOUT
-========================================
-*/
+/* ========================================
+   LOGOUT
+======================================== */
 
 document
   .getElementById("logoutBtn")
@@ -901,18 +936,14 @@ document
     async () => {
 
       detenerTiempoReal();
-
       await signOut(auth);
-
     }
   );
 
 
-/*
-========================================
-UTILIDADES
-========================================
-*/
+/* ========================================
+   UTILIDADES
+======================================== */
 
 function esc(valor){
 
@@ -921,18 +952,14 @@ function esc(valor){
   ).replace(
     /[&<>"']/g,
     c => ({
-
       "&":"&amp;",
       "<":"&lt;",
       ">":"&gt;",
       '"':"&quot;",
       "'":"&#39;"
-
     }[c])
   );
-
 }
-
 
 function fechaISO(valor){
 
@@ -940,29 +967,21 @@ function fechaISO(valor){
     valor &&
     typeof valor.toDate === "function"
   ){
-
-    return valor
-      .toDate()
-      .toISOString();
-
+    return valor.toDate().toISOString();
   }
 
-  const fecha =
-    new Date(valor);
+  const fecha = new Date(valor);
 
   if(!isNaN(fecha.getTime())){
     return fecha.toISOString();
   }
 
   return new Date().toISOString();
-
 }
-
 
 function fechaLocal(fecha = new Date()){
 
-  const a =
-    fecha.getFullYear();
+  const a = fecha.getFullYear();
 
   const m =
     String(
@@ -975,9 +994,7 @@ function fechaLocal(fecha = new Date()){
     ).padStart(2,"0");
 
   return `${a}-${m}-${d}`;
-
 }
-
 
 function fechaMostrar(fecha){
 
@@ -990,9 +1007,7 @@ function fechaMostrar(fecha){
         year:"numeric"
       }
     );
-
 }
-
 
 function horaMostrar(fecha){
 
@@ -1004,43 +1019,38 @@ function horaMostrar(fecha){
         minute:"2-digit"
       }
     );
+}
 
+function normalizar(texto){
+
+  return String(texto || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase()
+    .trim();
 }
 
 
-/*
-========================================
-TIEMPO REAL
-========================================
-*/
+/* ========================================
+   TIEMPO REAL
+======================================== */
 
 function iniciarTiempoReal(){
 
   detenerTiempoReal();
 
-
-  /*
-  MATERIALES
-  */
-
   detenerMateriales =
     onSnapshot(
-      collection(
-        db,
-        "materiales"
-      ),
-
+      collection(db,"materiales"),
       snapshot => {
 
         stock =
           snapshot.docs.map(
             documento => {
 
-              const x =
-                documento.data();
+              const x = documento.data();
 
               return {
-
                 id:documento.id,
 
                 name:
@@ -1059,49 +1069,39 @@ function iniciarTiempoReal(){
                     x.qty ??
                     0
                   )
-
               };
-
             }
           );
 
+        stock.sort(
+          (a,b) =>
+            a.name.localeCompare(
+              b.name,
+              "es"
+            )
+        );
+
         render();
-
       },
-
-      error => {
-
+      error =>
         console.error(
           "Error materiales:",
           error
-        );
-
-      }
+        )
     );
-
-
-  /*
-  MOVIMIENTOS
-  */
 
   detenerMovimientos =
     onSnapshot(
-      collection(
-        db,
-        "movimientos"
-      ),
-
+      collection(db,"movimientos"),
       snapshot => {
 
         moves =
           snapshot.docs.map(
             documento => {
 
-              const x =
-                documento.data();
+              const x = documento.data();
 
               return {
-
                 id:documento.id,
 
                 date:
@@ -1148,12 +1148,9 @@ function iniciarTiempoReal(){
                 cargamentoId:
                   x.cargamentoId ||
                   ""
-
               };
-
             }
           );
-
 
         moves.sort(
           (a,b) =>
@@ -1161,51 +1158,26 @@ function iniciarTiempoReal(){
             new Date(a.date)
         );
 
-
         render();
-
-      },
-
-      error => {
-
-        console.error(
-          "Error movimientos:",
-          error
-        );
-
       }
     );
 
-
-  /*
-  CARGAMENTOS
-  */
-
   detenerCargamentos =
     onSnapshot(
-      collection(
-        db,
-        "cargamentos"
-      ),
-
+      collection(db,"cargamentos"),
       snapshot => {
 
         cargamentos =
           snapshot.docs.map(
             documento => {
 
-              const x =
-                documento.data();
+              const x = documento.data();
 
               return {
-
-                id:
-                  documento.id,
+                id:documento.id,
 
                 date:
-                  fechaISO(
-                    x.fecha
-                  ),
+                  fechaISO(x.fecha),
 
                 responsableNombre:
                   x.responsableNombre ||
@@ -1220,19 +1192,25 @@ function iniciarTiempoReal(){
                   "",
 
                 materiales:
-                  Array.isArray(
-                    x.materiales
-                  )
-                  ?
-                  x.materiales
-                  :
-                  []
+                  Array.isArray(x.materiales)
+                  ? x.materiales
+                  : [],
 
+                editadoPorNombre:
+                  x.editadoPorNombre ||
+                  "",
+
+                editadoPorUid:
+                  x.editadoPorUid ||
+                  "",
+
+                fechaEdicion:
+                  x.fechaEdicion
+                  ? fechaISO(x.fechaEdicion)
+                  : ""
               };
-
             }
           );
-
 
         cargamentos.sort(
           (a,b) =>
@@ -1240,23 +1218,10 @@ function iniciarTiempoReal(){
             new Date(a.date)
         );
 
-
         renderCargamentos();
-
-      },
-
-      error => {
-
-        console.error(
-          "Error cargamentos:",
-          error
-        );
-
       }
     );
-
 }
-
 
 function detenerTiempoReal(){
 
@@ -1274,15 +1239,12 @@ function detenerTiempoReal(){
     detenerCargamentos();
     detenerCargamentos = null;
   }
-
 }
 
 
-/*
-========================================
-AGREGAR MATERIAL
-========================================
-*/
+/* ========================================
+   AGREGAR MATERIAL
+======================================== */
 
 document
   .getElementById("addForm")
@@ -1292,13 +1254,11 @@ document
 
       event.preventDefault();
 
-
       const name =
         document
           .getElementById("material")
           .value
           .trim();
-
 
       const amount =
         Number(
@@ -1307,75 +1267,53 @@ document
             .value
         );
 
-
       const unit =
         document
           .getElementById("unit")
           .value
           .trim();
 
-
       if(
         stock.some(
           x =>
-            x.name.toLowerCase()
-            ===
-            name.toLowerCase()
+            normalizar(x.name) ===
+            normalizar(name)
         )
       ){
-
-        alert(
-          "Ese material ya existe."
-        );
-
+        alert("Ese material ya existe.");
         return;
-
       }
-
 
       try{
 
         await addDoc(
-          collection(
-            db,
-            "materiales"
-          ),
+          collection(db,"materiales"),
           {
-
             nombre:name,
             cantidad:amount,
             unidad:unit
-
           }
         );
 
-
         event.target.reset();
 
-        alert(
-          "Material guardado."
-        );
-
+        alert("✅ Material guardado.");
 
       }catch(error){
 
         console.error(error);
 
         alert(
-          "No se pudo guardar el material."
+          "❌ No se pudo guardar el material."
         );
-
       }
-
     }
   );
 
 
-/*
-========================================
-MOVIMIENTO NORMAL
-========================================
-*/
+/* ========================================
+   MOVIMIENTO
+======================================== */
 
 document
   .getElementById("moveForm")
@@ -1385,35 +1323,25 @@ document
 
       event.preventDefault();
 
-
       const id =
         document
           .getElementById("pick")
           .value;
-
 
       const material =
         stock.find(
           x => x.id === id
         );
 
-
       if(!material){
-
-        alert(
-          "Selecciona un material."
-        );
-
+        alert("Selecciona un material.");
         return;
-
       }
-
 
       const tipo =
         document
           .getElementById("kind")
           .value;
-
 
       const cantidad =
         Number(
@@ -1422,124 +1350,125 @@ document
             .value
         );
 
-
       const nota =
         document
           .getElementById("note")
           .value
           .trim();
 
-
       if(cantidad <= 0){
-
-        alert(
-          "Cantidad inválida."
-        );
-
+        alert("Cantidad inválida.");
         return;
-
       }
-
 
       if(
         tipo === "Salida" &&
         cantidad > material.qty
       ){
-
         alert(
           "No hay suficiente existencia."
         );
-
         return;
-
       }
-
-
-      const nuevaCantidad =
-        tipo === "Entrada"
-        ?
-        material.qty + cantidad
-        :
-        material.qty - cantidad;
-
 
       try{
 
-        await updateDoc(
-          doc(
-            db,
-            "materiales",
-            material.id
-          ),
-          {
-            cantidad:nuevaCantidad
+        await runTransaction(
+          db,
+          async transaction => {
+
+            const referencia =
+              doc(
+                db,
+                "materiales",
+                material.id
+              );
+
+            const snap =
+              await transaction.get(
+                referencia
+              );
+
+            if(!snap.exists()){
+              throw new Error(
+                "Material no encontrado"
+              );
+            }
+
+            const actual =
+              Number(
+                snap.data().cantidad ??
+                snap.data().qty ??
+                0
+              );
+
+            const nuevaCantidad =
+              tipo === "Entrada"
+              ? actual + cantidad
+              : actual - cantidad;
+
+            if(nuevaCantidad < 0){
+              throw new Error(
+                "Existencia insuficiente"
+              );
+            }
+
+            transaction.update(
+              referencia,
+              {
+                cantidad:nuevaCantidad
+              }
+            );
+
+            const movimientoRef =
+              doc(
+                collection(
+                  db,
+                  "movimientos"
+                )
+              );
+
+            transaction.set(
+              movimientoRef,
+              {
+                nombre:material.name,
+                unidad:material.unit,
+                tipo:tipo,
+                cantidad:cantidad,
+                nota:nota,
+                fecha:new Date(),
+                responsableNombre:
+                  usuarioActual.nombre,
+                responsableUid:
+                  usuarioActual.uid
+              }
+            );
           }
         );
-
-
-        await addDoc(
-          collection(
-            db,
-            "movimientos"
-          ),
-          {
-
-            nombre:
-              material.name,
-
-            unidad:
-              material.unit,
-
-            tipo:
-              tipo,
-
-            cantidad:
-              cantidad,
-
-            nota:
-              nota,
-
-            fecha:
-              new Date(),
-
-            responsableNombre:
-              usuarioActual.nombre,
-
-            responsableUid:
-              usuarioActual.uid
-
-          }
-        );
-
 
         event.target.reset();
 
-
         alert(
-          "Movimiento guardado por " +
+          "✅ Movimiento guardado por " +
           usuarioActual.nombre
         );
-
 
       }catch(error){
 
         console.error(error);
 
         alert(
-          "No se pudo guardar el movimiento."
+          "❌ No se pudo guardar el movimiento: " +
+          error.message
         );
-
       }
-
     }
   );
 
 
-/*
-========================================
-BORRADOR DEL CARGAMENTO
-========================================
-*/
+/* ========================================
+   NUEVO CARGAMENTO
+======================================== */
 
 document
   .getElementById("addLoadMaterial")
@@ -1552,7 +1481,6 @@ document
           .getElementById("loadMaterial")
           .value;
 
-
       const cantidad =
         Number(
           document
@@ -1560,106 +1488,63 @@ document
             .value
         );
 
-
       const material =
         stock.find(
           x => x.id === id
         );
 
-
       if(!material){
-
-        alert(
-          "Selecciona un material."
-        );
-
+        alert("Selecciona un material.");
         return;
-
       }
 
-
       if(cantidad <= 0){
-
         alert(
           "Ingresa una cantidad válida."
         );
-
         return;
-
       }
-
 
       const existente =
         borradorCarga.find(
           x => x.id === id
         );
 
-
       if(existente){
-
-        existente.qty +=
-          cantidad;
-
+        existente.qty += cantidad;
       }else{
-
         borradorCarga.push({
-
-          id:
-            material.id,
-
-          name:
-            material.name,
-
-          unit:
-            material.unit,
-
-          qty:
-            cantidad
-
+          id:material.id,
+          name:material.name,
+          unit:material.unit,
+          qty:cantidad
         });
-
       }
-
 
       document
         .getElementById("loadQty")
         .value = "";
 
-
       renderBorradorCarga();
-
     }
   );
 
-
 function quitarCarga(index){
 
-  borradorCarga.splice(
-    index,
-    1
-  );
-
+  borradorCarga.splice(index,1);
   renderBorradorCarga();
-
 }
 
-
-window.quitarCarga =
-  quitarCarga;
-
+window.quitarCarga = quitarCarga;
 
 function renderBorradorCarga(){
 
   const contenedor =
-    document
-      .getElementById(
-        "loadDraftList"
-      );
+    document.getElementById(
+      "loadDraftList"
+    );
 
-
-  if(
-    borradorCarga.length === 0
-  ){
+  if(borradorCarga.length === 0){
 
     contenedor.innerHTML =
       `
@@ -1669,9 +1554,7 @@ function renderBorradorCarga(){
       `;
 
     return;
-
   }
-
 
   contenedor.innerHTML =
     borradorCarga.map(
@@ -1680,14 +1563,12 @@ function renderBorradorCarga(){
         <div class="carga-material">
 
           <div>
-
             <strong>
-              ${esc(x.name)}
+              📦 ${esc(x.name)}
             </strong>
 
             ${x.qty}
             ${esc(x.unit)}
-
           </div>
 
           <button
@@ -1695,22 +1576,19 @@ function renderBorradorCarga(){
             type="button"
             onclick="quitarCarga(${index})"
           >
-            🗑️
+            🗑️ Quitar
           </button>
 
         </div>
 
       `
     ).join("");
-
 }
 
 
-/*
-========================================
-REGISTRAR CARGAMENTO
-========================================
-*/
+/* ========================================
+   GUARDAR CARGAMENTO
+======================================== */
 
 document
   .getElementById("saveLoad")
@@ -1718,54 +1596,39 @@ document
     "click",
     async () => {
 
-      if(
-        borradorCarga.length === 0
-      ){
+      if(borradorCarga.length === 0){
 
         alert(
-          "Agrega al menos un material al cargamento."
+          "Agrega al menos un material."
         );
 
         return;
-
       }
 
-
       const boton =
-        document
-          .getElementById(
-            "saveLoad"
-          );
-
+        document.getElementById(
+          "saveLoad"
+        );
 
       const nota =
         document
-          .getElementById(
-            "loadNote"
-          )
+          .getElementById("loadNote")
           .value
           .trim();
 
-
       boton.disabled = true;
-
       boton.textContent =
-        "Registrando...";
-
+        "⏳ Registrando...";
 
       try{
 
-        /*
-        Primero actualizamos todas las
-        cantidades mediante transacción.
-        */
+        const fecha = new Date();
 
         await runTransaction(
           db,
           async transaction => {
 
             const lecturas = [];
-
 
             for(
               const item
@@ -1779,37 +1642,32 @@ document
                   item.id
                 );
 
-
               const snapshot =
                 await transaction.get(
                   referencia
                 );
 
-
-              if(
-                !snapshot.exists()
-              ){
-
+              if(!snapshot.exists()){
                 throw new Error(
-                  "Material no encontrado: " +
+                  "No existe " +
                   item.name
                 );
-
               }
 
-
               lecturas.push({
-
-                item:item,
-
-                referencia:referencia,
-
+                item,
+                referencia,
                 datos:snapshot.data()
-
               });
-
             }
 
+            const cargaRef =
+              doc(
+                collection(
+                  db,
+                  "cargamentos"
+                )
+              );
 
             for(
               const lectura
@@ -1823,156 +1681,101 @@ document
                   0
                 );
 
-
               transaction.update(
                 lectura.referencia,
                 {
-
                   cantidad:
                     actual +
                     lectura.item.qty
-
                 }
               );
-
             }
 
+            const materialesCarga =
+              borradorCarga.map(
+                x => ({
+                  materialId:x.id,
+                  nombre:x.name,
+                  unidad:x.unit,
+                  cantidad:x.qty
+                })
+              );
+
+            transaction.set(
+              cargaRef,
+              {
+                fecha:fecha,
+                responsableNombre:
+                  usuarioActual.nombre,
+                responsableUid:
+                  usuarioActual.uid,
+                nota:nota,
+                materiales:
+                  materialesCarga
+              }
+            );
+
+            for(
+              const item
+              of borradorCarga
+            ){
+
+              const movimientoRef =
+                doc(
+                  collection(
+                    db,
+                    "movimientos"
+                  )
+                );
+
+              transaction.set(
+                movimientoRef,
+                {
+                  nombre:item.name,
+                  unidad:item.unit,
+                  tipo:"Entrada",
+                  cantidad:item.qty,
+
+                  nota:
+                    nota ||
+                    "Ingreso por cargamento",
+
+                  fecha:fecha,
+
+                  responsableNombre:
+                    usuarioActual.nombre,
+
+                  responsableUid:
+                    usuarioActual.uid,
+
+                  cargamentoId:
+                    cargaRef.id
+                }
+              );
+            }
           }
         );
-
-
-        /*
-        Creamos el cargamento.
-        */
-
-        const fecha =
-          new Date();
-
-
-        const materialesCarga =
-          borradorCarga.map(
-            x => ({
-
-              materialId:
-                x.id,
-
-              nombre:
-                x.name,
-
-              unidad:
-                x.unit,
-
-              cantidad:
-                x.qty
-
-            })
-          );
-
-
-        const cargaRef =
-          await addDoc(
-            collection(
-              db,
-              "cargamentos"
-            ),
-            {
-
-              fecha:
-                fecha,
-
-              responsableNombre:
-                usuarioActual.nombre,
-
-              responsableUid:
-                usuarioActual.uid,
-
-              nota:
-                nota,
-
-              materiales:
-                materialesCarga
-
-            }
-          );
-
-
-        /*
-        También registramos cada material
-        como entrada en el historial general.
-        */
-
-        for(
-          const item
-          of borradorCarga
-        ){
-
-          await addDoc(
-            collection(
-              db,
-              "movimientos"
-            ),
-            {
-
-              nombre:
-                item.name,
-
-              unidad:
-                item.unit,
-
-              tipo:
-                "Entrada",
-
-              cantidad:
-                item.qty,
-
-              nota:
-                nota ||
-                "Ingreso por cargamento",
-
-              fecha:
-                fecha,
-
-              responsableNombre:
-                usuarioActual.nombre,
-
-              responsableUid:
-                usuarioActual.uid,
-
-              cargamentoId:
-                cargaRef.id
-
-            }
-          );
-
-        }
-
 
         borradorCarga = [];
 
         document
-          .getElementById(
-            "loadNote"
-          )
+          .getElementById("loadNote")
           .value = "";
-
 
         renderBorradorCarga();
 
-
         alert(
-          "Cargamento registrado correctamente."
+          "✅ Cargamento registrado correctamente."
         );
-
 
       }catch(error){
 
         console.error(error);
 
-
         alert(
-          "No se pudo registrar el cargamento."
+          "❌ No se pudo registrar: " +
+          error.message
         );
-
 
       }finally{
 
@@ -1980,91 +1783,165 @@ document
 
         boton.textContent =
           "📥 Registrar cargamento";
-
       }
-
     }
   );
 
 
-/*
-========================================
-RENDER CARGAMENTOS
-========================================
-*/
+/* ========================================
+   BUSCADORES
+======================================== */
+
+document
+  .getElementById("stockSearch")
+  .addEventListener(
+    "input",
+    renderStock
+  );
+
+document
+  .getElementById("loadSearch")
+  .addEventListener(
+    "input",
+    renderCargamentos
+  );
+
+
+/* ========================================
+   INVENTARIO
+======================================== */
+
+function renderStock(){
+
+  const busqueda =
+    normalizar(
+      document
+        .getElementById("stockSearch")
+        .value
+    );
+
+  const lista =
+    stock.filter(
+      x =>
+        normalizar(x.name)
+          .includes(busqueda)
+    );
+
+  document
+    .getElementById("stockList")
+    .innerHTML =
+
+      lista.length
+      ?
+
+      lista.map(
+        x => `
+
+          <div class="item">
+
+            <b>
+              📦 ${esc(x.name)}
+            </b>
+
+            <div class="qty">
+              ${x.qty}
+              ${esc(x.unit)}
+            </div>
+
+          </div>
+
+        `
+      ).join("")
+
+      :
+
+      `
+      <div class="empty">
+        🔍 No se encontró ese material.
+      </div>
+      `;
+}
+
+
+/* ========================================
+   CARGAMENTOS
+======================================== */
 
 function renderCargamentos(){
 
   const contenedor =
-    document
-      .getElementById(
-        "loadsHistory"
-      );
+    document.getElementById(
+      "loadsHistory"
+    );
 
+  const busqueda =
+    normalizar(
+      document
+        .getElementById("loadSearch")
+        .value
+    );
 
-  if(
-    cargamentos.length === 0
-  ){
+  const filtrados =
+    cargamentos.filter(
+      carga => {
+
+        if(!busqueda){
+          return true;
+        }
+
+        return carga.materiales.some(
+          material =>
+            normalizar(
+              material.nombre
+            ).includes(busqueda)
+        );
+      }
+    );
+
+  if(filtrados.length === 0){
 
     contenedor.innerHTML =
       `
       <div class="empty">
-        No hay cargamentos registrados.
+        🔍 No se encontraron cargamentos.
       </div>
       `;
 
     return;
-
   }
-
 
   const grupos = {};
 
-
-  cargamentos.forEach(
+  filtrados.forEach(
     carga => {
 
       const clave =
         fechaLocal(
-          new Date(
-            carga.date
-          )
+          new Date(carga.date)
         );
 
-
       if(!grupos[clave]){
-
         grupos[clave] = [];
-
       }
 
-
-      grupos[clave].push(
-        carga
-      );
-
+      grupos[clave].push(carga);
     }
   );
 
-
   const fechas =
-    Object.keys(
-      grupos
-    ).sort(
-      (a,b) =>
-        b.localeCompare(a)
-    );
-
+    Object.keys(grupos)
+      .sort(
+        (a,b) =>
+          b.localeCompare(a)
+      );
 
   let html = "";
-
 
   fechas.forEach(
     fecha => {
 
       const lista =
         grupos[fecha];
-
 
       html += `
 
@@ -2073,21 +1950,40 @@ function renderCargamentos(){
           <div class="fecha-titulo">
             📅 ${
               fechaMostrar(
-                fecha + "T12:00:00"
+                fecha +
+                "T12:00:00"
               )
             }
           </div>
-
       `;
 
-
       lista.forEach(
-        (carga,index) => {
+        carga => {
+
+          /*
+          Número calculado usando TODOS
+          los cargamentos del mismo día,
+          no solamente los filtrados.
+          */
+
+          const todosDelDia =
+            cargamentos
+              .filter(
+                x =>
+                  fechaLocal(
+                    new Date(x.date)
+                  ) === fecha
+              )
+              .sort(
+                (a,b) =>
+                  new Date(a.date) -
+                  new Date(b.date)
+              );
 
           const numero =
-            lista.length -
-            index;
-
+            todosDelDia.findIndex(
+              x => x.id === carga.id
+            ) + 1;
 
           html += `
 
@@ -2095,14 +1991,7 @@ function renderCargamentos(){
 
               <div
                 class="cargamento-cabecera"
-                onclick="
-                  document
-                    .getElementById(
-                      'detalle-${esc(carga.id)}'
-                    )
-                    .classList
-                    .toggle('hidden')
-                "
+                onclick="toggleCarga('${carga.id}')"
               >
 
                 <div>
@@ -2125,24 +2014,37 @@ function renderCargamentos(){
                     }
                   </div>
 
+                  ${
+                    carga.editadoPorNombre
+                    ?
+                    `
+                    <div class="editado">
+                      ✏️ Editado por:
+                      ${
+                        esc(
+                          carga.editadoPorNombre
+                        )
+                      }
+                    </div>
+                    `
+                    :
+                    ""
+                  }
+
                 </div>
 
-                <strong>
-                  ▼
-                </strong>
+                <strong>▼</strong>
 
               </div>
 
-
               <div
-                id="detalle-${esc(carga.id)}"
+                id="detalle-${carga.id}"
                 class="cargamento-detalle hidden"
               >
 
                 <strong>
-                  Materiales recibidos
+                  📋 Materiales recibidos
                 </strong>
-
 
                 ${
                   carga.materiales
@@ -2152,7 +2054,7 @@ function renderCargamentos(){
                         <div class="cargamento-linea">
 
                           <strong>
-                            ${
+                            📦 ${
                               esc(
                                 material.nombre
                               )
@@ -2181,7 +2083,6 @@ function renderCargamentos(){
                     .join("")
                 }
 
-
                 <div class="info-carga">
 
                   <div>
@@ -2200,7 +2101,7 @@ function renderCargamentos(){
                     }
                   </div>
 
-                  <div>
+                  <div class="responsable">
                     👤 Responsable:
                     ${
                       esc(
@@ -2210,7 +2111,47 @@ function renderCargamentos(){
                     }
                   </div>
 
-                  <div>
+                  ${
+                    carga.editadoPorNombre
+                    ?
+                    `
+                    <div class="editado">
+
+                      ✏️ Editado por:
+                      ${
+                        esc(
+                          carga.editadoPorNombre
+                        )
+                      }
+
+                      ${
+                        carga.fechaEdicion
+                        ?
+                        `
+                        <br>
+                        🕐 ${
+                          fechaMostrar(
+                            carga.fechaEdicion
+                          )
+                        }
+                        ·
+                        ${
+                          horaMostrar(
+                            carga.fechaEdicion
+                          )
+                        }
+                        `
+                        :
+                        ""
+                      }
+
+                    </div>
+                    `
+                    :
+                    ""
+                  }
+
+                  <div style="margin-top:8px">
                     📝 ${
                       esc(
                         carga.nota ||
@@ -2221,35 +2162,662 @@ function renderCargamentos(){
 
                 </div>
 
+                <div class="edit-actions">
+
+                  <button
+                    class="btn secondary full"
+                    type="button"
+                    onclick="abrirEdicion('${carga.id}')"
+                  >
+                    ✏️ Editar cargamento
+                  </button>
+
+                </div>
+
+                <div
+                  id="editar-${carga.id}"
+                  class="edit-panel hidden"
+                ></div>
+
               </div>
 
             </div>
-
           `;
-
         }
       );
 
-
-      html += `
-        </div>
-      `;
-
+      html += `</div>`;
     }
   );
 
+  contenedor.innerHTML = html;
+}
 
-  contenedor.innerHTML =
-    html;
+function toggleCarga(id){
 
+  const elemento =
+    document.getElementById(
+      "detalle-" + id
+    );
+
+  if(elemento){
+    elemento.classList.toggle(
+      "hidden"
+    );
+  }
+}
+
+window.toggleCarga = toggleCarga;
+
+
+/* ========================================
+   EDITAR CARGAMENTO
+======================================== */
+
+function abrirEdicion(id){
+
+  const carga =
+    cargamentos.find(
+      x => x.id === id
+    );
+
+  if(!carga){
+    return;
+  }
+
+  cargaEditando = id;
+
+  borradorEdicion =
+    carga.materiales.map(
+      x => ({
+        materialId:
+          x.materialId || "",
+
+        nombre:
+          x.nombre || "",
+
+        unidad:
+          x.unidad || "",
+
+        cantidad:
+          Number(
+            x.cantidad || 0
+          )
+      })
+    );
+
+  renderEditorCarga();
+}
+
+window.abrirEdicion =
+  abrirEdicion;
+
+
+function renderEditorCarga(){
+
+  if(!cargaEditando){
+    return;
+  }
+
+  const carga =
+    cargamentos.find(
+      x => x.id === cargaEditando
+    );
+
+  if(!carga){
+    return;
+  }
+
+  const contenedor =
+    document.getElementById(
+      "editar-" +
+      cargaEditando
+    );
+
+  if(!contenedor){
+    return;
+  }
+
+  contenedor.classList.remove(
+    "hidden"
+  );
+
+  contenedor.innerHTML = `
+
+    <h3>✏️ Editar cargamento</h3>
+
+    <p class="muted">
+      Los cambios de cantidades ajustarán
+      automáticamente el inventario.
+    </p>
+
+    <div id="editMaterialList">
+
+      ${
+        borradorEdicion
+          .map(
+            (x,index) => `
+
+              <div class="carga-material">
+
+                <div style="flex:1">
+
+                  <strong>
+                    📦 ${esc(x.nombre)}
+                  </strong>
+
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    value="${x.cantidad}"
+                    onchange="
+                      cambiarCantidadEdicion(
+                        ${index},
+                        this.value
+                      )
+                    "
+                  >
+
+                  <div class="muted">
+                    ${esc(x.unidad)}
+                  </div>
+
+                </div>
+
+                <button
+                  class="remove"
+                  type="button"
+                  onclick="
+                    quitarMaterialEdicion(
+                      ${index}
+                    )
+                  "
+                >
+                  🗑️
+                </button>
+
+              </div>
+
+            `
+          )
+          .join("")
+      }
+
+    </div>
+
+    <label>
+      ➕ Agregar otro material
+    </label>
+
+    <select id="editAddMaterial">
+
+      ${
+        stock.map(
+          x => `
+            <option value="${esc(x.id)}">
+              ${esc(x.name)}
+            </option>
+          `
+        ).join("")
+      }
+
+    </select>
+
+    <label>🔢 Cantidad</label>
+
+    <input
+      id="editAddQty"
+      type="number"
+      min=".001"
+      step="any"
+    >
+
+    <button
+      class="btn secondary full"
+      type="button"
+      onclick="agregarMaterialEdicion()"
+    >
+      ➕ Agregar material
+    </button>
+
+    <label>📝 Nota</label>
+
+    <textarea id="editNote">${
+      esc(carga.nota || "")
+    }</textarea>
+
+    <button
+      class="btn full"
+      type="button"
+      onclick="guardarEdicionCarga()"
+    >
+      💾 Guardar cambios
+    </button>
+
+    <button
+      class="btn secondary full"
+      type="button"
+      onclick="cancelarEdicion()"
+    >
+      ❌ Cancelar
+    </button>
+  `;
 }
 
 
-/*
-========================================
-PESTAÑAS
-========================================
-*/
+function cambiarCantidadEdicion(
+  index,
+  valor
+){
+
+  borradorEdicion[index].cantidad =
+    Number(valor);
+}
+
+window.cambiarCantidadEdicion =
+  cambiarCantidadEdicion;
+
+
+function quitarMaterialEdicion(
+  index
+){
+
+  borradorEdicion.splice(
+    index,
+    1
+  );
+
+  renderEditorCarga();
+}
+
+window.quitarMaterialEdicion =
+  quitarMaterialEdicion;
+
+
+function agregarMaterialEdicion(){
+
+  const id =
+    document
+      .getElementById(
+        "editAddMaterial"
+      )
+      .value;
+
+  const cantidad =
+    Number(
+      document
+        .getElementById(
+          "editAddQty"
+        )
+        .value
+    );
+
+  if(cantidad <= 0){
+
+    alert(
+      "Ingresa una cantidad válida."
+    );
+
+    return;
+  }
+
+  const material =
+    stock.find(
+      x => x.id === id
+    );
+
+  if(!material){
+    return;
+  }
+
+  const existente =
+    borradorEdicion.find(
+      x =>
+        x.materialId === id
+    );
+
+  if(existente){
+
+    existente.cantidad +=
+      cantidad;
+
+  }else{
+
+    borradorEdicion.push({
+      materialId:material.id,
+      nombre:material.name,
+      unidad:material.unit,
+      cantidad:cantidad
+    });
+  }
+
+  renderEditorCarga();
+}
+
+window.agregarMaterialEdicion =
+  agregarMaterialEdicion;
+
+
+function cancelarEdicion(){
+
+  if(cargaEditando){
+
+    const panel =
+      document.getElementById(
+        "editar-" +
+        cargaEditando
+      );
+
+    if(panel){
+      panel.classList.add(
+        "hidden"
+      );
+    }
+  }
+
+  cargaEditando = null;
+  borradorEdicion = [];
+}
+
+window.cancelarEdicion =
+  cancelarEdicion;
+
+
+/* ========================================
+   GUARDAR EDICIÓN
+======================================== */
+
+async function guardarEdicionCarga(){
+
+  const id = cargaEditando;
+
+  const carga =
+    cargamentos.find(
+      x => x.id === id
+    );
+
+  if(!carga){
+    return;
+  }
+
+  if(borradorEdicion.length === 0){
+
+    alert(
+      "El cargamento debe tener al menos un material."
+    );
+
+    return;
+  }
+
+  if(
+    borradorEdicion.some(
+      x =>
+        !Number.isFinite(
+          Number(x.cantidad)
+        ) ||
+        Number(x.cantidad) <= 0
+    )
+  ){
+
+    alert(
+      "Todas las cantidades deben ser mayores que 0."
+    );
+
+    return;
+  }
+
+  const nota =
+    document
+      .getElementById("editNote")
+      .value
+      .trim();
+
+  if(
+    !confirm(
+      "¿Guardar los cambios del cargamento?\n\n" +
+      "El inventario se ajustará automáticamente."
+    )
+  ){
+    return;
+  }
+
+  try{
+
+    /*
+    Calculamos cuánto cambió cada material.
+
+    Ejemplo:
+    antes Cemento = 50
+    después Cemento = 40
+
+    diferencia = -10
+
+    Entonces inventario baja 10.
+    */
+
+    const cantidadesAnteriores =
+      new Map();
+
+    carga.materiales.forEach(
+      x => {
+
+        const materialId =
+          x.materialId;
+
+        if(materialId){
+
+          cantidadesAnteriores.set(
+            materialId,
+            (
+              cantidadesAnteriores.get(
+                materialId
+              ) || 0
+            ) +
+            Number(
+              x.cantidad || 0
+            )
+          );
+        }
+      }
+    );
+
+    const cantidadesNuevas =
+      new Map();
+
+    borradorEdicion.forEach(
+      x => {
+
+        cantidadesNuevas.set(
+          x.materialId,
+          (
+            cantidadesNuevas.get(
+              x.materialId
+            ) || 0
+          ) +
+          Number(x.cantidad)
+        );
+      }
+    );
+
+    const ids =
+      new Set([
+        ...cantidadesAnteriores.keys(),
+        ...cantidadesNuevas.keys()
+      ]);
+
+    await runTransaction(
+      db,
+      async transaction => {
+
+        const lecturas = [];
+
+        for(const materialId of ids){
+
+          const referencia =
+            doc(
+              db,
+              "materiales",
+              materialId
+            );
+
+          const snapshot =
+            await transaction.get(
+              referencia
+            );
+
+          if(!snapshot.exists()){
+
+            throw new Error(
+              "Uno de los materiales ya no existe."
+            );
+          }
+
+          lecturas.push({
+            materialId,
+            referencia,
+            datos:snapshot.data()
+          });
+        }
+
+        /*
+        Primero comprobamos todos los
+        resultados antes de escribir.
+        */
+
+        const actualizaciones = [];
+
+        for(const lectura of lecturas){
+
+          const anterior =
+            cantidadesAnteriores.get(
+              lectura.materialId
+            ) || 0;
+
+          const nueva =
+            cantidadesNuevas.get(
+              lectura.materialId
+            ) || 0;
+
+          const diferencia =
+            nueva - anterior;
+
+          const stockActual =
+            Number(
+              lectura.datos.cantidad ??
+              lectura.datos.qty ??
+              0
+            );
+
+          const stockFinal =
+            stockActual +
+            diferencia;
+
+          if(stockFinal < 0){
+
+            const nombre =
+              lectura.datos.nombre ||
+              "Material";
+
+            throw new Error(
+              "No se puede hacer la edición porque " +
+              nombre +
+              " quedaría con existencia negativa."
+            );
+          }
+
+          actualizaciones.push({
+            referencia:
+              lectura.referencia,
+
+            cantidad:
+              stockFinal
+          });
+        }
+
+        for(
+          const actualizacion
+          of actualizaciones
+        ){
+
+          transaction.update(
+            actualizacion.referencia,
+            {
+              cantidad:
+                actualizacion.cantidad
+            }
+          );
+        }
+
+        transaction.update(
+          doc(
+            db,
+            "cargamentos",
+            id
+          ),
+          {
+            materiales:
+              borradorEdicion.map(
+                x => ({
+                  materialId:
+                    x.materialId,
+                  nombre:
+                    x.nombre,
+                  unidad:
+                    x.unidad,
+                  cantidad:
+                    Number(x.cantidad)
+                })
+              ),
+
+            nota:nota,
+
+            editadoPorNombre:
+              usuarioActual.nombre,
+
+            editadoPorUid:
+              usuarioActual.uid,
+
+            fechaEdicion:
+              new Date()
+          }
+        );
+      }
+    );
+
+    /*
+    IMPORTANTE:
+    No modificamos los movimientos históricos
+    originales. El cargamento conserva quién
+    lo registró y ahora también quién lo editó.
+    */
+
+    cargaEditando = null;
+    borradorEdicion = [];
+
+    alert(
+      "✅ Cargamento editado correctamente por " +
+      usuarioActual.nombre
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "❌ No se pudo editar:\n" +
+      error.message
+    );
+  }
+}
+
+window.guardarEdicionCarga =
+  guardarEdicionCarga;
+
+
+/* ========================================
+   PESTAÑAS
+======================================== */
 
 const panels = {
 
@@ -2272,29 +2840,24 @@ const panels = {
     document.getElementById(
       "historyPanel"
     )
-
 };
-
 
 function abrirPanel(
   nombre,
   boton
 ){
 
-  Object.values(
-    panels
-  ).forEach(
-    panel =>
-      panel.classList.add(
-        "hidden"
-      )
-  );
-
+  Object.values(panels)
+    .forEach(
+      panel =>
+        panel.classList.add(
+          "hidden"
+        )
+    );
 
   panels[nombre]
     .classList
     .remove("hidden");
-
 
   document
     .querySelectorAll(
@@ -2307,88 +2870,70 @@ function abrirPanel(
         )
     );
 
-
   boton.classList.add(
     "active"
   );
 
-
   render();
-
 }
-
 
 document
   .getElementById("tabStock")
   .addEventListener(
     "click",
     function(){
-
       abrirPanel(
         "stock",
         this
       );
-
     }
   );
-
 
 document
   .getElementById("tabMove")
   .addEventListener(
     "click",
     function(){
-
       abrirPanel(
         "move",
         this
       );
-
     }
   );
-
 
 document
   .getElementById("tabLoads")
   .addEventListener(
     "click",
     function(){
-
       abrirPanel(
         "loads",
         this
       );
-
     }
   );
-
 
 document
   .getElementById("tabHistory")
   .addEventListener(
     "click",
     function(){
-
       abrirPanel(
         "history",
         this
       );
-
     }
   );
 
 
-/*
-========================================
-FECHA HISTORIAL
-========================================
-*/
+/* ========================================
+   HISTORIAL
+======================================== */
 
 document
   .getElementById("filterDate")
   .value =
     fechaLocal();
-
 
 document
   .getElementById("filterDate")
@@ -2398,11 +2943,9 @@ document
   );
 
 
-/*
-========================================
-RENDER GENERAL
-========================================
-*/
+/* ========================================
+   RENDER GENERAL
+======================================== */
 
 function render(){
 
@@ -2411,10 +2954,8 @@ function render(){
     .textContent =
       stock.length;
 
-
   const hoy =
     fechaLocal();
-
 
   document
     .getElementById("today")
@@ -2426,30 +2967,107 @@ function render(){
           ) === hoy
       ).length;
 
-
-  /*
-  INVENTARIO
-  */
+  renderStock();
 
   document
-    .getElementById("stockList")
+    .getElementById("pick")
     .innerHTML =
 
-      stock.length
-      ?
+      stock.map(
+        x => `
+          <option value="${esc(x.id)}">
+            ${esc(x.name)}
+            — ${x.qty}
+            ${esc(x.unit)}
+          </option>
+        `
+      ).join("");
+
+  document
+    .getElementById("loadMaterial")
+    .innerHTML =
 
       stock.map(
+        x => `
+          <option value="${esc(x.id)}">
+            ${esc(x.name)}
+            — ${x.qty}
+            ${esc(x.unit)}
+          </option>
+        `
+      ).join("");
+
+  document
+    .getElementById(
+      "loadResponsible"
+    )
+    .textContent =
+      usuarioActual.nombre ||
+      "Usuario";
+
+  const filtro =
+    document
+      .getElementById("filterDate")
+      .value;
+
+  const filtrados =
+    moves.filter(
+      x =>
+        fechaLocal(
+          new Date(x.date)
+        ) === filtro
+    );
+
+  document
+    .getElementById("historyList")
+    .innerHTML =
+
+      filtrados.length
+      ?
+
+      filtrados.map(
         x => `
 
           <div class="item">
 
             <b>
+              ${
+                x.kind === "Entrada"
+                ? "🟢 Entrada"
+                : "🔴 Salida"
+              }:
               ${esc(x.name)}
             </b>
 
-            <div class="qty">
-              ${x.qty}
+            <div>
+              🔢 ${x.qty}
               ${esc(x.unit)}
+              ·
+              🕐 ${horaMostrar(x.date)}
+            </div>
+
+            <div class="responsable">
+
+              ${
+                x.responsableNombre
+                ?
+                "👤 Responsable: " +
+                esc(
+                  x.responsableNombre
+                )
+                :
+                "👤 Responsable: No registrado"
+              }
+
+            </div>
+
+            <div class="muted">
+              📝 ${
+                esc(
+                  x.note ||
+                  "Sin nota"
+                )
+              }
             </div>
 
           </div>
@@ -2461,187 +3079,18 @@ function render(){
 
       `
       <div class="empty">
-        No hay materiales.
+        📭 No hay movimientos para esta fecha.
       </div>
       `;
-
-
-  /*
-  SELECT MOVIMIENTO
-  */
-
-  document
-    .getElementById("pick")
-    .innerHTML =
-
-      stock.map(
-        x => `
-
-          <option value="${esc(x.id)}">
-
-            ${esc(x.name)}
-            —
-            ${x.qty}
-            ${esc(x.unit)}
-
-          </option>
-
-        `
-      ).join("");
-
-
-  /*
-  SELECT CARGAMENTO
-  */
-
-  document
-    .getElementById("loadMaterial")
-    .innerHTML =
-
-      stock.map(
-        x => `
-
-          <option value="${esc(x.id)}">
-
-            ${esc(x.name)}
-            —
-            ${x.qty}
-            ${esc(x.unit)}
-
-          </option>
-
-        `
-      ).join("");
-
-
-  /*
-  RESPONSABLE CARGAMENTO
-  */
-
-  document
-    .getElementById(
-      "loadResponsible"
-    )
-    .textContent =
-      usuarioActual.nombre ||
-      "Usuario";
-
-
-  /*
-  HISTORIAL
-  */
-
-  const filtro =
-    document
-      .getElementById("filterDate")
-      .value;
-
-
-  const filtrados =
-    moves.filter(
-      x =>
-        fechaLocal(
-          new Date(x.date)
-        ) === filtro
-    );
-
-
-  document
-    .getElementById("historyList")
-    .innerHTML =
-
-      filtrados.length
-      ?
-
-      filtrados.map(
-        x => {
-
-          const responsable =
-            x.responsableNombre
-            ?
-            "👤 Responsable: " +
-            esc(
-              x.responsableNombre
-            )
-            :
-            "👤 Responsable: No registrado";
-
-
-          return `
-
-            <div class="item">
-
-              <b>
-
-                ${
-                  x.kind === "Entrada"
-                  ?
-                  "🟢 Entrada"
-                  :
-                  "🔴 Salida"
-                }:
-
-                ${esc(x.name)}
-
-              </b>
-
-              <div>
-
-                ${x.qty}
-                ${esc(x.unit)}
-
-                ·
-
-                ${
-                  horaMostrar(
-                    x.date
-                  )
-                }
-
-              </div>
-
-              <div class="responsable">
-                ${responsable}
-              </div>
-
-              <div class="muted">
-
-                ${
-                  esc(
-                    x.note ||
-                    "Sin nota"
-                  )
-                }
-
-              </div>
-
-            </div>
-
-          `;
-
-        }
-      ).join("")
-
-      :
-
-      `
-      <div class="empty">
-        No hay movimientos para esta fecha.
-      </div>
-      `;
-
 
   renderBorradorCarga();
   renderCargamentos();
-
 }
 
 
-/*
-========================================
-CSV
-========================================
-*/
+/* ========================================
+   CSV
+======================================== */
 
 document
   .getElementById("exportBtn")
@@ -2668,7 +3117,6 @@ document
             const fecha =
               new Date(x.date);
 
-
             return [
 
               fecha.toLocaleDateString(
@@ -2688,14 +3136,10 @@ document
               "No registrado",
 
               x.note
-
             ];
-
           }
         )
-
       ];
-
 
       const csv =
         filas.map(
@@ -2713,7 +3157,6 @@ document
             ).join(";")
         ).join("\r\n");
 
-
       const blob =
         new Blob(
           [
@@ -2726,34 +3169,24 @@ document
           }
         );
 
-
       const url =
         URL.createObjectURL(
           blob
         );
-
 
       const a =
         document.createElement(
           "a"
         );
 
-
-      a.href =
-        url;
-
+      a.href = url;
 
       a.download =
         "BODEGA_SEASCAPE_historial.csv";
 
-
       a.click();
 
-
-      URL.revokeObjectURL(
-        url
-      );
-
+      URL.revokeObjectURL(url);
     }
   );
 
