@@ -39,9 +39,9 @@ header p{
   padding:14px;
 }
 
-.hidden{display:none!important}
-
-/* LOGIN */
+.hidden{
+  display:none!important;
+}
 
 .login-wrap{
   max-width:420px;
@@ -69,8 +69,6 @@ header p{
   word-break:break-word;
 }
 
-/* USUARIO */
-
 .userbar{
   display:flex;
   justify-content:space-between;
@@ -84,6 +82,7 @@ header p{
 
 .user-info strong{
   display:block;
+  font-size:17px;
 }
 
 .user-email{
@@ -102,8 +101,6 @@ header p{
   cursor:pointer;
   white-space:nowrap;
 }
-
-/* APP */
 
 .tabs{
   display:flex;
@@ -169,7 +166,9 @@ select{
   padding:12px 0;
 }
 
-.item:last-child{border:0}
+.item:last-child{
+  border:0;
+}
 
 .muted{
   color:#637168;
@@ -233,21 +232,20 @@ select{
 </style>
 
 <link rel="manifest" href="manifest.json">
-<meta name="mobile-web-app-capable" content="yes">
 
 </head>
 
 <body>
 
 <header>
-<h1>📦 BODEGA SEASCAPE</h1>
-<p>Control de inventario · Firebase</p>
+  <h1>📦 BODEGA SEASCAPE</h1>
+  <p>Control de inventario · Firebase</p>
 </header>
 
 
 <!-- LOGIN -->
 
-<div id="loginScreen" class="login-wrap hidden">
+<div id="loginScreen" class="login-wrap">
 
   <div class="login-card">
 
@@ -353,8 +351,6 @@ select{
   </nav>
 
 
-  <!-- INVENTARIO -->
-
   <section id="stock" class="panel">
 
     <h2>Inventario actual</h2>
@@ -372,7 +368,6 @@ select{
       <div class="row">
 
         <div>
-
           <label>Cantidad inicial</label>
 
           <input
@@ -382,11 +377,9 @@ select{
             step="any"
             required
           >
-
         </div>
 
         <div>
-
           <label>Unidad</label>
 
           <input
@@ -394,7 +387,6 @@ select{
             placeholder="sacos, unidades, kg..."
             required
           >
-
         </div>
 
       </div>
@@ -409,8 +401,6 @@ select{
 
   </section>
 
-
-  <!-- MOVIMIENTOS -->
 
   <section id="move" class="panel hidden">
 
@@ -453,13 +443,11 @@ select{
     </form>
 
     <p class="muted">
-      El responsable se registra automáticamente con la cuenta iniciada.
+      El responsable se registra automáticamente.
     </p>
 
   </section>
 
-
-  <!-- HISTORIAL -->
 
   <section id="history" class="panel hidden">
 
@@ -502,38 +490,25 @@ import {
   getDoc,
   addDoc,
   doc,
-  updateDoc,
-  query,
-  orderBy
-}
-from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut
-}
-from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 
 let stock = [];
 let moves = [];
-let datosCargados = false;
 
-/*
-  Aquí guardaremos los datos del usuario
-  actualmente conectado.
-*/
 let usuarioActual = {
   uid:"",
   nombre:"",
   email:""
 };
 
-
-/* LOGIN */
 
 const loginScreen =
   document.getElementById("loginScreen");
@@ -557,9 +532,11 @@ const userEmail =
   document.getElementById("userEmail");
 
 
+/* INICIAR SESIÓN */
+
 loginForm.addEventListener(
   "submit",
-  async e => {
+  async function(e){
 
     e.preventDefault();
 
@@ -587,74 +564,85 @@ loginForm.addEventListener(
         password
       );
 
-      loginForm.reset();
-
     }catch(error){
 
-      console.error(
-        "ERROR INICIANDO SESIÓN:",
-        error
-      );
+      console.error(error);
 
       loginError.textContent =
         "Error Firebase: " +
         (error.code || error.message);
 
-    }finally{
-
-      loginBtn.disabled = false;
-      loginBtn.textContent = "Ingresar";
-
     }
+
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Ingresar";
 
   }
 );
 
 
-/* CARGAR PERFIL DEL USUARIO */
+/* BUSCAR NOMBRE DEL USUARIO */
 
-async function cargarUsuario(user){
+async function obtenerUsuario(user){
 
-  const perfilRef =
-    doc(
-      db,
-      "usuarios",
-      user.uid
+  try{
+
+    const ref =
+      doc(
+        db,
+        "usuarios",
+        user.uid
+      );
+
+    const snap =
+      await getDoc(ref);
+
+    if(snap.exists()){
+
+      const datos =
+        snap.data();
+
+      if(datos.activo === false){
+
+        throw new Error(
+          "Esta cuenta está desactivada."
+        );
+
+      }
+
+      return {
+        uid:user.uid,
+        nombre:datos.nombre || user.email,
+        email:user.email || datos.email || ""
+      };
+
+    }
+
+    /*
+      Si por alguna razón no encuentra el documento,
+      la aplicación NO queda en blanco.
+    */
+
+    return {
+      uid:user.uid,
+      nombre:user.email || "Usuario",
+      email:user.email || ""
+    };
+
+  }catch(error){
+
+    console.error(
+      "Error leyendo perfil:",
+      error
     );
 
-  const perfilSnap =
-    await getDoc(perfilRef);
-
-  if(!perfilSnap.exists()){
-
-    throw new Error(
-      "No existe el perfil del usuario en Firestore."
-    );
+    return {
+      uid:user.uid,
+      nombre:user.email || "Usuario",
+      email:user.email || ""
+    };
 
   }
-
-  const perfil =
-    perfilSnap.data();
-
-  if(perfil.activo === false){
-
-    throw new Error(
-      "Esta cuenta está desactivada."
-    );
-
-  }
-
-  usuarioActual = {
-    uid:user.uid,
-    nombre:perfil.nombre || user.email,
-    email:user.email || perfil.email || ""
-  };
-
-  userName.textContent =
-    "👤 " + usuarioActual.nombre;
-
-  userEmail.textContent =
-    usuarioActual.email;
 
 }
 
@@ -663,52 +651,9 @@ async function cargarUsuario(user){
 
 onAuthStateChanged(
   auth,
-  async user => {
+  async function(user){
 
-    if(user){
-
-      try{
-
-        /*
-          Primero buscamos quién es el usuario
-          dentro de la colección usuarios.
-        */
-        await cargarUsuario(user);
-
-        loginScreen.classList.add("hidden");
-        appScreen.classList.remove("hidden");
-
-        if(!datosCargados){
-
-          await cargarDatos();
-          datosCargados = true;
-
-        }
-
-      }catch(error){
-
-        console.error(
-          "ERROR CARGANDO USUARIO:",
-          error
-        );
-
-        await signOut(auth);
-
-        loginError.textContent =
-          error.message ||
-          "No se pudo cargar el usuario.";
-
-      }
-
-    }else{
-
-      appScreen.classList.add("hidden");
-      loginScreen.classList.remove("hidden");
-
-      userName.textContent =
-        "👤 Usuario";
-
-      userEmail.textContent = "";
+    if(!user){
 
       usuarioActual = {
         uid:"",
@@ -716,11 +661,30 @@ onAuthStateChanged(
         email:""
       };
 
-      stock = [];
-      moves = [];
-      datosCargados = false;
+      appScreen.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
+
+      return;
 
     }
+
+
+    usuarioActual =
+      await obtenerUsuario(user);
+
+
+    userName.textContent =
+      "👤 " + usuarioActual.nombre;
+
+    userEmail.textContent =
+      usuarioActual.email;
+
+
+    loginScreen.classList.add("hidden");
+    appScreen.classList.remove("hidden");
+
+
+    await cargarDatos();
 
   }
 );
@@ -732,27 +696,15 @@ document
   .getElementById("logoutBtn")
   .addEventListener(
     "click",
-    async () => {
+    async function(){
 
-      try{
-
-        await signOut(auth);
-
-      }catch(error){
-
-        console.error(error);
-
-        alert(
-          "No se pudo cerrar la sesión."
-        );
-
-      }
+      await signOut(auth);
 
     }
   );
 
 
-/* UTILIDADES */
+/* FECHA */
 
 function fechaISO(valor){
 
@@ -793,30 +745,36 @@ function fechaISO(valor){
 }
 
 
-function esc(v){
+/* ESCAPAR TEXTO */
 
-  return String(v ?? "").replace(
-    /[&<>"']/g,
-    c =>
-    ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-    }[c])
-  );
+function esc(valor){
+
+  return String(valor ?? "")
+    .replace(
+      /[&<>"']/g,
+      function(c){
+
+        return {
+          "&":"&amp;",
+          "<":"&lt;",
+          ">":"&gt;",
+          '"':"&quot;",
+          "'":"&#39;"
+        }[c];
+
+      }
+    );
 
 }
 
 
-/* CARGAR FIREBASE */
+/* CARGAR DATOS */
 
 async function cargarDatos(){
 
   try{
 
-    const materialesSnapshot =
+    const materiales =
       await getDocs(
         collection(
           db,
@@ -824,11 +782,13 @@ async function cargarDatos(){
         )
       );
 
-    stock =
-      materialesSnapshot.docs.map(
-        d => {
 
-          const data = d.data();
+    stock =
+      materiales.docs.map(
+        function(d){
+
+          const data =
+            d.data();
 
           return {
 
@@ -857,43 +817,21 @@ async function cargarDatos(){
       );
 
 
-    let movimientosSnapshot;
-
-    try{
-
-      movimientosSnapshot =
-        await getDocs(
-          query(
-            collection(
-              db,
-              "movimientos"
-            ),
-            orderBy(
-              "fecha",
-              "desc"
-            )
-          )
-        );
-
-    }catch(error){
-
-      console.error(
-        "ERROR LEYENDO MOVIMIENTOS:",
-        error
+    const movimientos =
+      await getDocs(
+        collection(
+          db,
+          "movimientos"
+        )
       );
-
-      movimientosSnapshot = {
-        docs:[]
-      };
-
-    }
 
 
     moves =
-      movimientosSnapshot.docs.map(
-        d => {
+      movimientos.docs.map(
+        function(d){
 
-          const data = d.data();
+          const data =
+            d.data();
 
           return {
 
@@ -945,17 +883,30 @@ async function cargarDatos(){
         }
       );
 
+
+    moves.sort(
+      function(a,b){
+
+        return (
+          new Date(b.date) -
+          new Date(a.date)
+        );
+
+      }
+    );
+
+
     render();
 
   }catch(error){
 
     console.error(
-      "ERROR CARGANDO FIREBASE:",
+      "Error cargando datos:",
       error
     );
 
     alert(
-      "Error cargando los datos de Firebase."
+      "No se pudieron cargar los datos de Firebase."
     );
 
   }
@@ -969,14 +920,12 @@ document
   .getElementById("addForm")
   .addEventListener(
     "submit",
-    async e => {
+    async function(e){
 
       e.preventDefault();
 
-      if(
-        !auth.currentUser ||
-        !usuarioActual.uid
-      ){
+
+      if(!auth.currentUser){
 
         alert(
           "Debes iniciar sesión."
@@ -986,17 +935,20 @@ document
 
       }
 
+
       const name =
         document
           .getElementById("material")
           .value
           .trim();
 
+
       const unit =
         document
           .getElementById("unit")
           .value
           .trim();
+
 
       const amount =
         Number(
@@ -1005,22 +957,28 @@ document
             .value
         );
 
+
       if(
         stock.some(
-          x =>
-          x.name.toLowerCase()
-          ===
-          name.toLowerCase()
+          function(x){
+
+            return (
+              x.name.toLowerCase() ===
+              name.toLowerCase()
+            );
+
+          }
         )
       ){
 
         alert(
-          "Ese material ya existe. Registra una entrada para aumentar su cantidad."
+          "Ese material ya existe."
         );
 
         return;
 
       }
+
 
       try{
 
@@ -1037,19 +995,27 @@ document
             }
           );
 
+
         stock.push({
+
           id:nuevo.id,
+
           name:name,
+
           unit:unit,
+
           qty:amount
+
         });
 
-        render();
 
         e.target.reset();
 
+        render();
+
+
         alert(
-          "Material guardado correctamente en Firebase."
+          "Material guardado correctamente."
         );
 
       }catch(error){
@@ -1066,15 +1032,16 @@ document
   );
 
 
-/* MOVIMIENTOS */
+/* ENTRADA / SALIDA */
 
 document
   .getElementById("moveForm")
   .addEventListener(
     "submit",
-    async e => {
+    async function(e){
 
       e.preventDefault();
+
 
       if(
         !auth.currentUser ||
@@ -1089,40 +1056,59 @@ document
 
       }
 
+
       const id =
         document
           .getElementById("pick")
           .value;
 
-      const x =
+
+      const material =
         stock.find(
-          item =>
-          item.id === id
+          function(x){
+
+            return x.id === id;
+
+          }
         );
 
-      const kind =
-        document
-          .getElementById("kind")
-          .value;
 
-      const q =
-        Number(
-          document
-            .getElementById("qty")
-            .value
-        );
-
-      if(!x){
+      if(!material){
 
         alert(
-          "Agrega primero un material."
+          "Selecciona un material."
         );
 
         return;
 
       }
 
-      if(!q || q <= 0){
+
+      const tipo =
+        document
+          .getElementById("kind")
+          .value;
+
+
+      const cantidad =
+        Number(
+          document
+            .getElementById("qty")
+            .value
+        );
+
+
+      const nota =
+        document
+          .getElementById("note")
+          .value
+          .trim();
+
+
+      if(
+        !cantidad ||
+        cantidad <= 0
+      ){
 
         alert(
           "Ingresa una cantidad válida."
@@ -1132,16 +1118,17 @@ document
 
       }
 
+
       if(
-        kind === "Salida" &&
-        q > x.qty
+        tipo === "Salida" &&
+        cantidad > material.qty
       ){
 
         alert(
           "No hay suficiente existencia. Disponible: " +
-          x.qty +
+          material.qty +
           " " +
-          x.unit
+          material.unit
         );
 
         return;
@@ -1150,11 +1137,11 @@ document
 
 
       const nuevaCantidad =
-        kind === "Entrada"
+        tipo === "Entrada"
         ?
-        x.qty + q
+        material.qty + cantidad
         :
-        x.qty - q;
+        material.qty - cantidad;
 
 
       try{
@@ -1163,38 +1150,35 @@ document
           doc(
             db,
             "materiales",
-            x.id
+            material.id
           ),
           {
             cantidad:nuevaCantidad,
-            nombre:x.name,
-            unidad:x.unit
+            nombre:material.name,
+            unidad:material.unit
           }
         );
 
 
-        /*
-          AQUÍ SE GUARDA AUTOMÁTICAMENTE
-          QUIÉN REALIZÓ EL MOVIMIENTO.
-        */
+        const datosMovimiento = {
 
-        const movimiento = {
+          nombre:
+            material.name,
 
-          nombre:x.name,
+          unidad:
+            material.unit,
 
-          unidad:x.unit,
+          tipo:
+            tipo,
 
-          tipo:kind,
-
-          cantidad:q,
+          cantidad:
+            cantidad,
 
           nota:
-            document
-              .getElementById("note")
-              .value
-              .trim(),
+            nota,
 
-          fecha:new Date(),
+          fecha:
+            new Date(),
 
           responsableNombre:
             usuarioActual.nombre,
@@ -1205,38 +1189,43 @@ document
         };
 
 
-        const movimientoNuevo =
+        const nuevoMovimiento =
           await addDoc(
             collection(
               db,
               "movimientos"
             ),
-            movimiento
+            datosMovimiento
           );
 
 
-        x.qty =
+        material.qty =
           nuevaCantidad;
 
 
         moves.unshift({
 
           id:
-            movimientoNuevo.id,
+            nuevoMovimiento.id,
 
           date:
-            new Date().toISOString(),
+            new Date()
+              .toISOString(),
 
-          name:x.name,
+          name:
+            material.name,
 
-          unit:x.unit,
+          unit:
+            material.unit,
 
-          kind:kind,
+          kind:
+            tipo,
 
-          qty:q,
+          qty:
+            cantidad,
 
           note:
-            movimiento.nota,
+            nota,
 
           responsableNombre:
             usuarioActual.nombre,
@@ -1247,22 +1236,20 @@ document
         });
 
 
-        render();
-
         e.target.reset();
 
+        render();
+
+
         alert(
-          "Movimiento guardado correctamente por " +
+          "Movimiento guardado por " +
           usuarioActual.nombre +
           "."
         );
 
       }catch(error){
 
-        console.error(
-          "ERROR GUARDANDO MOVIMIENTO:",
-          error
-        );
+        console.error(error);
 
         alert(
           "Error guardando el movimiento."
@@ -1274,7 +1261,7 @@ document
   );
 
 
-/* FECHA */
+/* FILTRO DE FECHA */
 
 document
   .getElementById("filterDate")
@@ -1304,37 +1291,41 @@ function mostrarSeccion(
       "#appScreen section"
     )
     .forEach(
-      section =>
-      section.classList.add(
-        "hidden"
-      )
+      function(section){
+
+        section
+          .classList
+          .add("hidden");
+
+      }
     );
 
-  const seccion =
-    document.getElementById(id);
 
-  if(!seccion){
-    return;
-  }
+  document
+    .getElementById(id)
+    .classList
+    .remove("hidden");
 
-  seccion.classList.remove(
-    "hidden"
-  );
 
   document
     .querySelectorAll(
       ".tabs button"
     )
     .forEach(
-      button =>
-      button.classList.remove(
-        "active"
-      )
+      function(button){
+
+        button
+          .classList
+          .remove("active");
+
+      }
     );
 
-  boton.classList.add(
-    "active"
-  );
+
+  boton
+    .classList
+    .add("active");
+
 
   render();
 
@@ -1386,11 +1377,11 @@ document
   );
 
 
-/* RENDER */
+/* MOSTRAR DATOS */
 
 function render(){
 
-  const today =
+  const hoy =
     new Date()
       .toISOString()
       .slice(0,10);
@@ -1405,4 +1396,51 @@ function render(){
   document
     .getElementById("today")
     .textContent =
-    mov
+    moves.filter(
+      function(x){
+
+        return (
+          fechaISO(x.date)
+            .slice(0,10)
+          ===
+          hoy
+        );
+
+      }
+    ).length;
+
+
+  document
+    .getElementById("stockList")
+    .innerHTML =
+
+    stock.length
+
+    ?
+
+    stock.map(
+      function(x){
+
+        return `
+          <div class="item">
+
+            <b>
+              ${esc(x.name)}
+            </b>
+
+            <div class="qty">
+              ${x.qty}
+              ${esc(x.unit)}
+            </div>
+
+          </div>
+        `;
+
+      }
+    ).join("")
+
+    :
+
+    `
+      <div class="empty">
+        Aún no hay materia
