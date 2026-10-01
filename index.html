@@ -3196,5 +3196,29 @@ document
 
 </script>
 
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
+    try {
+      const registro = await navigator.serviceWorker.register(
+        "./sw.js",
+        { updateViaCache: "none" }
+      );
+
+      registro.update();
+
+      console.log(
+        "BODEGA SEASCAPE lista para instalación."
+      );
+    } catch (error) {
+      console.error(
+        "Error al registrar Service Worker:",
+        error
+      );
+    }
+  });
+}
+</script>
+
 </body>
 </html>
