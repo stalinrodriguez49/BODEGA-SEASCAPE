@@ -1,18 +1,13 @@
 <!doctype html>
 <html lang="es">
-
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#166534">
 
 <title>BODEGA SEASCAPE</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -27,15 +22,8 @@ header{
   padding:22px 18px;
 }
 
-h1{
-  margin:0;
-  font-size:23px;
-}
-
-header p{
-  margin:5px 0 0;
-  opacity:.85;
-}
+h1{margin:0;font-size:23px}
+header p{margin:5px 0 0;opacity:.85}
 
 .wrap{
   max-width:760px;
@@ -43,9 +31,7 @@ header p{
   padding:14px;
 }
 
-.hidden{
-  display:none!important;
-}
+.hidden{display:none!important}
 
 .login-wrap{
   max-width:420px;
@@ -53,23 +39,52 @@ header p{
   padding:14px;
 }
 
-.login-card{
+.card,.panel{
   background:white;
   border-radius:16px;
-  padding:22px;
+  padding:20px;
   box-shadow:0 2px 12px #102b1515;
 }
 
-.login-card h2{
+.card h2{
   margin-top:0;
   color:#166534;
 }
 
-.login-error{
-  color:#b42318;
-  font-size:14px;
-  margin-top:12px;
+label{
+  display:block;
   font-weight:700;
+  margin:12px 0 5px;
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  border:1px solid #cbd5ce;
+  border-radius:9px;
+  font-size:16px;
+  background:white;
+}
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:12px 14px;
+  font-weight:700;
+  background:#166534;
+  color:white;
+  cursor:pointer;
+}
+
+.full{
+  width:100%;
+  margin-top:14px;
+}
+
+.status{
+  margin-top:14px;
+  font-weight:700;
+  font-size:14px;
   word-break:break-word;
 }
 
@@ -79,17 +94,16 @@ header p{
   align-items:center;
   gap:10px;
   background:#e5f1e8;
-  padding:10px 12px;
+  padding:12px;
   border-radius:12px;
   margin-bottom:12px;
 }
 
-.user-info strong{
+.userbar strong{
   display:block;
-  font-size:17px;
 }
 
-.user-email{
+.email{
   font-size:13px;
   color:#52705b;
   word-break:break-all;
@@ -102,101 +116,6 @@ header p{
   background:#b42318;
   color:white;
   font-weight:700;
-}
-
-.tabs{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-  margin-bottom:14px;
-}
-
-.tabs button,
-.btn{
-  border:0;
-  border-radius:10px;
-  padding:12px 14px;
-  font-weight:700;
-  background:#166534;
-  color:white;
-}
-
-.tabs button{
-  background:#dce9df;
-  color:#164d2b;
-}
-
-.tabs button.active{
-  background:#166534;
-  color:white;
-}
-
-.panel{
-  background:white;
-  border-radius:14px;
-  padding:16px;
-  margin:12px 0;
-  box-shadow:0 2px 10px #102b1510;
-}
-
-label{
-  display:block;
-  font-size:14px;
-  font-weight:700;
-  margin:10px 0 5px;
-}
-
-input,
-select{
-  width:100%;
-  padding:12px;
-  border:1px solid #cbd5ce;
-  border-radius:9px;
-  font-size:16px;
-  background:white;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.item{
-  border-bottom:1px solid #e4e9e5;
-  padding:12px 0;
-}
-
-.item:last-child{
-  border:0;
-}
-
-.muted{
-  color:#637168;
-  font-size:13px;
-}
-
-.responsable{
-  margin-top:5px;
-  font-size:14px;
-  font-weight:700;
-  color:#166534;
-}
-
-.qty{
-  font-size:20px;
-  font-weight:800;
-  color:#166534;
-}
-
-.btn.secondary{
-  background:#e5eee7;
-  color:#164d2b;
-}
-
-.full{
-  width:100%;
-  margin-top:12px;
 }
 
 .stats{
@@ -217,394 +136,374 @@ select{
   color:#166534;
 }
 
+.tabs{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin:14px 0;
+}
+
+.tabs button{
+  border:0;
+  border-radius:10px;
+  padding:12px 14px;
+  font-weight:700;
+  background:#dce9df;
+  color:#164d2b;
+}
+
+.tabs button.active{
+  background:#166534;
+  color:white;
+}
+
+.panel{
+  margin:12px 0;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.item{
+  border-bottom:1px solid #e4e9e5;
+  padding:12px 0;
+}
+
+.item:last-child{border:0}
+
+.qty{
+  font-size:20px;
+  font-weight:800;
+  color:#166534;
+}
+
+.muted{
+  color:#637168;
+  font-size:13px;
+}
+
+.responsable{
+  color:#166534;
+  font-weight:700;
+  font-size:14px;
+  margin-top:4px;
+}
+
 .empty{
-  color:#68766c;
   text-align:center;
   padding:20px;
+  color:#68766c;
 }
 
-.warn{
-  font-size:13px;
-  background:#fff7df;
-  padding:12px;
-  border-radius:10px;
-  color:#735514;
+.secondary{
+  background:#e5eee7;
+  color:#164d2b;
 }
-
 </style>
-
-<link rel="manifest" href="manifest.json">
-
 </head>
 
 <body>
 
 <header>
-
-<h1>📦 BODEGA SEASCAPE</h1>
-
-<p>
-Control de inventario · Firebase
-</p>
-
+  <h1>📦 BODEGA SEASCAPE</h1>
+  <p>Control de inventario · Firebase</p>
 </header>
 
 
 <!-- LOGIN -->
 
-<div
-  id="loginScreen"
-  class="login-wrap"
->
+<div id="loginScreen" class="login-wrap">
 
-<div class="login-card">
+  <div class="card">
 
-<h2>
-🔐 Iniciar sesión
-</h2>
+    <h2>🔐 Iniciar sesión</h2>
 
-<p class="muted">
-Ingresa con tu cuenta de BODEGA SEASCAPE.
-</p>
+    <p class="muted">
+      Ingresa con tu cuenta de BODEGA SEASCAPE.
+    </p>
 
-<form id="loginForm">
+    <form id="loginForm">
 
-<label>
-Correo electrónico
-</label>
+      <label>Correo electrónico</label>
 
-<input
-  id="loginEmail"
-  type="email"
-  autocomplete="username"
-  required
->
+      <input
+        id="loginEmail"
+        type="email"
+        required
+      >
 
-<label>
-Contraseña
-</label>
+      <label>Contraseña</label>
 
-<input
-  id="loginPassword"
-  type="password"
-  autocomplete="current-password"
-  required
->
+      <input
+        id="loginPassword"
+        type="password"
+        required
+      >
 
-<button
-  id="loginBtn"
-  class="btn full"
-  type="submit"
->
-Ingresar
-</button>
+      <button
+        id="loginBtn"
+        class="btn full"
+        type="submit"
+      >
+        Ingresar
+      </button>
 
-</form>
+    </form>
 
-<div
-  id="loginError"
-  class="login-error"
-></div>
+    <div id="status" class="status">
+      🟡 Preparando Firebase...
+    </div>
 
-</div>
+  </div>
 
 </div>
 
 
-<!-- APLICACIÓN -->
+<!-- APP -->
 
-<main
-  id="appScreen"
-  class="wrap hidden"
->
+<main id="appScreen" class="wrap hidden">
 
+  <div class="userbar">
 
-<div class="userbar">
+    <div>
 
-<div class="user-info">
+      <strong id="userName">
+        👤 Usuario
+      </strong>
 
-<strong id="userName">
-👤 Usuario
-</strong>
+      <div id="userEmail" class="email"></div>
 
-<div
-  id="userEmail"
-  class="user-email"
-></div>
+    </div>
 
-</div>
+    <button
+      id="logoutBtn"
+      class="logout"
+      type="button"
+    >
+      Cerrar sesión
+    </button>
 
-<button
-  id="logoutBtn"
-  class="logout"
-  type="button"
->
-Cerrar sesión
-</button>
+  </div>
 
-</div>
 
+  <div class="stats">
 
-<div class="stats">
+    <div class="stat">
+      Tipos de materiales
+      <strong id="count">0</strong>
+    </div>
 
-<div class="stat">
+    <div class="stat">
+      Movimientos hoy
+      <strong id="today">0</strong>
+    </div>
 
-<span>
-Tipos de materiales
-</span>
+  </div>
 
-<strong id="count">
-0
-</strong>
 
-</div>
+  <div class="tabs">
 
+    <button
+      id="tabStock"
+      class="active"
+      type="button"
+    >
+      Inventario
+    </button>
 
-<div class="stat">
+    <button
+      id="tabMove"
+      type="button"
+    >
+      Entrada / salida
+    </button>
 
-<span>
-Movimientos hoy
-</span>
+    <button
+      id="tabHistory"
+      type="button"
+    >
+      Historial
+    </button>
 
-<strong id="today">
-0
-</strong>
+  </div>
 
-</div>
 
-</div>
+  <!-- INVENTARIO -->
 
+  <section id="stockPanel" class="panel">
 
-<nav
-  class="tabs"
-  style="margin-top:14px"
->
+    <h2>Inventario actual</h2>
 
-<button
-  id="tabStock"
-  class="active"
-  type="button"
->
-Inventario
-</button>
+    <form id="addForm">
 
-<button
-  id="tabMove"
-  type="button"
->
-Entrada / salida
-</button>
+      <label>Nombre del material</label>
 
-<button
-  id="tabHistory"
-  type="button"
->
-Historial
-</button>
+      <input
+        id="material"
+        required
+      >
 
-</nav>
+      <div class="row">
 
+        <div>
 
-<!-- INVENTARIO -->
+          <label>Cantidad inicial</label>
 
-<section
-  id="stock"
-  class="panel"
->
+          <input
+            id="amount"
+            type="number"
+            min="0"
+            step="any"
+            required
+          >
 
-<h2>
-Inventario actual
-</h2>
+        </div>
 
-<form id="addForm">
+        <div>
 
-<label>
-Nombre del material
-</label>
+          <label>Unidad</label>
 
-<input
-  id="material"
-  placeholder="Ej. Cemento"
-  required
->
+          <input
+            id="unit"
+            placeholder="sacos, kg, unidades..."
+            required
+          >
 
-<div class="row">
+        </div>
 
-<div>
+      </div>
 
-<label>
-Cantidad inicial
-</label>
+      <button class="btn full">
+        Agregar material
+      </button>
 
-<input
-  id="amount"
-  type="number"
-  min="0"
-  step="any"
-  required
->
+    </form>
 
-</div>
+    <div id="stockList"></div>
 
+  </section>
 
-<div>
 
-<label>
-Unidad
-</label>
+  <!-- MOVIMIENTO -->
 
-<input
-  id="unit"
-  placeholder="sacos, unidades, kg..."
-  required
->
+  <section
+    id="movePanel"
+    class="panel hidden"
+  >
 
-</div>
+    <h2>Registrar movimiento</h2>
 
-</div>
+    <form id="moveForm">
 
-<button
-  class="btn full"
-  type="submit"
->
-Agregar material
-</button>
+      <label>Tipo</label>
 
-</form>
+      <select id="kind">
 
-<div id="stockList"></div>
+        <option value="Salida">
+          Salida
+        </option>
 
-</section>
+        <option value="Entrada">
+          Entrada
+        </option>
 
+      </select>
 
-<!-- MOVIMIENTO -->
 
-<section
-  id="move"
-  class="panel hidden"
->
+      <label>Material</label>
 
-<h2>
-Registrar movimiento
-</h2>
+      <select id="pick"></select>
 
-<form id="moveForm">
 
-<label>
-Tipo de movimiento
-</label>
+      <label>Cantidad</label>
 
-<select id="kind">
+      <input
+        id="qty"
+        type="number"
+        min=".001"
+        step="any"
+        required
+      >
 
-<option value="Salida">
-Salida
-</option>
 
-<option value="Entrada">
-Entrada
-</option>
+      <label>Nota</label>
 
-</select>
+      <input
+        id="note"
+        placeholder="Opcional"
+      >
 
 
-<label>
-Material
-</label>
+      <button class="btn full">
+        Guardar movimiento
+      </button>
 
-<select
-  id="pick"
-  required
-></select>
+    </form>
 
+    <p class="muted">
+      El responsable se registra automáticamente.
+    </p>
 
-<label>
-Cantidad
-</label>
+  </section>
 
-<input
-  id="qty"
-  type="number"
-  min=".001"
-  step="any"
-  required
->
 
+  <!-- HISTORIAL -->
 
-<label>
-Nota (opcional)
-</label>
+  <section
+    id="historyPanel"
+    class="panel hidden"
+  >
 
-<input
-  id="note"
-  placeholder="Ej. Entrega para trabajo"
->
+    <h2>Historial</h2>
 
+    <label>Fecha</label>
 
-<button
-  class="btn full"
-  type="submit"
->
-Guardar movimiento
-</button>
+    <input
+      id="filterDate"
+      type="date"
+    >
 
-</form>
+    <div id="historyList"></div>
 
-<p class="muted">
-El responsable se registra automáticamente.
-</p>
+    <button
+      id="exportBtn"
+      class="btn secondary full"
+      type="button"
+    >
+      Exportar CSV
+    </button>
 
-</section>
-
-
-<!-- HISTORIAL -->
-
-<section
-  id="history"
-  class="panel hidden"
->
-
-<h2>
-Historial de movimientos
-</h2>
-
-<label>
-Filtrar por fecha
-</label>
-
-<input
-  type="date"
-  id="filterDate"
->
-
-<div id="historyList"></div>
-
-<button
-  id="exportBtn"
-  class="btn secondary full"
-  type="button"
->
-Exportar historial CSV
-</button>
-
-</section>
-
-
-<div class="warn">
-Los datos se guardan en Firebase y pueden sincronizarse entre dispositivos.
-</div>
+  </section>
 
 </main>
 
 
 <script type="module">
 
+/*
+========================================
+IMPORTAR FIREBASE DIRECTAMENTE
+========================================
+*/
+
 import {
-  db,
-  auth
-} from "./firebase.js";
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 
 import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+import {
+  getFirestore,
   collection,
   getDocs,
   getDoc,
@@ -614,12 +513,50 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-import {
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+/*
+========================================
+CONFIGURACIÓN FIREBASE
+========================================
+*/
 
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyBjJ_SbNo9pA8IE7mP_2v3UnIGkY0IzjF0",
+
+  authDomain:
+    "bodega-seascape.firebaseapp.com",
+
+  projectId:
+    "bodega-seascape",
+
+  storageBucket:
+    "bodega-seascape.firebasestorage.app",
+
+  messagingSenderId:
+    "634162820624",
+
+  appId:
+    "1:634162820624:web:6d67c35de7667fe07efc95"
+
+};
+
+
+const app =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(app);
+
+const db =
+  getFirestore(app);
+
+
+/*
+========================================
+VARIABLES
+========================================
+*/
 
 let stock = [];
 
@@ -632,56 +569,72 @@ let usuarioActual = {
 };
 
 
+/*
+========================================
+ELEMENTOS
+========================================
+*/
+
 const loginScreen =
-  document.getElementById(
-    "loginScreen"
-  );
+  document.getElementById("loginScreen");
 
 const appScreen =
-  document.getElementById(
-    "appScreen"
-  );
+  document.getElementById("appScreen");
 
 const loginForm =
-  document.getElementById(
-    "loginForm"
-  );
-
-const loginError =
-  document.getElementById(
-    "loginError"
-  );
+  document.getElementById("loginForm");
 
 const loginBtn =
-  document.getElementById(
-    "loginBtn"
-  );
+  document.getElementById("loginBtn");
+
+const status =
+  document.getElementById("status");
 
 const userName =
-  document.getElementById(
-    "userName"
-  );
+  document.getElementById("userName");
 
 const userEmail =
-  document.getElementById(
-    "userEmail"
-  );
+  document.getElementById("userEmail");
 
 
-/* =========================
-   LOGIN CON DIAGNÓSTICO
-========================= */
+/*
+========================================
+CONFIRMACIÓN DE JAVASCRIPT
+========================================
+*/
+
+status.style.color =
+  "#166534";
+
+status.textContent =
+  "🟢 Firebase cargado. Puedes iniciar sesión.";
+
+
+/*
+========================================
+LOGIN
+========================================
+*/
 
 loginForm.addEventListener(
   "submit",
-  async e => {
+  async event => {
 
-    e.preventDefault();
+    event.preventDefault();
 
-    loginError.style.color =
-      "#166534";
 
-    loginError.textContent = "";
+    const email =
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+
+    const password =
+      document
+        .getElementById("loginPassword")
+        .value;
+
 
     loginBtn.disabled = true;
 
@@ -689,28 +642,14 @@ loginForm.addEventListener(
       "Ingresando...";
 
 
-    const email =
-      document
-        .getElementById(
-          "loginEmail"
-        )
-        .value
-        .trim();
+    status.style.color =
+      "#166534";
 
-
-    const password =
-      document
-        .getElementById(
-          "loginPassword"
-        )
-        .value;
+    status.textContent =
+      "1️⃣ Enviando correo y contraseña a Firebase...";
 
 
     try{
-
-      loginError.textContent =
-        "1️⃣ Enviando datos a Firebase...";
-
 
       const resultado =
         await signInWithEmailAndPassword(
@@ -720,12 +659,8 @@ loginForm.addEventListener(
         );
 
 
-      loginError.style.color =
-        "#166534";
-
-
-      loginError.textContent =
-        "2️⃣ Firebase aceptó la sesión: " +
+      status.textContent =
+        "2️⃣ Acceso aceptado: " +
         resultado.user.email;
 
 
@@ -734,12 +669,12 @@ loginForm.addEventListener(
       console.error(error);
 
 
-      loginError.style.color =
+      status.style.color =
         "#b42318";
 
 
-      loginError.textContent =
-        "❌ Error Firebase: " +
+      status.textContent =
+        "❌ " +
         (
           error.code ||
           error.message
@@ -758,9 +693,11 @@ loginForm.addEventListener(
 );
 
 
-/* =========================
-   SESIÓN
-========================= */
+/*
+========================================
+CAMBIO DE SESIÓN
+========================================
+*/
 
 onAuthStateChanged(
   auth,
@@ -778,17 +715,14 @@ onAuthStateChanged(
         .remove("hidden");
 
 
-      usuarioActual = {
-        uid:"",
-        nombre:"",
-        email:""
-      };
-
-
       return;
 
     }
 
+
+    /*
+    MOSTRAR APP INMEDIATAMENTE
+    */
 
     usuarioActual = {
 
@@ -815,11 +749,6 @@ onAuthStateChanged(
       usuarioActual.email;
 
 
-    /*
-      MOSTRAR LA APP
-      ANTES DE LEER FIRESTORE
-    */
-
     loginScreen
       .classList
       .add("hidden");
@@ -831,7 +760,7 @@ onAuthStateChanged(
 
 
     /*
-      CARGAR INVENTARIO
+    CARGAR DATOS
     */
 
     try{
@@ -840,67 +769,52 @@ onAuthStateChanged(
 
     }catch(error){
 
-      console.error(
-        "Error cargando datos:",
-        error
+      console.error(error);
+
+      alert(
+        "La sesión inició, pero hubo un error cargando el inventario."
       );
 
     }
 
 
     /*
-      BUSCAR PERFIL
-      usuarios/{UID}
+    BUSCAR NOMBRE EN usuarios/UID
     */
 
     try{
 
-      const perfilRef =
-        doc(
-          db,
-          "usuarios",
-          user.uid
-        );
-
-
-      const perfilSnap =
+      const perfil =
         await getDoc(
-          perfilRef
+          doc(
+            db,
+            "usuarios",
+            user.uid
+          )
         );
 
 
-      if(
-        perfilSnap.exists()
-      ){
+      if(perfil.exists()){
 
-        const perfil =
-          perfilSnap.data();
+        const datos =
+          perfil.data();
 
 
         usuarioActual.nombre =
-          perfil.nombre ||
+          datos.nombre ||
           usuarioActual.nombre;
-
-
-        usuarioActual.email =
-          perfil.email ||
-          usuarioActual.email;
 
 
         userName.textContent =
           "👤 " +
           usuarioActual.nombre;
 
-
-        userEmail.textContent =
-          usuarioActual.email;
-
       }
 
     }catch(error){
 
       console.error(
-        "Error leyendo perfil:",
+        "Error perfil:",
         error
       );
 
@@ -910,133 +824,29 @@ onAuthStateChanged(
 );
 
 
-/* =========================
-   CERRAR SESIÓN
-========================= */
+/*
+========================================
+LOGOUT
+========================================
+*/
 
 document
-  .getElementById(
-    "logoutBtn"
-  )
+  .getElementById("logoutBtn")
   .addEventListener(
     "click",
     async () => {
 
-      try{
-
-        await signOut(auth);
-
-      }catch(error){
-
-        console.error(error);
-
-      }
+      await signOut(auth);
 
     }
   );
-
-
-/* =========================
-   FECHAS
-========================= */
-
-function fechaISO(valor){
-
-  try{
-
-    if(
-      valor &&
-      typeof valor.toDate ===
-      "function"
-    ){
-
-      return valor
-        .toDate()
-        .toISOString();
-
-    }
-
-
-    if(valor){
-
-      const fecha =
-        new Date(valor);
-
-
-      if(
-        !isNaN(
-          fecha.getTime()
-        )
-      ){
-
-        return fecha
-          .toISOString();
-
-      }
-
-    }
-
-  }catch(error){
-
-    console.error(error);
-
-  }
-
-
-  return new Date()
-    .toISOString();
-
-}
 
 
 /*
-  FECHA LOCAL DE ECUADOR.
-  Evita que por UTC aparezca
-  el día siguiente.
+========================================
+UTILIDADES
+========================================
 */
-
-function fechaLocal(){
-
-  const ahora =
-    new Date();
-
-
-  const anio =
-    ahora.getFullYear();
-
-
-  const mes =
-    String(
-      ahora.getMonth() + 1
-    ).padStart(
-      2,
-      "0"
-    );
-
-
-  const dia =
-    String(
-      ahora.getDate()
-    ).padStart(
-      2,
-      "0"
-    );
-
-
-  return (
-    anio +
-    "-" +
-    mes +
-    "-" +
-    dia
-  );
-
-}
-
-
-/* =========================
-   TEXTO SEGURO
-========================= */
 
 function esc(valor){
 
@@ -1047,13 +857,9 @@ function esc(valor){
     c => ({
 
       "&":"&amp;",
-
       "<":"&lt;",
-
       ">":"&gt;",
-
       '"':"&quot;",
-
       "'":"&#39;"
 
     }[c])
@@ -1062,9 +868,76 @@ function esc(valor){
 }
 
 
-/* =========================
-   CARGAR FIRESTORE
-========================= */
+function fechaISO(valor){
+
+  if(
+    valor &&
+    typeof valor.toDate === "function"
+  ){
+
+    return valor
+      .toDate()
+      .toISOString();
+
+  }
+
+
+  const fecha =
+    new Date(valor);
+
+
+  if(
+    !isNaN(
+      fecha.getTime()
+    )
+  ){
+
+    return fecha
+      .toISOString();
+
+  }
+
+
+  return new Date()
+    .toISOString();
+
+}
+
+
+function fechaLocal(fecha = new Date()){
+
+  const a =
+    fecha.getFullYear();
+
+
+  const m =
+    String(
+      fecha.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const d =
+    String(
+      fecha.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  return `${a}-${m}-${d}`;
+
+}
+
+
+/*
+========================================
+CARGAR DATOS
+========================================
+*/
 
 async function cargarDatos(){
 
@@ -1079,31 +952,31 @@ async function cargarDatos(){
 
   stock =
     materiales.docs.map(
-      d => {
+      documento => {
 
-        const data =
-          d.data();
+        const x =
+          documento.data();
 
 
         return {
 
           id:
-            d.id,
+            documento.id,
 
           name:
-            data.nombre ||
-            data.name ||
+            x.nombre ||
+            x.name ||
             "Sin nombre",
 
           unit:
-            data.unidad ||
-            data.unit ||
+            x.unidad ||
+            x.unit ||
             "",
 
           qty:
             Number(
-              data.cantidad ??
-              data.qty ??
+              x.cantidad ??
+              x.qty ??
               0
             )
 
@@ -1124,56 +997,56 @@ async function cargarDatos(){
 
   moves =
     movimientos.docs.map(
-      d => {
+      documento => {
 
-        const data =
-          d.data();
+        const x =
+          documento.data();
 
 
         return {
 
           id:
-            d.id,
+            documento.id,
 
           date:
             fechaISO(
-              data.fecha ||
-              data.date
+              x.fecha ||
+              x.date
             ),
 
           name:
-            data.nombre ||
-            data.name ||
+            x.nombre ||
+            x.name ||
             "",
 
           unit:
-            data.unidad ||
-            data.unit ||
+            x.unidad ||
+            x.unit ||
             "",
 
           kind:
-            data.tipo ||
-            data.kind ||
+            x.tipo ||
+            x.kind ||
             "",
 
           qty:
             Number(
-              data.cantidad ??
-              data.qty ??
+              x.cantidad ??
+              x.qty ??
               0
             ),
 
           note:
-            data.nota ||
-            data.note ||
+            x.nota ||
+            x.note ||
             "",
 
           responsableNombre:
-            data.responsableNombre ||
+            x.responsableNombre ||
             "",
 
           responsableUid:
-            data.responsableUid ||
+            x.responsableUid ||
             ""
 
         };
@@ -1194,48 +1067,24 @@ async function cargarDatos(){
 }
 
 
-/* =========================
-   AGREGAR MATERIAL
-========================= */
+/*
+========================================
+AGREGAR MATERIAL
+========================================
+*/
 
 document
-  .getElementById(
-    "addForm"
-  )
+  .getElementById("addForm")
   .addEventListener(
     "submit",
-    async e => {
+    async event => {
 
-      e.preventDefault();
-
-
-      if(
-        !auth.currentUser
-      ){
-
-        alert(
-          "Debes iniciar sesión."
-        );
-
-        return;
-
-      }
+      event.preventDefault();
 
 
       const name =
         document
-          .getElementById(
-            "material"
-          )
-          .value
-          .trim();
-
-
-      const unit =
-        document
-          .getElementById(
-            "unit"
-          )
+          .getElementById("material")
           .value
           .trim();
 
@@ -1243,21 +1092,24 @@ document
       const amount =
         Number(
           document
-            .getElementById(
-              "amount"
-            )
+            .getElementById("amount")
             .value
         );
+
+
+      const unit =
+        document
+          .getElementById("unit")
+          .value
+          .trim();
 
 
       if(
         stock.some(
           x =>
-            x.name
-              .toLowerCase()
+            x.name.toLowerCase()
             ===
-            name
-              .toLowerCase()
+            name.toLowerCase()
         )
       ){
 
@@ -1280,14 +1132,11 @@ document
             ),
             {
 
-              nombre:
-                name,
+              nombre:name,
 
-              cantidad:
-                amount,
+              cantidad:amount,
 
-              unidad:
-                unit
+              unidad:unit
 
             }
           );
@@ -1298,26 +1147,23 @@ document
           id:
             nuevo.id,
 
-          name:
-            name,
+          name:name,
 
-          unit:
-            unit,
+          qty:amount,
 
-          qty:
-            amount
+          unit:unit
 
         });
 
 
-        e.target.reset();
+        event.target.reset();
 
 
         render();
 
 
         alert(
-          "Material guardado correctamente."
+          "Material guardado."
         );
 
 
@@ -1325,9 +1171,8 @@ document
 
         console.error(error);
 
-
         alert(
-          "Error guardando el material."
+          "No se pudo guardar el material."
         );
 
       }
@@ -1336,40 +1181,24 @@ document
   );
 
 
-/* =========================
-   ENTRADA / SALIDA
-========================= */
+/*
+========================================
+MOVIMIENTOS
+========================================
+*/
 
 document
-  .getElementById(
-    "moveForm"
-  )
+  .getElementById("moveForm")
   .addEventListener(
     "submit",
-    async e => {
+    async event => {
 
-      e.preventDefault();
-
-
-      if(
-        !auth.currentUser ||
-        !usuarioActual.uid
-      ){
-
-        alert(
-          "Debes iniciar sesión."
-        );
-
-        return;
-
-      }
+      event.preventDefault();
 
 
       const id =
         document
-          .getElementById(
-            "pick"
-          )
+          .getElementById("pick")
           .value;
 
 
@@ -1393,38 +1222,31 @@ document
 
       const tipo =
         document
-          .getElementById(
-            "kind"
-          )
+          .getElementById("kind")
           .value;
 
 
       const cantidad =
         Number(
           document
-            .getElementById(
-              "qty"
-            )
+            .getElementById("qty")
             .value
         );
 
 
       const nota =
         document
-          .getElementById(
-            "note"
-          )
+          .getElementById("note")
           .value
           .trim();
 
 
       if(
-        !cantidad ||
         cantidad <= 0
       ){
 
         alert(
-          "Ingresa una cantidad válida."
+          "Cantidad inválida."
         );
 
         return;
@@ -1439,10 +1261,7 @@ document
       ){
 
         alert(
-          "No hay suficiente existencia. Disponible: " +
-          material.qty +
-          " " +
-          material.unit
+          "No hay suficiente existencia."
         );
 
         return;
@@ -1469,16 +1288,8 @@ document
             material.id
           ),
           {
-
             cantidad:
-              nuevaCantidad,
-
-            nombre:
-              material.name,
-
-            unidad:
-              material.unit
-
+              nuevaCantidad
           }
         );
 
@@ -1559,7 +1370,7 @@ document
         });
 
 
-        e.target.reset();
+        event.target.reset();
 
 
         render();
@@ -1567,8 +1378,7 @@ document
 
         alert(
           "Movimiento guardado por " +
-          usuarioActual.nombre +
-          "."
+          usuarioActual.nombre
         );
 
 
@@ -1578,7 +1388,7 @@ document
 
 
         alert(
-          "Error guardando el movimiento."
+          "No se pudo guardar el movimiento."
         );
 
       }
@@ -1587,54 +1397,48 @@ document
   );
 
 
-/* =========================
-   FECHA HISTORIAL
-========================= */
+/*
+========================================
+PESTAÑAS
+========================================
+*/
 
-document
-  .getElementById(
-    "filterDate"
-  )
-  .value =
-    fechaLocal();
+const panels = {
+
+  stock:
+    document.getElementById(
+      "stockPanel"
+    ),
+
+  move:
+    document.getElementById(
+      "movePanel"
+    ),
+
+  history:
+    document.getElementById(
+      "historyPanel"
+    )
+
+};
 
 
-document
-  .getElementById(
-    "filterDate"
-  )
-  .addEventListener(
-    "change",
-    render
-  );
-
-
-/* =========================
-   PESTAÑAS
-========================= */
-
-function mostrarSeccion(
-  id,
+function abrirPanel(
+  nombre,
   boton
 ){
 
-  document
-    .querySelectorAll(
-      "#appScreen section"
-    )
-    .forEach(
-      section => {
-
-        section
-          .classList
-          .add("hidden");
-
-      }
-    );
+  Object.values(
+    panels
+  ).forEach(
+    panel =>
+      panel.classList.add(
+        "hidden"
+      )
+  );
 
 
-  document
-    .getElementById(id)
+  panels[nombre]
     .classList
     .remove("hidden");
 
@@ -1644,19 +1448,16 @@ function mostrarSeccion(
       ".tabs button"
     )
     .forEach(
-      button => {
-
-        button
-          .classList
-          .remove("active");
-
-      }
+      b =>
+        b.classList.remove(
+          "active"
+        )
     );
 
 
-  boton
-    .classList
-    .add("active");
+  boton.classList.add(
+    "active"
+  );
 
 
   render();
@@ -1665,14 +1466,12 @@ function mostrarSeccion(
 
 
 document
-  .getElementById(
-    "tabStock"
-  )
+  .getElementById("tabStock")
   .addEventListener(
     "click",
     function(){
 
-      mostrarSeccion(
+      abrirPanel(
         "stock",
         this
       );
@@ -1682,11 +1481,386 @@ document
 
 
 document
-  .getElementById(
-    "tabMove"
-  )
+  .getElementById("tabMove")
   .addEventListener(
     "click",
     function(){
 
-      
+      abrirPanel(
+        "move",
+        this
+      );
+
+    }
+  );
+
+
+document
+  .getElementById("tabHistory")
+  .addEventListener(
+    "click",
+    function(){
+
+      abrirPanel(
+        "history",
+        this
+      );
+
+    }
+  );
+
+
+/*
+========================================
+FECHA
+========================================
+*/
+
+document
+  .getElementById("filterDate")
+  .value =
+    fechaLocal();
+
+
+document
+  .getElementById("filterDate")
+  .addEventListener(
+    "change",
+    render
+  );
+
+
+/*
+========================================
+RENDER
+========================================
+*/
+
+function render(){
+
+  document
+    .getElementById("count")
+    .textContent =
+      stock.length;
+
+
+  const hoy =
+    fechaLocal();
+
+
+  document
+    .getElementById("today")
+    .textContent =
+      moves.filter(
+        x =>
+          fechaLocal(
+            new Date(x.date)
+          ) === hoy
+      ).length;
+
+
+  document
+    .getElementById("stockList")
+    .innerHTML =
+
+      stock.length
+      ?
+
+      stock.map(
+        x => `
+
+          <div class="item">
+
+            <b>
+              ${esc(x.name)}
+            </b>
+
+            <div class="qty">
+              ${x.qty}
+              ${esc(x.unit)}
+            </div>
+
+          </div>
+
+        `
+      ).join("")
+
+      :
+
+      `
+        <div class="empty">
+          No hay materiales.
+        </div>
+      `;
+
+
+  document
+    .getElementById("pick")
+    .innerHTML =
+
+      stock.map(
+        x => `
+
+          <option value="${esc(x.id)}">
+
+            ${esc(x.name)}
+            —
+            ${x.qty}
+            ${esc(x.unit)}
+
+          </option>
+
+        `
+      ).join("");
+
+
+  const filtro =
+    document
+      .getElementById("filterDate")
+      .value;
+
+
+  const filtrados =
+    moves.filter(
+      x =>
+        fechaLocal(
+          new Date(x.date)
+        ) === filtro
+    );
+
+
+  document
+    .getElementById("historyList")
+    .innerHTML =
+
+      filtrados.length
+      ?
+
+      filtrados.map(
+        x => {
+
+          let responsable;
+
+
+          if(
+            x.responsableNombre
+          ){
+
+            responsable =
+              x.kind === "Entrada"
+              ?
+              "👤 Entregado por: " +
+              esc(
+                x.responsableNombre
+              )
+              :
+              "👤 Retirado por: " +
+              esc(
+                x.responsableNombre
+              );
+
+          }else{
+
+            responsable =
+              "👤 Responsable: No registrado";
+
+          }
+
+
+          return `
+
+            <div class="item">
+
+              <b>
+
+                ${
+                  x.kind === "Entrada"
+                  ?
+                  "🟢 Entrada"
+                  :
+                  "🔴 Salida"
+                }:
+
+                ${esc(x.name)}
+
+              </b>
+
+              <div>
+
+                ${x.qty}
+                ${esc(x.unit)}
+
+                ·
+
+                ${
+                  new Date(
+                    x.date
+                  ).toLocaleTimeString(
+                    "es-EC",
+                    {
+                      hour:"2-digit",
+                      minute:"2-digit"
+                    }
+                  )
+                }
+
+              </div>
+
+              <div class="responsable">
+                ${responsable}
+              </div>
+
+              <div class="muted">
+                ${
+                  esc(
+                    x.note ||
+                    "Sin nota"
+                  )
+                }
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      ).join("")
+
+      :
+
+      `
+        <div class="empty">
+          No hay movimientos para esta fecha.
+        </div>
+      `;
+
+}
+
+
+/*
+========================================
+CSV
+========================================
+*/
+
+document
+  .getElementById("exportBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      const filas = [
+
+        [
+          "Fecha",
+          "Hora",
+          "Movimiento",
+          "Material",
+          "Cantidad",
+          "Unidad",
+          "Responsable",
+          "Nota"
+        ],
+
+        ...moves.map(
+          x => {
+
+            const fecha =
+              new Date(x.date);
+
+
+            return [
+
+              fecha.toLocaleDateString(
+                "es-EC"
+              ),
+
+              fecha.toLocaleTimeString(
+                "es-EC"
+              ),
+
+              x.kind,
+
+              x.name,
+
+              x.qty,
+
+              x.unit,
+
+              x.responsableNombre ||
+              "No registrado",
+
+              x.note
+
+            ];
+
+          }
+        )
+
+      ];
+
+
+      const csv =
+        filas.map(
+          fila =>
+            fila.map(
+              valor =>
+                '"' +
+                String(
+                  valor ?? ""
+                ).replace(
+                  /"/g,
+                  '""'
+                ) +
+                '"'
+            ).join(";")
+        ).join("\r\n");
+
+
+      const blob =
+        new Blob(
+          [
+            "\ufeff" +
+            csv
+          ],
+          {
+            type:
+              "text/csv;charset=utf-8;"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const a =
+        document.createElement(
+          "a"
+        );
+
+
+      a.href =
+        url;
+
+
+      a.download =
+        "BODEGA_SEASCAPE_historial.csv";
+
+
+      a.click();
+
+
+      URL.revokeObjectURL(
+        url
+      );
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
